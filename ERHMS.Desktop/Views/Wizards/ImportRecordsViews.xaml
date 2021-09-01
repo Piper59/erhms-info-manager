@@ -52,10 +52,9 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0"
+                               Content="{Binding Source, StringFormat={Markup:String Label}}"
                                Style="{StaticResource UnwrappedLabel}"
-                               ToolTip="{Binding Source}">
-                            <TextBlock Text="{Binding Source, StringFormat={Markup:String Label}}" />
-                        </Label>
+                               ToolTip="{Binding Source}" />
                         <Controls:BoundComboBox AutomationProperties.Name="{Binding Source, StringFormat={Markup:String Label.Target}}"
                                                 Grid.Column="1"
                                                 Binding="{Binding Name}"
@@ -76,9 +75,11 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0"
-                       Style="{StaticResource Body}"
-                       Text="{Markup:String ImportRecords.Body.Close.Failure}" />
+            <Grid Grid.Row="0"
+                  Style="{StaticResource Paragraph}">
+                <TextBlock Style="{StaticResource Body}"
+                           Text="{Markup:String ImportRecords.Body.Close.Failure}" />
+            </Grid>
             <TextBox Grid.Row="1"
                      IsReadOnly="True"
                      Style="{StaticResource CodeTextBox}"

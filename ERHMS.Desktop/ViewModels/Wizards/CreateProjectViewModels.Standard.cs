@@ -11,21 +11,13 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         public static class Standard
         {
-            public class SetProjectCreationInfoViewModel : CreateProjectViewModels.SetProjectCreationInfoViewModel
-            {
-                public SetProjectCreationInfoViewModel(State state)
-                    : base(state) { }
-
-                protected override StepViewModel GetSubsequent()
-                {
-                    return new CommitViewModel(State);
-                }
-            }
-
             public class CommitViewModel : CreateProjectViewModels.CommitViewModel
             {
                 public CommitViewModel(State state)
-                    : base(state) { }
+                    : base(state)
+                {
+                    Details.Add(Strings.Label_Strategy_CreateProject, Strings.Strategy_Standard);
+                }
 
                 protected override void ContinueCore(Project project)
                 {

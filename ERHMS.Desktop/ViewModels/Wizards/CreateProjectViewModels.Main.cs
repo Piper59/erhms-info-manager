@@ -9,6 +9,7 @@ using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Shared;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Naming;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public partial class State
         {
             public CoreProject CoreProject { get; }
-            public Project Project { get; set; }
+            public DatabaseStatus DatabaseStatus { get; set; }
             public ProjectCreationInfo ProjectCreationInfo { get; set; }
+            public Project Project { get; set; }
 
             public State(CoreProject coreProject)
             {
@@ -32,54 +34,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             }
         }
 
-        public class SetStrategyViewModel : StepViewModel<State>
-        {
-            public override string Title => Strings.CreateProject_Lead_SetStrategy;
-            public IEnumerable<CoreView> CoreViews => CoreView.GetInstances(State.CoreProject);
-
-            private bool expanded;
-            public bool Expanded
-            {
-                get { return expanded; }
-                set { SetProperty(ref expanded, value); }
-            }
-
-            public ICommand CreateStandardCommand { get; }
-            public ICommand CreateBlankCommand { get; }
-            public ICommand CreateFromTemplateCommand { get; }
-            public ICommand CreateFromExistingCommand { get; }
-
-            public SetStrategyViewModel(State state)
-                : base(state)
-            {
-                CreateStandardCommand = new SyncCommand(CreateStandard);
-                CreateBlankCommand = new SyncCommand(CreateBlank);
-                CreateFromTemplateCommand = new SyncCommand(CreateFromTemplate);
-                CreateFromExistingCommand = new SyncCommand(CreateFromExisting);
-            }
-
-            public void CreateStandard()
-            {
-                Wizard.GoForward(new Standard.SetProjectCreationInfoViewModel(State));
-            }
-
-            public void CreateBlank()
-            {
-                Wizard.GoForward(new Blank.SetProjectCreationInfoViewModel(State));
-            }
-
-            public void CreateFromTemplate()
-            {
-                Wizard.GoForward(new FromTemplate.SetXTemplateViewModel(State));
-            }
-
-            public void CreateFromExisting()
-            {
-                Wizard.GoForward(new FromExisting.SetSourceProjectViewModel(State));
-            }
-        }
-
-        public abstract class SetProjectCreationInfoViewModel : StepViewModel<State>
+        public class SetProjectCreationInfoViewModel : StepViewModel<State>
         {
             private readonly IDirectoryDialogService directoryDialog;
             private readonly IDictionary<DatabaseProvider, ConnectionInfoViewModel> connectionInfosByDatabaseProvider;
@@ -113,7 +68,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public ICommand BrowseCommand { get; }
 
-            protected SetProjectCreationInfoViewModel(State state)
+            public SetProjectCreationInfoViewModel(State state)
                 : base(state)
             {
                 directoryDialog = ServiceLocator.Resolve<IDirectoryDialogService>();
@@ -144,8 +99,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 LocationRoot = directoryDialog.Directory;
             }
 
-            protected abstract StepViewModel GetSubsequent();
-
             public override bool CanContinue()
             {
                 return true;
@@ -153,14 +106,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override async Task ContinueAsync()
             {
-                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                progress.Lead = Strings.Lead_ValidatingName;
-                InvalidNameReason reason = InvalidNameReason.None;
-                bool valid = await progress.Run(() =>
-                {
-                    ProjectNameValidator validator = new ProjectNameValidator(LocationRoot);
-                    return validator.IsValid(Name, out reason);
-                });
+                ProjectNameValidator validator = new ProjectNameValidator(LocationRoot);
+                bool valid = validator.IsValid(Name, out InvalidNameReason reason);
                 if (reason != InvalidNameReason.None)
                 {
                     IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
@@ -182,8 +129,67 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 };
                 string connectionString = ConnectionInfo.GetConnectionString(projectCreationInfo.FilePath);
                 projectCreationInfo.Database = DatabaseProviders.CurrentItem.ToDatabase(connectionString);
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                State.DatabaseStatus = await progress.Run(() =>
+                {
+                    return projectCreationInfo.Database.GetStatus();
+                });
                 State.ProjectCreationInfo = projectCreationInfo;
-                Wizard.GoForward(GetSubsequent());
+                if (State.DatabaseStatus == DatabaseStatus.Initialized)
+                {
+                    Wizard.GoForward(new Blank.CommitViewModel(State));
+                }
+                else
+                {
+                    Wizard.GoForward(new SetStrategyViewModel(State));
+                }
+            }
+        }
+
+        public class SetStrategyViewModel : StepViewModel<State>
+        {
+            public override string Title => Strings.CreateProject_Lead_SetStrategy;
+            public IEnumerable<CoreView> CoreViews => CoreView.GetInstances(State.CoreProject);
+
+            private bool expanded;
+            public bool Expanded
+            {
+                get { return expanded; }
+                set { SetProperty(ref expanded, value); }
+            }
+
+            public ICommand CreateStandardCommand { get; }
+            public ICommand CreateBlankCommand { get; }
+            public ICommand CreateFromTemplateCommand { get; }
+            public ICommand CreateFromExistingCommand { get; }
+
+            public SetStrategyViewModel(State state)
+                : base(state)
+            {
+                CreateStandardCommand = new SyncCommand(CreateStandard);
+                CreateBlankCommand = new SyncCommand(CreateBlank);
+                CreateFromTemplateCommand = new SyncCommand(CreateFromTemplate);
+                CreateFromExistingCommand = new SyncCommand(CreateFromExisting);
+            }
+
+            public void CreateStandard()
+            {
+                Wizard.GoForward(new Standard.CommitViewModel(State));
+            }
+
+            public void CreateBlank()
+            {
+                Wizard.GoForward(new Blank.CommitViewModel(State));
+            }
+
+            public void CreateFromTemplate()
+            {
+                Wizard.GoForward(new FromTemplate.SetXTemplateViewModel(State));
+            }
+
+            public void CreateFromExisting()
+            {
+                Wizard.GoForward(new FromExisting.SetSourceProjectViewModel(State));
             }
         }
 
@@ -206,7 +212,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     {
                         Strings.Label_ConnectionInfo,
                         state.ProjectCreationInfo.Database.GetConnectionStringBuilder()
-                    }
+                    },
+                    { Strings.Label_DatabaseStatus, state.DatabaseStatus }
                 };
             }
 
@@ -228,8 +235,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         State.ProjectCreationInfo.Database.Create();
                     }
                     Project project = ProjectExtensions.Create(State.ProjectCreationInfo);
-                    progress.Report(Strings.Body_Initializing);
-                    project.Initialize();
+                    if (!project.IsInitialized())
+                    {
+                        progress.Report(Strings.Body_Initializing);
+                        project.Initialize();
+                    }
                     Progress = progress;
                     try
                     {
@@ -272,7 +282,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public static WizardViewModel GetWizard(CoreProject coreProject)
         {
             State state = new State(coreProject);
-            StepViewModel step = new SetStrategyViewModel(state);
+            StepViewModel step = new SetProjectCreationInfoViewModel(state);
             return new WizardViewModel(step);
         }
     }

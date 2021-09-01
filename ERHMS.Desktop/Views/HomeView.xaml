@@ -38,11 +38,9 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Button AutomationProperties.HelpText="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.CreateOrOpenProject}}"
+                <Button AutomationProperties.HelpText="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.SetUpProject}}"
                         Grid.Column="0"
-                        Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
                         CommandParameter="{Binding CoreProject}"
-                        Style="{StaticResource WorkflowButton}"
                         ToolTip="{Binding Current.FilePath}">
                     <AutomationProperties.Name>
                         <MultiBinding StringFormat="{}{0} {1}">
@@ -53,6 +51,16 @@
                                      Path="Current.Name" />
                         </MultiBinding>
                     </AutomationProperties.Name>
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
+                            <Setter Property="Command" Value="{x:Static local:AppCommands.GoToCoreProjectCommand}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Current}" Value="{x:Null}">
+                                    <Setter Property="Command" Value="{x:Static local:AppCommands.SetUpCoreProjectCommand}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
                     <StackPanel>
                         <TextBlock Style="{StaticResource Lead}">
                             <TextBlock.Margin>
@@ -64,7 +72,7 @@
                         </TextBlock>
                         <TextBlock Margin="0"
                                    Style="{StaticResource Small}"
-                                   Text="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.CreateOrOpenProject}}"
+                                   Text="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.SetUpProject}}"
                                    TextTrimming="CharacterEllipsis"
                                    TextWrapping="NoWrap" />
                     </StackPanel>
@@ -122,8 +130,8 @@
                             </ContextMenu.Resources>
                             <MenuItem Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
                                       CommandParameter="{Binding CoreProject}"
-                                      Header="{Markup:String AccessText.GoToCurrentProject}" />
-                            <MenuItem Header="{Markup:String AccessText.OpenRecentProject}"
+                                      Header="{Markup:String AccessText.GoToProject}" />
+                            <MenuItem Header="{Markup:String AccessText.SwitchProject}"
                                       ItemsSource="{Binding Recents}"
                                       Visibility="{Binding CanHaveRecents, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <MenuItem.ItemContainerStyle>
@@ -131,7 +139,7 @@
                                         <Setter Property="AutomationProperties.Name" Value="{Binding Name, TargetNullValue=''}" />
                                         <Setter Property="AutomationProperties.HelpText" Value="{Binding FilePath, TargetNullValue=''}" />
                                         <Setter Property="ToolTipService.VerticalOffset" Value="{StaticResource SmallSpace}" />
-                                        <Setter Property="Command" Value="{Binding DataContext.MakeCurrentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" />
+                                        <Setter Property="Command" Value="{Binding DataContext.SetCurrentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" />
                                         <Setter Property="CommandParameter" Value="{Binding}" />
                                         <Setter Property="MaxWidth" Value="{StaticResource MenuWidth}" />
                                         <Setter Property="ToolTip" Value="{Binding FilePath}" />
@@ -141,10 +149,10 @@
                             <Separator />
                             <MenuItem Command="{x:Static local:AppCommands.CreateCoreProjectCommand}"
                                       CommandParameter="{Binding CoreProject}"
-                                      Header="{Markup:String AccessText.CreateNewProject}" />
+                                      Header="{Markup:String AccessText.CreateProject}" />
                             <MenuItem Command="{x:Static local:AppCommands.OpenCoreProjectCommand}"
                                       CommandParameter="{Binding CoreProject}"
-                                      Header="{Markup:String AccessText.OpenExistingProject}" />
+                                      Header="{Markup:String AccessText.OpenProject}" />
                         </ContextMenu>
                     </Button.ContextMenu>
                     <Button.Margin>

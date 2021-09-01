@@ -1,9 +1,7 @@
 ﻿using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
-using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.Domain;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -16,49 +14,9 @@ namespace ERHMS.Desktop.ViewModels
             public CoreProject CoreProject { get; }
             public CoreView MainCoreView => CoreView.GetInstances(CoreProject).First();
 
-            private bool hasPath;
-            public bool HasPath
-            {
-                get { return hasPath; }
-                set { SetProperty(ref hasPath, value); }
-            }
-
-            public ICommand SetUpProjectCommand { get; }
-            public ICommand GoToMainViewCommand { get; }
-
             public ProjectViewModel(CoreProject coreProject)
             {
                 CoreProject = coreProject;
-                Initialize();
-                Settings.Default.SettingsSaving += Default_SettingsSaving;
-                SetUpProjectCommand = new SyncCommand(SetUpProject);
-                GoToMainViewCommand = new SyncCommand(GoToMainView, CanGoToMainView);
-            }
-
-            private void Default_SettingsSaving(object sender, CancelEventArgs e)
-            {
-                Initialize();
-            }
-
-            private void Initialize()
-            {
-                HasPath = Settings.Default.HasProjectPath(CoreProject);
-            }
-
-            public void SetUpProject()
-            {
-                WizardViewModel wizard = SetUpProjectViewModels.GetWizard(CoreProject);
-                wizard.Run();
-            }
-
-            public bool CanGoToMainView()
-            {
-                return AppCommands.GoToCoreViewCommand.CanExecute(MainCoreView);
-            }
-
-            public void GoToMainView()
-            {
-                AppCommands.GoToCoreViewCommand.Execute(MainCoreView);
             }
         }
 
@@ -84,7 +42,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public StartViewModel()
         {
-            Closed = WorkerProject.HasPath && IncidentProject.HasPath;
+            Closed = Settings.Default.HasWorkerProjectPath && Settings.Default.HasIncidentProjectPath;
             ToggleCommand = new SyncCommand(Toggle);
             CloseCommand = new SyncCommand(Close);
         }

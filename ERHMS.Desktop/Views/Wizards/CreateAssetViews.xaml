@@ -49,9 +49,8 @@
                    Grid.Row="1"
                    Content="{Markup:String Label.Location}" />
             <Label Grid.Column="1"
-                   Grid.Row="1">
-                <TextBlock Text="{Binding FilePath, Converter={StaticResource PathToDirectoryNameConverter}}" />
-            </Label>
+                   Grid.Row="1"
+                   Content="{Binding FilePath, Converter={StaticResource PathToDirectoryNameConverter}}" />
         </Grid>
     </DataTemplate>
 

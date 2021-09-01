@@ -64,9 +64,10 @@
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModels+Blank+SetWithWorkerInfoViewModel}">
         <StackPanel>
-            <Label>
-                <TextBlock Text="{Markup:String CreateView.Body.SetWithWorkerInfo}" />
-            </Label>
+            <Grid Style="{StaticResource Paragraph}">
+                <TextBlock Style="{StaticResource Body}"
+                           Text="{Markup:String CreateView.Body.SetWithWorkerInfo}" />
+            </Grid>
             <CheckBox Content="{Markup:String Label.WithWorkerInfo}"
                       IsChecked="{Binding WithWorkerInfo}" />
         </StackPanel>

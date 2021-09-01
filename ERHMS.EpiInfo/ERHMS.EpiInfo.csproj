@@ -85,6 +85,7 @@
     <Compile Include="Analytics\Pgm.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Data\CollectedDataProviderExtensions.cs" />
+    <Compile Include="Data\DatabaseStatus.cs" />
     <Compile Include="Data\IDatabaseExtensions.cs" />
     <Compile Include="Data\IDbDriverExtensions.cs" />
     <Compile Include="Data\Record.cs" />

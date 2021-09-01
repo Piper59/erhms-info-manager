@@ -49,6 +49,7 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand GoToCoreViewCommand { get; }
         public ICommand CreateCoreProjectCommand { get; }
         public ICommand OpenCoreProjectCommand { get; }
+        public ICommand SetUpCoreProjectCommand { get; }
         public ICommand OpenUriCommand { get; }
         public ICommand ExportLogsCommand { get; }
         public ICommand StartEpiInfoCommand { get; }
@@ -62,11 +63,12 @@ namespace ERHMS.Desktop.ViewModels
             GoToStartCommand = new SyncCommand(GoToStart);
             GoToAboutCommand = new SyncCommand(GoToAbout);
             GoToProjectCommand = new AsyncCommand<Project>(GoToProjectAsync, CanGoToProject);
-            GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync);
+            GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync, CanGoToCoreProject);
             GoToViewCommand = new AsyncCommand<View>(GoToViewAsync, CanGoToView);
-            GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync);
+            GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync, CanGoToCoreView);
             CreateCoreProjectCommand = new SyncCommand<CoreProject>(CreateCoreProject);
             OpenCoreProjectCommand = new SyncCommand<CoreProject>(OpenCoreProject);
+            SetUpCoreProjectCommand = new SyncCommand<CoreProject>(SetUpCoreProject);
             OpenUriCommand = new SyncCommand<string>(OpenUri);
             ExportLogsCommand = new AsyncCommand(ExportLogsAsync);
             StartEpiInfoCommand = new SyncCommand(StartEpiInfo);
@@ -126,6 +128,11 @@ namespace ERHMS.Desktop.ViewModels
             await GoToProjectAsync(Task.FromResult(project));
         }
 
+        public bool CanGoToCoreProject(CoreProject coreProject)
+        {
+            return Settings.Default.HasProjectPath(coreProject);
+        }
+
         public async Task GoToCoreProjectAsync(CoreProject coreProject)
         {
             // TODO: Handle errors
@@ -144,6 +151,11 @@ namespace ERHMS.Desktop.ViewModels
         public async Task GoToViewAsync(View view)
         {
             await GoToViewAsync(Task.FromResult(view));
+        }
+
+        public bool CanGoToCoreView(CoreView coreView)
+        {
+            return CanGoToCoreProject(coreView.CoreProject);
         }
 
         public async Task GoToCoreViewAsync(CoreView coreView)
@@ -179,15 +191,25 @@ namespace ERHMS.Desktop.ViewModels
             {
                 // TODO: Confirm
             }
-            IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-            fileDialog.InitialDirectory = Configuration.Instance.GetProjectsDirectory();
-            fileDialog.Filter = Strings.FileDialog_Filter_Projects;
-            if (fileDialog.Open() != true)
+            if (!SetUpProjectViewModels.Open(coreProject))
             {
                 return;
             }
-            Settings.Default.SetProjectPath(coreProject, fileDialog.FileName);
-            Settings.Default.Save();
+            GoToHome();
+        }
+
+        public void SetUpCoreProject(CoreProject coreProject)
+        {
+            // TODO: Handle errors
+            if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
+            {
+                // TODO: Confirm
+            }
+            WizardViewModel wizard = SetUpProjectViewModels.GetWizard(coreProject);
+            if (wizard.Run() != true)
+            {
+                return;
+            }
             GoToHome();
         }
 

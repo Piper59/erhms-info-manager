@@ -156,8 +156,8 @@
   <data name="AccessText.CopyValue" xml:space="preserve">
     <value>_Copy value to Clipboard</value>
   </data>
-  <data name="AccessText.CreateNewProject" xml:space="preserve">
-    <value>Create a _new project</value>
+  <data name="AccessText.CreateProject" xml:space="preserve">
+    <value>_Create a new project</value>
   </data>
   <data name="AccessText.Data" xml:space="preserve">
     <value>_Data</value>
@@ -201,11 +201,11 @@
   <data name="AccessText.FullName" xml:space="preserve">
     <value>F_ull name</value>
   </data>
-  <data name="AccessText.GoToCurrentProject" xml:space="preserve">
-    <value>View the _current project</value>
-  </data>
   <data name="AccessText.GoToHelp" xml:space="preserve">
     <value>V_iew help</value>
+  </data>
+  <data name="AccessText.GoToProject" xml:space="preserve">
+    <value>V_iew the current project</value>
   </data>
   <data name="AccessText.GoToStart" xml:space="preserve">
     <value>V_iew quick start</value>
@@ -249,11 +249,8 @@
   <data name="AccessText.Open" xml:space="preserve">
     <value>_Open</value>
   </data>
-  <data name="AccessText.OpenExistingProject" xml:space="preserve">
-    <value>Open an _existing project</value>
-  </data>
-  <data name="AccessText.OpenRecentProject" xml:space="preserve">
-    <value>Switch to a _recent project</value>
+  <data name="AccessText.OpenProject" xml:space="preserve">
+    <value>_Open an existing project</value>
   </data>
   <data name="AccessText.Pages" xml:space="preserve">
     <value>_Pages</value>
@@ -286,13 +283,16 @@
     <value>_Set up an incident project</value>
   </data>
   <data name="AccessText.SetUpProject.Worker" xml:space="preserve">
-    <value>_Set up the worker project</value>
+    <value>_Set up a worker project</value>
   </data>
   <data name="AccessText.Similarity" xml:space="preserve">
     <value>_Similarity</value>
   </data>
   <data name="AccessText.Size" xml:space="preserve">
     <value>_Size</value>
+  </data>
+  <data name="AccessText.SwitchProject" xml:space="preserve">
+    <value>_Switch to a recent project</value>
   </data>
   <data name="AccessText.Tools" xml:space="preserve">
     <value>_Tools</value>
@@ -551,7 +551,7 @@ Close anyway?</value>
     <value>File creation was successful</value>
   </data>
   <data name="CreateAsset.Lead.SetFilePath" xml:space="preserve">
-    <value>Choose a name and location for the new file</value>
+    <value>Choose a name and location for the file</value>
   </data>
   <data name="CreateAsset.Lead.SetView" xml:space="preserve">
     <value>Choose a form to use as a data source</value>
@@ -569,37 +569,37 @@ Close anyway?</value>
     <value>Create a _standard project (recommended)</value>
   </data>
   <data name="CreateProject.HelpText.Blank" xml:space="preserve">
-    <value>Create a new project containing no forms.</value>
+    <value>Create a project containing no forms.</value>
   </data>
   <data name="CreateProject.HelpText.FromExisting" xml:space="preserve">
-    <value>Create a new project containing forms copied from an existing project. Existing records will not be copied.</value>
+    <value>Create a project containing forms copied from an existing project. Existing records will not be copied.</value>
   </data>
   <data name="CreateProject.HelpText.FromTemplate" xml:space="preserve">
-    <value>Create a new project containing forms defined in a project-level template.</value>
+    <value>Create a project containing forms defined in a project-level template.</value>
   </data>
   <data name="CreateProject.HelpText.Name.Incident" xml:space="preserve">
-    <value>Use a name that uniquely identifies this incident.</value>
+    <value>Use a name that uniquely identifies the incident.</value>
   </data>
   <data name="CreateProject.HelpText.Name.Worker" xml:space="preserve">
-    <value>Use your organization's name or simply "Workers."</value>
+    <value>Consider using your organization's name or simply "Workers."</value>
   </data>
   <data name="CreateProject.HelpText.Standard.Incident" xml:space="preserve">
-    <value>Create a new project containing standard incident forms.</value>
+    <value>Create a project containing standard incident forms.</value>
   </data>
   <data name="CreateProject.HelpText.Standard.Worker" xml:space="preserve">
-    <value>Create a new project containing standard worker forms.</value>
+    <value>Create a project containing standard worker forms.</value>
   </data>
   <data name="CreateProject.Lead.Close" xml:space="preserve">
     <value>Project creation was successful</value>
   </data>
   <data name="CreateProject.Lead.SetProjectCreationInfo" xml:space="preserve">
-    <value>Enter details for the new project</value>
+    <value>Enter details for the project</value>
   </data>
   <data name="CreateProject.Lead.SetSourceProject" xml:space="preserve">
     <value>Choose an existing project</value>
   </data>
   <data name="CreateProject.Lead.SetStrategy" xml:space="preserve">
-    <value>Choose how to create the new project</value>
+    <value>Choose how to create the project</value>
   </data>
   <data name="CreateProject.Lead.SetXTemplate" xml:space="preserve">
     <value>Choose a template</value>
@@ -617,19 +617,19 @@ Close anyway?</value>
     <value>Create a _standard form</value>
   </data>
   <data name="CreateView.Body.SetWithWorkerInfo" xml:space="preserve">
-    <value>If you choose to collect worker information, the new form will contain fields for worker name, email address, and ID. You can use these fields to associate each record with the corresponding worker.</value>
+    <value>If you choose to collect worker information, the form will contain fields for worker name, email address, and ID. You can use these fields to associate each record with the corresponding worker.</value>
   </data>
   <data name="CreateView.HelpText.Blank" xml:space="preserve">
-    <value>Create a new form containing minimal fields.</value>
+    <value>Create a form containing minimal fields.</value>
   </data>
   <data name="CreateView.HelpText.FromExisting" xml:space="preserve">
-    <value>Create a new form containing fields copied from an existing form. Existing records will not be copied.</value>
+    <value>Create a form containing fields copied from an existing form. Existing records will not be copied.</value>
   </data>
   <data name="CreateView.HelpText.FromTemplate" xml:space="preserve">
-    <value>Create a new form containing fields defined in a form-level template.</value>
+    <value>Create a form containing fields defined in a form-level template.</value>
   </data>
   <data name="CreateView.HelpText.Standard" xml:space="preserve">
-    <value>Create a new form containing fields defined in a standard worker or incident form.</value>
+    <value>Create a form containing fields defined in a standard worker or incident form.</value>
   </data>
   <data name="CreateView.Lead.Close" xml:space="preserve">
     <value>Form creation was successful</value>
@@ -641,10 +641,10 @@ Close anyway?</value>
     <value>Choose an existing form</value>
   </data>
   <data name="CreateView.Lead.SetStrategy" xml:space="preserve">
-    <value>Choose how to create the new form</value>
+    <value>Choose how to create the form</value>
   </data>
   <data name="CreateView.Lead.SetViewName" xml:space="preserve">
-    <value>Enter a name for the new form</value>
+    <value>Enter a name for the form</value>
   </data>
   <data name="CreateView.Lead.SetWithWorkerInfo" xml:space="preserve">
     <value>Choose whether to collect worker information</value>
@@ -657,6 +657,15 @@ Close anyway?</value>
   </data>
   <data name="DatabaseProvider.Value.SqlServer" xml:space="preserve">
     <value>Microsoft SQL Server</value>
+  </data>
+  <data name="DatabaseStatus.Value.Existing" xml:space="preserve">
+    <value>Exists (will be initialized)</value>
+  </data>
+  <data name="DatabaseStatus.Value.Initialized" xml:space="preserve">
+    <value>Exists (already initialized)</value>
+  </data>
+  <data name="DatabaseStatus.Value.Missing" xml:space="preserve">
+    <value>Does not exist (will be created and initialized)</value>
   </data>
   <data name="ExportRecords.AccessText.ExportToFile" xml:space="preserve">
     <value>Export to a _comma-separated values (CSV) file</value>
@@ -755,9 +764,6 @@ Close anyway?</value>
   <data name="HelpText.CreateAsset.Mapping" xml:space="preserve">
     <value>Create a new file in the Epi Info Maps module.</value>
   </data>
-  <data name="HelpText.CreateOrOpenProject" xml:space="preserve">
-    <value>Click here to create or open a project.</value>
-  </data>
   <data name="HelpText.CreateView" xml:space="preserve">
     <value>Create a new form in the Epi Info Form Designer module.</value>
   </data>
@@ -802,6 +808,9 @@ Close anyway?</value>
   </data>
   <data name="HelpText.Refresh" xml:space="preserve">
     <value>Refresh the information displayed on this screen.</value>
+  </data>
+  <data name="HelpText.SetUpProject" xml:space="preserve">
+    <value>Click here to set up a project.</value>
   </data>
   <data name="HelpText.UndeleteRecords" xml:space="preserve">
     <value>Mark the selected records as undeleted.</value>
@@ -875,6 +884,9 @@ Close anyway?</value>
   <data name="Label.DatabaseProvider" xml:space="preserve">
     <value>Database type:</value>
   </data>
+  <data name="Label.DatabaseStatus" xml:space="preserve">
+    <value>Database status:</value>
+  </data>
   <data name="Label.DataSource" xml:space="preserve">
     <value>Server name:</value>
   </data>
@@ -916,6 +928,15 @@ Close anyway?</value>
   </data>
   <data name="Label.Search" xml:space="preserve">
     <value>Search:</value>
+  </data>
+  <data name="Label.Source" xml:space="preserve">
+    <value>Source:</value>
+  </data>
+  <data name="Label.Strategy.CreateProject" xml:space="preserve">
+    <value>Project type:</value>
+  </data>
+  <data name="Label.Strategy.CreateView" xml:space="preserve">
+    <value>Form type:</value>
   </data>
   <data name="Label.Target" xml:space="preserve">
     <value>Destination for {0}:</value>
@@ -1074,19 +1095,34 @@ Close anyway?</value>
     <value>Undeleted</value>
   </data>
   <data name="SetUpProject.AccessText.Create" xml:space="preserve">
-    <value>Create a _new project</value>
+    <value>_Create a new project</value>
   </data>
   <data name="SetUpProject.AccessText.Open" xml:space="preserve">
-    <value>Open an _existing project</value>
+    <value>_Open an existing project</value>
+  </data>
+  <data name="SetUpProject.Body.SetStrategy" xml:space="preserve">
+    <value>A project consists of an Epi Info project (.prj) file and an underlying database. If you choose to create a new project, ERHMS Info Manager will ensure that the database exists and has been initialized for use with Epi Info.</value>
   </data>
   <data name="SetUpProject.HelpText.Create" xml:space="preserve">
     <value>Create a new Epi Info project (.prj) file connected to a new or existing database.</value>
   </data>
   <data name="SetUpProject.HelpText.Open" xml:space="preserve">
-    <value>Open an existing Epi Info project (.prj) file.</value>
+    <value>Open an existing Epi Info project (.prj) file connected to an existing database.</value>
   </data>
   <data name="SetUpProject.Lead.SetStrategy" xml:space="preserve">
     <value>Choose how to set up the project</value>
+  </data>
+  <data name="Strategy.Blank" xml:space="preserve">
+    <value>Blank</value>
+  </data>
+  <data name="Strategy.FromExisting" xml:space="preserve">
+    <value>Copy of existing</value>
+  </data>
+  <data name="Strategy.FromTemplate" xml:space="preserve">
+    <value>Template-based</value>
+  </data>
+  <data name="Strategy.Standard" xml:space="preserve">
+    <value>Standard</value>
   </data>
   <data name="Title.AboutApp" xml:space="preserve">
     <value>About ERHMS Info Manager</value>

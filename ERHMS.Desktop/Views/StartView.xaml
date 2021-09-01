@@ -14,15 +14,15 @@
             <StackPanel Style="{StaticResource Section}">
                 <TextBlock Style="{StaticResource Lead}"
                            Text="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Lead.Start.{0}'}" />
-                <Button Command="{Binding SetUpProjectCommand}"
+                <Button Command="{x:Static local:AppCommands.SetUpCoreProjectCommand}"
+                        CommandParameter="{Binding CoreProject}"
                         Content="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.SetUpProject.{0}'}" />
-                <Button Command="{Binding GoToMainViewCommand}"
-                        Content="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseMainView.{0}'}"
-                        IsEnabled="{Binding HasPath}" />
+                <Button Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
+                        CommandParameter="{Binding MainCoreView}"
+                        Content="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseMainView.{0}'}" />
                 <Button Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
                         CommandParameter="{Binding CoreProject}"
-                        Content="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseViews.{0}'}"
-                        IsEnabled="{Binding HasPath}" />
+                        Content="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseViews.{0}'}" />
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>

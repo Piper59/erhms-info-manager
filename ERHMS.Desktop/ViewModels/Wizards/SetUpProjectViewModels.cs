@@ -1,5 +1,6 @@
 ﻿using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.Services;
 using ERHMS.Domain;
 using System.Windows.Input;
 
@@ -7,14 +8,10 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 {
     public static class SetUpProjectViewModels
     {
-        public class State
+        public class State : CreateProjectViewModels.State
         {
-            public CoreProject CoreProject { get; }
-
             public State(CoreProject coreProject)
-            {
-                CoreProject = coreProject;
-            }
+                : base(coreProject) { }
         }
 
         public class SetStrategyViewModel : StepViewModel<State>
@@ -28,24 +25,18 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 : base(state)
             {
                 CreateCommand = new SyncCommand(Create);
-                OpenCommand = new SyncCommand(Open, CanOpen);
+                OpenCommand = new SyncCommand(Open);
             }
 
             public void Create()
             {
-                CreateProjectViewModels.State state = new CreateProjectViewModels.State(State.CoreProject);
-                Wizard.GoForward(new CreateProjectViewModels.SetStrategyViewModel(state));
-            }
-
-            public bool CanOpen()
-            {
-                return AppCommands.OpenCoreProjectCommand.CanExecute(State.CoreProject);
+                Wizard.GoForward(new CreateProjectViewModels.SetProjectCreationInfoViewModel(State));
             }
 
             public void Open()
             {
                 Wizard.Close();
-                AppCommands.OpenCoreProjectCommand.Execute(State.CoreProject);
+                Wizard.Result = SetUpProjectViewModels.Open(State.CoreProject);
             }
         }
 
@@ -54,6 +45,20 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             State state = new State(coreProject);
             StepViewModel step = new SetStrategyViewModel(state);
             return new WizardViewModel(step);
+        }
+
+        public static bool Open(CoreProject coreProject)
+        {
+            IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
+            fileDialog.InitialDirectory = Configuration.Instance.GetProjectsDirectory();
+            fileDialog.Filter = Strings.FileDialog_Filter_Projects;
+            if (fileDialog.Open() != true)
+            {
+                return false;
+            }
+            Settings.Default.SetProjectPath(coreProject, fileDialog.FileName);
+            Settings.Default.Save();
+            return true;
         }
     }
 }

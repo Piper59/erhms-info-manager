@@ -7,6 +7,10 @@
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
+            <Grid Style="{StaticResource Paragraph}">
+                <TextBlock Style="{StaticResource Body}"
+                           Text="{Markup:String SetUpProject.Body.SetStrategy}" />
+            </Grid>
             <Button AutomationProperties.HelpText="{Markup:String SetUpProject.HelpText.Create}"
                     Command="{Binding CreateCommand}"
                     Content="{Markup:String SetUpProject.AccessText.Create}" />

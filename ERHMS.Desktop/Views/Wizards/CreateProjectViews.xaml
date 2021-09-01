@@ -4,32 +4,6 @@
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+SetStrategyViewModel}">
-        <StackPanel>
-            <StackPanel.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
-            </StackPanel.Resources>
-            <Button AutomationProperties.HelpText="{Binding State.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}"
-                    Command="{Binding CreateStandardCommand}"
-                    Content="{Markup:String CreateProject.AccessText.Standard}" />
-            <Controls:ExpandButton AccessText="{Markup:String AccessText.Advanced}"
-                                   AltText="{Markup:String AltText.Advanced}"
-                                   Expanded="{Binding Expanded}"
-                                   Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityInverter}}" />
-            <StackPanel Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.Blank}"
-                        Command="{Binding CreateBlankCommand}"
-                        Content="{Markup:String CreateProject.AccessText.Blank}" />
-                <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.FromTemplate}"
-                        Command="{Binding CreateFromTemplateCommand}"
-                        Content="{Markup:String CreateProject.AccessText.FromTemplate}" />
-                <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.FromExisting}"
-                        Command="{Binding CreateFromExistingCommand}"
-                        Content="{Markup:String CreateProject.AccessText.FromExisting}" />
-            </StackPanel>
-        </StackPanel>
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+SetProjectCreationInfoViewModel}">
         <StackPanel>
             <Grid>
@@ -94,6 +68,32 @@
                       Visibility="{Binding Editable, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ContentPresenter Content="{Binding}" />
             </GroupBox>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+SetStrategyViewModel}">
+        <StackPanel>
+            <StackPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
+            </StackPanel.Resources>
+            <Button AutomationProperties.HelpText="{Binding State.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}"
+                    Command="{Binding CreateStandardCommand}"
+                    Content="{Markup:String CreateProject.AccessText.Standard}" />
+            <Controls:ExpandButton AccessText="{Markup:String AccessText.Advanced}"
+                                   AltText="{Markup:String AltText.Advanced}"
+                                   Expanded="{Binding Expanded}"
+                                   Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityInverter}}" />
+            <StackPanel Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.Blank}"
+                        Command="{Binding CreateBlankCommand}"
+                        Content="{Markup:String CreateProject.AccessText.Blank}" />
+                <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.FromTemplate}"
+                        Command="{Binding CreateFromTemplateCommand}"
+                        Content="{Markup:String CreateProject.AccessText.FromTemplate}" />
+                <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.FromExisting}"
+                        Command="{Binding CreateFromExistingCommand}"
+                        Content="{Markup:String CreateProject.AccessText.FromExisting}" />
+            </StackPanel>
         </StackPanel>
     </DataTemplate>
 

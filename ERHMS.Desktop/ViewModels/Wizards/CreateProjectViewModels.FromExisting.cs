@@ -67,19 +67,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public override Task ContinueAsync()
                 {
                     State.SourceProject = Project;
-                    Wizard.GoForward(new SetProjectCreationInfoViewModel(State));
+                    Wizard.GoForward(new CommitViewModel(State));
                     return Task.CompletedTask;
-                }
-            }
-
-            public class SetProjectCreationInfoViewModel : CreateProjectViewModels.SetProjectCreationInfoViewModel
-            {
-                public SetProjectCreationInfoViewModel(State state)
-                    : base(state) { }
-
-                protected override StepViewModel GetSubsequent()
-                {
-                    return new CommitViewModel(State);
                 }
             }
 
@@ -88,7 +77,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public CommitViewModel(State state)
                     : base(state)
                 {
-                    Details.Insert(0, Strings.Label_Project, state.SourceProject.FilePath);
+                    Details.Add(Strings.Label_Strategy_CreateProject, Strings.Strategy_FromExisting);
+                    Details.Add(Strings.Label_Source, state.SourceProject);
                 }
 
                 protected override void ContinueCore(Project project)

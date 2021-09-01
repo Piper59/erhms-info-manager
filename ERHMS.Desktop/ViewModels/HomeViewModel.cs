@@ -39,7 +39,7 @@ namespace ERHMS.Desktop.ViewModels
                 protected set { SetProperty(ref recents, value); }
             }
 
-            public abstract ICommand MakeCurrentCommand { get; }
+            public abstract ICommand SetCurrentCommand { get; }
             public abstract ICommand RemoveRecentCommand { get; }
 
             protected ProjectCollectionViewModel()
@@ -60,7 +60,7 @@ namespace ERHMS.Desktop.ViewModels
             public override CoreProject CoreProject => CoreProject.Worker;
             public override bool CanHaveRecents => false;
 
-            public override ICommand MakeCurrentCommand => Command.Null;
+            public override ICommand SetCurrentCommand => Command.Null;
             public override ICommand RemoveRecentCommand => Command.Null;
 
             public WorkerProjectCollectionViewModel()
@@ -87,13 +87,13 @@ namespace ERHMS.Desktop.ViewModels
             public override CoreProject CoreProject => CoreProject.Incident;
             public override bool CanHaveRecents => true;
 
-            public override ICommand MakeCurrentCommand { get; }
+            public override ICommand SetCurrentCommand { get; }
             public override ICommand RemoveRecentCommand { get; }
 
             public IncidentProjectCollectionViewModel()
             {
                 Initialize();
-                MakeCurrentCommand = new SyncCommand<ProjectInfo>(MakeCurrent, IsNotEmpty);
+                SetCurrentCommand = new SyncCommand<ProjectInfo>(SetCurrent, IsNotEmpty);
                 RemoveRecentCommand = new SyncCommand<ProjectInfo>(RemoveRecent, IsNotEmpty);
             }
 
@@ -115,7 +115,7 @@ namespace ERHMS.Desktop.ViewModels
                 return projectInfo != EmptyProjectInfo.Instance;
             }
 
-            public void MakeCurrent(ProjectInfo projectInfo)
+            public void SetCurrent(ProjectInfo projectInfo)
             {
                 Settings.Default.IncidentProjectPath = projectInfo.FilePath;
                 Settings.Default.Save();

@@ -63,6 +63,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     Details = new DetailsViewModel
                     {
+                        { Strings.Label_Strategy_CreateView, Strings.Strategy_Blank },
                         { Strings.Label_Name, state.ViewName },
                         { Strings.Label_WithWorkerInfo, state.WithWorkerInfo }
                     };

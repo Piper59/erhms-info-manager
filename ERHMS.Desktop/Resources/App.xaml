@@ -36,6 +36,14 @@
     </Style>
 
     <!-- Text -->
+    <Style x:Key="Paragraph" TargetType="Panel">
+        <Setter Property="Margin">
+            <Setter.Value>
+                <Thickness Bottom="{StaticResource DefaultFontSize}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="Body" TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}" />
 
     <Style x:Key="Heading" TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}">

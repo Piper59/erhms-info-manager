@@ -178,11 +178,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a _new project.
+        ///   Looks up a localized string similar to _Create a new project.
         /// </summary>
-        public static string AccessText_CreateNewProject {
+        public static string AccessText_CreateProject {
             get {
-                return ResourceManager.GetString("AccessText.CreateNewProject", resourceCulture);
+                return ResourceManager.GetString("AccessText.CreateProject", resourceCulture);
             }
         }
         
@@ -313,20 +313,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View the _current project.
-        /// </summary>
-        public static string AccessText_GoToCurrentProject {
-            get {
-                return ResourceManager.GetString("AccessText.GoToCurrentProject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to V_iew help.
         /// </summary>
         public static string AccessText_GoToHelp {
             get {
                 return ResourceManager.GetString("AccessText.GoToHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to V_iew the current project.
+        /// </summary>
+        public static string AccessText_GoToProject {
+            get {
+                return ResourceManager.GetString("AccessText.GoToProject", resourceCulture);
             }
         }
         
@@ -457,20 +457,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open an _existing project.
+        ///   Looks up a localized string similar to _Open an existing project.
         /// </summary>
-        public static string AccessText_OpenExistingProject {
+        public static string AccessText_OpenProject {
             get {
-                return ResourceManager.GetString("AccessText.OpenExistingProject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Switch to a _recent project.
-        /// </summary>
-        public static string AccessText_OpenRecentProject {
-            get {
-                return ResourceManager.GetString("AccessText.OpenRecentProject", resourceCulture);
+                return ResourceManager.GetString("AccessText.OpenProject", resourceCulture);
             }
         }
         
@@ -565,7 +556,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Set up the worker project.
+        ///   Looks up a localized string similar to _Set up a worker project.
         /// </summary>
         public static string AccessText_SetUpProject_Worker {
             get {
@@ -588,6 +579,15 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Size {
             get {
                 return ResourceManager.GetString("AccessText.Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Switch to a recent project.
+        /// </summary>
+        public static string AccessText_SwitchProject {
+            get {
+                return ResourceManager.GetString("AccessText.SwitchProject", resourceCulture);
             }
         }
         
@@ -1328,7 +1328,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a name and location for the new file.
+        ///   Looks up a localized string similar to Choose a name and location for the file.
         /// </summary>
         public static string CreateAsset_Lead_SetFilePath {
             get {
@@ -1382,7 +1382,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new project containing no forms..
+        ///   Looks up a localized string similar to Create a project containing no forms..
         /// </summary>
         public static string CreateProject_HelpText_Blank {
             get {
@@ -1391,7 +1391,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new project containing forms copied from an existing project. Existing records will not be copied..
+        ///   Looks up a localized string similar to Create a project containing forms copied from an existing project. Existing records will not be copied..
         /// </summary>
         public static string CreateProject_HelpText_FromExisting {
             get {
@@ -1400,7 +1400,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new project containing forms defined in a project-level template..
+        ///   Looks up a localized string similar to Create a project containing forms defined in a project-level template..
         /// </summary>
         public static string CreateProject_HelpText_FromTemplate {
             get {
@@ -1409,7 +1409,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a name that uniquely identifies this incident..
+        ///   Looks up a localized string similar to Use a name that uniquely identifies the incident..
         /// </summary>
         public static string CreateProject_HelpText_Name_Incident {
             get {
@@ -1418,7 +1418,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use your organization&apos;s name or simply &quot;Workers.&quot;.
+        ///   Looks up a localized string similar to Consider using your organization&apos;s name or simply &quot;Workers.&quot;.
         /// </summary>
         public static string CreateProject_HelpText_Name_Worker {
             get {
@@ -1427,7 +1427,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new project containing standard incident forms..
+        ///   Looks up a localized string similar to Create a project containing standard incident forms..
         /// </summary>
         public static string CreateProject_HelpText_Standard_Incident {
             get {
@@ -1436,7 +1436,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new project containing standard worker forms..
+        ///   Looks up a localized string similar to Create a project containing standard worker forms..
         /// </summary>
         public static string CreateProject_HelpText_Standard_Worker {
             get {
@@ -1454,7 +1454,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter details for the new project.
+        ///   Looks up a localized string similar to Enter details for the project.
         /// </summary>
         public static string CreateProject_Lead_SetProjectCreationInfo {
             get {
@@ -1472,7 +1472,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose how to create the new project.
+        ///   Looks up a localized string similar to Choose how to create the project.
         /// </summary>
         public static string CreateProject_Lead_SetStrategy {
             get {
@@ -1526,7 +1526,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you choose to collect worker information, the new form will contain fields for worker name, email address, and ID. You can use these fields to associate each record with the corresponding worker..
+        ///   Looks up a localized string similar to If you choose to collect worker information, the form will contain fields for worker name, email address, and ID. You can use these fields to associate each record with the corresponding worker..
         /// </summary>
         public static string CreateView_Body_SetWithWorkerInfo {
             get {
@@ -1535,7 +1535,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new form containing minimal fields..
+        ///   Looks up a localized string similar to Create a form containing minimal fields..
         /// </summary>
         public static string CreateView_HelpText_Blank {
             get {
@@ -1544,7 +1544,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new form containing fields copied from an existing form. Existing records will not be copied..
+        ///   Looks up a localized string similar to Create a form containing fields copied from an existing form. Existing records will not be copied..
         /// </summary>
         public static string CreateView_HelpText_FromExisting {
             get {
@@ -1553,7 +1553,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new form containing fields defined in a form-level template..
+        ///   Looks up a localized string similar to Create a form containing fields defined in a form-level template..
         /// </summary>
         public static string CreateView_HelpText_FromTemplate {
             get {
@@ -1562,7 +1562,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new form containing fields defined in a standard worker or incident form..
+        ///   Looks up a localized string similar to Create a form containing fields defined in a standard worker or incident form..
         /// </summary>
         public static string CreateView_HelpText_Standard {
             get {
@@ -1598,7 +1598,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose how to create the new form.
+        ///   Looks up a localized string similar to Choose how to create the form.
         /// </summary>
         public static string CreateView_Lead_SetStrategy {
             get {
@@ -1607,7 +1607,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a name for the new form.
+        ///   Looks up a localized string similar to Enter a name for the form.
         /// </summary>
         public static string CreateView_Lead_SetViewName {
             get {
@@ -1648,6 +1648,33 @@ namespace ERHMS.Desktop.Properties {
         public static string DatabaseProvider_Value_SqlServer {
             get {
                 return ResourceManager.GetString("DatabaseProvider.Value.SqlServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exists (will be initialized).
+        /// </summary>
+        public static string DatabaseStatus_Value_Existing {
+            get {
+                return ResourceManager.GetString("DatabaseStatus.Value.Existing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exists (already initialized).
+        /// </summary>
+        public static string DatabaseStatus_Value_Initialized {
+            get {
+                return ResourceManager.GetString("DatabaseStatus.Value.Initialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Does not exist (will be created and initialized).
+        /// </summary>
+        public static string DatabaseStatus_Value_Missing {
+            get {
+                return ResourceManager.GetString("DatabaseStatus.Value.Missing", resourceCulture);
             }
         }
         
@@ -1941,15 +1968,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click here to create or open a project..
-        /// </summary>
-        public static string HelpText_CreateOrOpenProject {
-            get {
-                return ResourceManager.GetString("HelpText.CreateOrOpenProject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create a new form in the Epi Info Form Designer module..
         /// </summary>
         public static string HelpText_CreateView {
@@ -2081,6 +2099,15 @@ namespace ERHMS.Desktop.Properties {
         public static string HelpText_Refresh {
             get {
                 return ResourceManager.GetString("HelpText.Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click here to set up a project..
+        /// </summary>
+        public static string HelpText_SetUpProject {
+            get {
+                return ResourceManager.GetString("HelpText.SetUpProject", resourceCulture);
             }
         }
         
@@ -2301,6 +2328,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Database status:.
+        /// </summary>
+        public static string Label_DatabaseStatus {
+            get {
+                return ResourceManager.GetString("Label.DatabaseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server name:.
         /// </summary>
         public static string Label_DataSource {
@@ -2423,6 +2459,33 @@ namespace ERHMS.Desktop.Properties {
         public static string Label_Search {
             get {
                 return ResourceManager.GetString("Label.Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source:.
+        /// </summary>
+        public static string Label_Source {
+            get {
+                return ResourceManager.GetString("Label.Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project type:.
+        /// </summary>
+        public static string Label_Strategy_CreateProject {
+            get {
+                return ResourceManager.GetString("Label.Strategy.CreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Form type:.
+        /// </summary>
+        public static string Label_Strategy_CreateView {
+            get {
+                return ResourceManager.GetString("Label.Strategy.CreateView", resourceCulture);
             }
         }
         
@@ -2895,7 +2958,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a _new project.
+        ///   Looks up a localized string similar to _Create a new project.
         /// </summary>
         public static string SetUpProject_AccessText_Create {
             get {
@@ -2904,11 +2967,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open an _existing project.
+        ///   Looks up a localized string similar to _Open an existing project.
         /// </summary>
         public static string SetUpProject_AccessText_Open {
             get {
                 return ResourceManager.GetString("SetUpProject.AccessText.Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A project consists of an Epi Info project (.prj) file and an underlying database. If you choose to create a new project, ERHMS Info Manager will ensure that the database exists and has been initialized for use with Epi Info..
+        /// </summary>
+        public static string SetUpProject_Body_SetStrategy {
+            get {
+                return ResourceManager.GetString("SetUpProject.Body.SetStrategy", resourceCulture);
             }
         }
         
@@ -2922,7 +2994,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open an existing Epi Info project (.prj) file..
+        ///   Looks up a localized string similar to Open an existing Epi Info project (.prj) file connected to an existing database..
         /// </summary>
         public static string SetUpProject_HelpText_Open {
             get {
@@ -2936,6 +3008,42 @@ namespace ERHMS.Desktop.Properties {
         public static string SetUpProject_Lead_SetStrategy {
             get {
                 return ResourceManager.GetString("SetUpProject.Lead.SetStrategy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blank.
+        /// </summary>
+        public static string Strategy_Blank {
+            get {
+                return ResourceManager.GetString("Strategy.Blank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy of existing.
+        /// </summary>
+        public static string Strategy_FromExisting {
+            get {
+                return ResourceManager.GetString("Strategy.FromExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template-based.
+        /// </summary>
+        public static string Strategy_FromTemplate {
+            get {
+                return ResourceManager.GetString("Strategy.FromTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard.
+        /// </summary>
+        public static string Strategy_Standard {
+            get {
+                return ResourceManager.GetString("Strategy.Standard", resourceCulture);
             }
         }
         

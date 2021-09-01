@@ -89,19 +89,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     State.TemplatePath = TemplatePath;
                     State.XTemplate = XTemplate;
-                    Wizard.GoForward(new SetProjectCreationInfoViewModel(State));
+                    Wizard.GoForward(new CommitViewModel(State));
                     return Task.CompletedTask;
-                }
-            }
-
-            public class SetProjectCreationInfoViewModel : CreateProjectViewModels.SetProjectCreationInfoViewModel
-            {
-                public SetProjectCreationInfoViewModel(State state)
-                    : base(state) { }
-
-                protected override StepViewModel GetSubsequent()
-                {
-                    return new CommitViewModel(State);
                 }
             }
 
@@ -110,7 +99,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public CommitViewModel(State state)
                     : base(state)
                 {
-                    Details.Insert(0, Strings.Label_Template, state.TemplatePath);
+                    Details.Add(Strings.Label_Strategy_CreateProject, Strings.Strategy_FromTemplate);
+                    Details.Add(Strings.Label_Template, state.TemplatePath);
                 }
 
                 protected override void ContinueCore(Project project)

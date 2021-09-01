@@ -76,6 +76,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         });
                         return await ViewListCollectionView.CreateAsync(project);
                     });
+                    Command.OnCanExecuteChanged();
                 }
 
                 public override bool CanContinue()
@@ -128,8 +129,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     Details = new DetailsViewModel
                     {
-                        { Strings.Label_Project, state.SourceView.Project.FilePath },
-                        { Strings.Label_View, state.SourceView.Name },
+                        { Strings.Label_Strategy_CreateView, Strings.Strategy_FromExisting },
+                        { Strings.Label_Source, state.SourceView },
                         { Strings.Label_Name, state.ViewName }
                     };
                 }

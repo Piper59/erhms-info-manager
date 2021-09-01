@@ -8,5 +8,17 @@ namespace ERHMS.EpiInfo.Data
         {
             return @this.TableExists(TableNames.DbInfo);
         }
+
+        public static DatabaseStatus GetStatus(this IDatabase @this)
+        {
+            if (@this.Exists())
+            {
+                return @this.IsInitialized() ? DatabaseStatus.Initialized : DatabaseStatus.Existing;
+            }
+            else
+            {
+                return DatabaseStatus.Missing;
+            }
+        }
     }
 }
