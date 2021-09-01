@@ -4,11 +4,15 @@ using ERHMS.Common.Compression;
 using ERHMS.Common.Logging;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Templating;
+using ERHMS.EpiInfo.Templating.Xml;
+using ERHMS.Resources;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -88,40 +92,6 @@ namespace ERHMS.Desktop.ViewModels
             dialog.Show();
         }
 
-        private async Task GoToProjectAsync(Task<Project> task)
-        {
-            try
-            {
-                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                progress.Lead = Strings.Lead_LoadingProject;
-                Content = await progress.Run(async () =>
-                {
-                    return await ProjectViewModel.CreateAsync(await task);
-                });
-            }
-            catch (Exception ex)
-            {
-                OnError(ex, Strings.Body_LoadError_Project);
-            }
-        }
-
-        private async Task GoToViewAsync(Task<View> task)
-        {
-            try
-            {
-                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                progress.Lead = Strings.Lead_LoadingView;
-                Content = await progress.Run(async () =>
-                {
-                    return await ViewViewModel.CreateAsync(await task);
-                });
-            }
-            catch (Exception ex)
-            {
-                OnError(ex, Strings.Body_LoadError_View);
-            }
-        }
-
         public void GoToHome()
         {
             Content = Home;
@@ -152,7 +122,19 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToProjectAsync(Project project)
         {
-            await GoToProjectAsync(Task.FromResult(project));
+            try
+            {
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Lead = Strings.Lead_LoadingProject;
+                Content = await progress.Run(() =>
+                {
+                    return ProjectViewModel.CreateAsync(project);
+                });
+            }
+            catch (Exception ex)
+            {
+                OnError(ex, Strings.Body_LoadError_Project);
+            }
         }
 
         public bool CanGoToCoreProject(CoreProject coreProject)
@@ -162,11 +144,24 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToCoreProjectAsync(CoreProject coreProject)
         {
-            await GoToProjectAsync(Task.Run(() =>
+            try
             {
-                string projectPath = Settings.Default.GetProjectPath(coreProject);
-                return ProjectExtensions.Open(projectPath);
-            }));
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Lead = Strings.Lead_LoadingProject;
+                Content = await progress.Run(async () =>
+                {
+                    Project project = await Task.Run(() =>
+                    {
+                        string projectPath = Settings.Default.GetProjectPath(coreProject);
+                        return ProjectExtensions.Open(projectPath);
+                    });
+                    return await ProjectViewModel.CreateAsync(project);
+                });
+            }
+            catch (Exception ex)
+            {
+                OnError(ex, Strings.Body_LoadError_Project);
+            }
         }
 
         public bool CanGoToView(View view)
@@ -176,7 +171,19 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToViewAsync(View view)
         {
-            await GoToViewAsync(Task.FromResult(view));
+            try
+            {
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Lead = Strings.Lead_LoadingView;
+                Content = await progress.Run(() =>
+                {
+                    return ViewViewModel.CreateAsync(view);
+                });
+            }
+            catch (Exception ex)
+            {
+                OnError(ex, Strings.Body_LoadError_View);
+            }
         }
 
         public bool CanGoToCoreView(CoreView coreView)
@@ -186,13 +193,57 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToCoreViewAsync(CoreView coreView)
         {
-            // TODO: Handle errors
-            await GoToViewAsync(Task.Run(() =>
+            Project project = null;
+            object content = null;
+            try
             {
-                string projectPath = Settings.Default.GetProjectPath(coreView.CoreProject);
-                Project project = ProjectExtensions.Open(projectPath);
-                return project.Views[coreView.Name];
-            }));
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Lead = Strings.Lead_LoadingView;
+                content = await progress.Run(async () =>
+                {
+                    View view = await Task.Run(() =>
+                    {
+                        string projectPath = Settings.Default.GetProjectPath(coreView.CoreProject);
+                        project = ProjectExtensions.Open(projectPath);
+                        return project.Views.Contains(coreView.Name) ? project.Views[coreView.Name] : null;
+                    });
+                    return view == null ? null : await ViewViewModel.CreateAsync(view);
+                });
+            }
+            catch (Exception ex)
+            {
+                OnError(ex, Strings.Body_LoadError_View);
+                return;
+            }
+            if (content == null)
+            {
+                IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                dialog.Severity = DialogSeverity.Warning;
+                dialog.Lead = Strings.Lead_ConfirmViewCreation;
+                dialog.Body = string.Format(Strings.Body_ConfirmViewCreation, coreView.Name, coreView.GetTitle());
+                dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Create);
+                if (dialog.Show() != true)
+                {
+                    return;
+                }
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Lead = Strings.Lead_CreatingView;
+                content = await progress.Run(async () =>
+                {
+                    View view = await Task.Run(() =>
+                    {
+                        XTemplate xTemplate = ResourceManager.GetXTemplate(coreView);
+                        ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, project)
+                        {
+                            Progress = Log.Progress
+                        };
+                        instantiator.Instantiate();
+                        return instantiator.View;
+                    });
+                    return await ViewViewModel.CreateAsync(view);
+                });
+            }
+            Content = content;
         }
 
         public void CreateCoreProject(CoreProject coreProject)

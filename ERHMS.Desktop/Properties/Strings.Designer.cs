@@ -178,6 +178,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Create.
+        /// </summary>
+        public static string AccessText_Create {
+            get {
+                return ResourceManager.GetString("AccessText.Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Create a new project.
         /// </summary>
         public static string AccessText_CreateProject {
@@ -943,6 +952,17 @@ namespace ERHMS.Desktop.Properties {
         public static string Body_ConfirmOrphanAssetCreation {
             get {
                 return ResourceManager.GetString("Body.ConfirmOrphanAssetCreation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Form: {0}
+        ///
+        ///No form with this name was found in the project. Create a standard {1}?.
+        /// </summary>
+        public static string Body_ConfirmViewCreation {
+            get {
+                return ResourceManager.GetString("Body.ConfirmViewCreation", resourceCulture);
             }
         }
         
@@ -2576,6 +2596,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_ConfirmOrphanAssetCreation {
             get {
                 return ResourceManager.GetString("Lead.ConfirmOrphanAssetCreation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This form does not exist.
+        /// </summary>
+        public static string Lead_ConfirmViewCreation {
+            get {
+                return ResourceManager.GetString("Lead.ConfirmViewCreation", resourceCulture);
             }
         }
         

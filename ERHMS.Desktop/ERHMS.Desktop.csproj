@@ -145,6 +145,7 @@
     <Compile Include="IAppCommands.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
+    <Compile Include="Infrastructure\CoreViewExtensions.cs" />
     <Compile Include="Infrastructure\FileFilter.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
     <Compile Include="Infrastructure\InvalidNameReasonExtensions.cs" />
