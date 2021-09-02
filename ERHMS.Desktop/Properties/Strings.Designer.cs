@@ -133,6 +133,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Change.
+        /// </summary>
+        public static string AccessText_Change {
+            get {
+                return ResourceManager.GetString("AccessText.Change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Check integrity.
         /// </summary>
         public static string AccessText_CheckIntegrity {
@@ -565,7 +574,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Set up a worker project.
+        ///   Looks up a localized string similar to _Set up the worker project.
         /// </summary>
         public static string AccessText_SetUpProject_Worker {
             get {
@@ -974,6 +983,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Body_ConfirmViewDeletion {
             get {
                 return ResourceManager.GetString("Body.ConfirmViewDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The worker project has already been set up. Multiple worker projects are not supported. ERHMS Info Manager will only recognize workers who have been entered into the current project&apos;s Worker Rostering Form..
+        /// </summary>
+        public static string Body_ConfirmWorkerProjectChange {
+            get {
+                return ResourceManager.GetString("Body.ConfirmWorkerProjectChange", resourceCulture);
             }
         }
         
@@ -2632,6 +2650,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_ConfirmViewDeletion {
             get {
                 return ResourceManager.GetString("Lead.ConfirmViewDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to change the worker project?.
+        /// </summary>
+        public static string Lead_ConfirmWorkerProjectChange {
+            get {
+                return ResourceManager.GetString("Lead.ConfirmWorkerProjectChange", resourceCulture);
             }
         }
         

@@ -246,9 +246,31 @@ namespace ERHMS.Desktop.ViewModels
             Content = content;
         }
 
+        private bool? ConfirmCoreProjectChange(CoreProject coreProject)
+        {
+            if (coreProject == CoreProject.Worker
+                && Settings.Default.HasWorkerProjectPath
+                && File.Exists(Settings.Default.WorkerProjectPath))
+            {
+                IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                dialog.Severity = DialogSeverity.Warning;
+                dialog.Lead = Strings.Lead_ConfirmWorkerProjectChange;
+                dialog.Body = Strings.Body_ConfirmWorkerProjectChange;
+                dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Change);
+                return dialog.Show();
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public void CreateCoreProject(CoreProject coreProject)
         {
-            // TODO: Confirm
+            if (ConfirmCoreProjectChange(coreProject) != true)
+            {
+                return;
+            }
             WizardViewModel wizard = CreateProjectViewModels.GetWizard(coreProject);
             if (wizard.Run() != true)
             {
@@ -259,7 +281,10 @@ namespace ERHMS.Desktop.ViewModels
 
         public void OpenCoreProject(CoreProject coreProject)
         {
-            // TODO: Confirm
+            if (ConfirmCoreProjectChange(coreProject) != true)
+            {
+                return;
+            }
             if (!SetUpProjectViewModels.Open(coreProject))
             {
                 return;
@@ -269,7 +294,10 @@ namespace ERHMS.Desktop.ViewModels
 
         public void SetUpCoreProject(CoreProject coreProject)
         {
-            // TODO: Confirm
+            if (ConfirmCoreProjectChange(coreProject) != true)
+            {
+                return;
+            }
             WizardViewModel wizard = SetUpProjectViewModels.GetWizard(coreProject);
             if (wizard.Run() != true)
             {
