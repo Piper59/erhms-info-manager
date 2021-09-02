@@ -501,6 +501,12 @@ Close anyway?</value>
   <data name="CoreProject.Label.Worker" xml:space="preserve">
     <value>Worker project:</value>
   </data>
+  <data name="CoreProject.Value.Incident" xml:space="preserve">
+    <value>Incident</value>
+  </data>
+  <data name="CoreProject.Value.Worker" xml:space="preserve">
+    <value>Worker</value>
+  </data>
   <data name="CoreReport.AccessText.Incident" xml:space="preserve">
     <value>_Incident report</value>
   </data>

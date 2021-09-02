@@ -58,7 +58,17 @@
             <Controls:BoundComboBox AutomationProperties.Name="{Markup:String Label.View}"
                                     Grid.Column="1"
                                     Binding="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
-                                    ItemsSource="{Binding CoreViews}" />
+                                    ItemsSource="{Binding CoreViews}">
+                <Controls:BoundComboBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <Controls:ComboBoxHeader Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreProject.Value.{0}'}" />
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </Controls:BoundComboBox.GroupStyle>
+            </Controls:BoundComboBox>
         </Grid>
     </DataTemplate>
 

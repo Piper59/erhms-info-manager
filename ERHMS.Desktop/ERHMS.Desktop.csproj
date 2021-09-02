@@ -110,6 +110,9 @@
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Controls\BoundComboBox.cs" />
+    <Compile Include="Controls\ComboBoxHeader.xaml.cs">
+      <DependentUpon>ComboBoxHeader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ExpandButton.xaml.cs">
       <DependentUpon>ExpandButton.xaml</DependentUpon>
     </Compile>
@@ -315,6 +318,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ComboBoxHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

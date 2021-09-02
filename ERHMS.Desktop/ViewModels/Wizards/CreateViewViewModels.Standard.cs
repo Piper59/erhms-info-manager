@@ -11,6 +11,7 @@ using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using ERHMS.Resources;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
@@ -32,6 +33,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     : base(state)
                 {
                     CoreViews = new ListCollectionView<CoreView>(CoreView.Instances);
+                    CoreViews.GroupDescriptions.Add(new PropertyGroupDescription(nameof(CoreView.CoreProject)));
                 }
 
                 public override bool CanContinue()

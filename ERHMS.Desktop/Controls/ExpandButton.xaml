@@ -33,7 +33,7 @@
         <ToggleButton AutomationProperties.Name="{Binding AltText, ElementName=Root, TargetNullValue=''}"
                       Click="Button_Click">
             <ToggleButton.Template>
-                <ControlTemplate>
+                <ControlTemplate TargetType="ToggleButton">
                     <Label Content="{Binding AccessText, ElementName=Root}"
                            FontSize="{Binding FontSize, ElementName=Root}"
                            Foreground="{Binding Foreground, ElementName=Root}" />

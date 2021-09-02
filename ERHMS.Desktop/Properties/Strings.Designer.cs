@@ -1177,6 +1177,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incident.
+        /// </summary>
+        public static string CoreProject_Value_Incident {
+            get {
+                return ResourceManager.GetString("CoreProject.Value.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker.
+        /// </summary>
+        public static string CoreProject_Value_Worker {
+            get {
+                return ResourceManager.GetString("CoreProject.Value.Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Incident report.
         /// </summary>
         public static string CoreReport_AccessText_Incident {

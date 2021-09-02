@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="ERHMS.Desktop.Controls.ComboBoxHeader"
+             x:Name="Root"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Border Background="{x:Static SystemColors.ControlBrush}"
+            Padding="3,0">
+        <TextBlock FontWeight="{StaticResource ThickFontWeight}"
+                   Foreground="{x:Static SystemColors.ControlTextBrush}"
+                   Margin="{StaticResource DefaultPadding}"
+                   Text="{Binding Text, ElementName=Root}" />
+    </Border>
+</UserControl>
