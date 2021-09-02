@@ -1470,9 +1470,9 @@ namespace ERHMS.Desktop
         {
             { "Add", "plus" },
             { "Clear", "times" },
-            { "Clipboard", "clipboard" },
             { "Close", "times" },
             { "Collapse", "chevron-up" },
+            { "Copy", "copy" },
             { "CoreView.AfterActionReview", "chart-line" },
             { "CoreView.DeploymentHealthSurvey", "heartbeat" },
             { "CoreView.PostDeploymentHealthSurvey", "heartbeat" },

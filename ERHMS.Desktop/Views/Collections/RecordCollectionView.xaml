@@ -61,7 +61,7 @@
                 <Controls:IconButton AccessKey="3"
                                      ContextMenuService.Placement="Bottom"
                                      AltText="{Markup:String AltText.Copy}"
-                                     Content="{Markup:Icon Clipboard}"
+                                     Content="{Markup:Icon Copy}"
                                      HelpText="{Markup:String HelpText.CopyField}"
                                      IsEnabled="{Binding HasItems, ElementName=ItemsDataGrid}">
                     <b:Interaction.Behaviors>
