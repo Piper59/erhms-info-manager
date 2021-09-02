@@ -23,6 +23,11 @@ namespace ERHMS.Desktop.Data
         public ListCollectionView(params TItem[] items)
             : this(items.ToList()) { }
 
+        public void UnsetCurrent()
+        {
+            SetCurrent(null, -1);
+        }
+
         public bool MoveCurrentTo(Predicate<TItem> predicate)
         {
             int position = -1;

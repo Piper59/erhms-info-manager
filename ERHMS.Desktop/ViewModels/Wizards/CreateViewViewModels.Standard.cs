@@ -33,6 +33,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     : base(state)
                 {
                     CoreViews = new ListCollectionView<CoreView>(CoreView.Instances);
+                    CoreViews.UnsetCurrent();
                     CoreViews.GroupDescriptions.Add(new PropertyGroupDescription(nameof(CoreView.CoreProject)));
                 }
 
