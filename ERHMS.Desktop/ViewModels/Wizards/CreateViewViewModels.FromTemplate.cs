@@ -81,6 +81,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     }
                     TemplatePath = fileDialog.FileName;
                     XTemplate = xTemplate;
+                    Command.OnCanExecuteChanged();
                 }
 
                 public override bool CanContinue()

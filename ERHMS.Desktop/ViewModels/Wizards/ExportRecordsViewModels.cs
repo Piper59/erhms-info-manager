@@ -82,6 +82,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     return;
                 }
                 FilePath = fileDialog.FileName;
+                Command.OnCanExecuteChanged();
             }
 
             public override bool CanContinue()
