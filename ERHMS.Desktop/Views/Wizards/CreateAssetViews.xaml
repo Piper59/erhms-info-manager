@@ -38,7 +38,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0"
+                <TextBox AutomationProperties.Name="{Markup:String Label.File}"
+                         Grid.Column="0"
                          IsReadOnly="True"
                          Text="{Binding FilePath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}" />
                 <Button Grid.Column="1"

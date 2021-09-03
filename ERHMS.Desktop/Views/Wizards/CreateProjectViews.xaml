@@ -46,7 +46,8 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0"
+                    <TextBox AutomationProperties.Name="{Markup:String Label.LocationRoot}"
+                             Grid.Column="0"
                              IsReadOnly="True"
                              Text="{Binding LocationRoot, Mode=OneWay}"
                              ToolTip="{Binding LocationRoot}" />
@@ -112,7 +113,8 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
                    Content="{Markup:String Label.Template}" />
-            <TextBox Grid.Column="1"
+            <TextBox AutomationProperties.Name="{Markup:String Label.Template}"
+                     Grid.Column="1"
                      IsReadOnly="True"
                      Text="{Binding TemplatePath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}">
                 <TextBox.ToolTip>
@@ -139,7 +141,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0"
+                <TextBox AutomationProperties.Name="{Markup:String Label.Project}"
+                         Grid.Column="0"
                          IsReadOnly="True"
                          Text="{Binding Project.FilePath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}"
                          ToolTip="{Binding Project.FilePath}" />

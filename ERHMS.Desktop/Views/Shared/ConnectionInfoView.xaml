@@ -21,13 +21,15 @@
         <Label Grid.Column="0"
                Grid.Row="0"
                Content="{Markup:String Label.DataSource}" />
-        <TextBox Grid.Column="1"
+        <TextBox AutomationProperties.Name="{Markup:String Label.DataSource}"
+                 Grid.Column="1"
                  Grid.Row="0"
                  Text="{Binding DataSource, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Column="0"
                Grid.Row="1"
                Content="{Markup:String Label.InitialCatalog}" />
-        <TextBox Grid.Column="1"
+        <TextBox AutomationProperties.Name="{Markup:String Label.InitialCatalog}"
+                 Grid.Column="1"
                  Grid.Row="1"
                  Text="{Binding InitialCatalog, UpdateSourceTrigger=PropertyChanged}" />
         <CheckBox Grid.Column="1"
@@ -45,14 +47,16 @@
         <Label Grid.Column="0"
                Grid.Row="4"
                Content="{Markup:String Label.UserID}" />
-        <TextBox Grid.Column="1"
+        <TextBox AutomationProperties.Name="{Markup:String Label.UserID}"
+                 Grid.Column="1"
                  Grid.Row="4"
                  IsEnabled="{Binding CanHaveCredentials}"
                  Text="{Binding UserID, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Column="0"
                Grid.Row="5"
                Content="{Markup:String Label.Password}" />
-        <PasswordBox Grid.Column="1"
+        <PasswordBox AutomationProperties.Name="{Markup:String Label.Password}"
+                     Grid.Column="1"
                      Grid.Row="5"
                      IsEnabled="{Binding CanHaveCredentials}">
             <b:Interaction.Behaviors>
