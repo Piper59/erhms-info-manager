@@ -51,6 +51,12 @@ namespace ERHMS.Desktop.ViewModels
             return Result;
         }
 
+        public bool? Run<TState>(out TState state)
+        {
+            state = ((StepViewModel<TState>)step).State;
+            return Run();
+        }
+
         public void GoForward(StepViewModel step)
         {
             step.Wizard = this;

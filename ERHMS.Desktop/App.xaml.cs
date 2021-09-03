@@ -1,7 +1,7 @@
 ﻿using ERHMS.Common.Logging;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
-using ERHMS.Desktop.EventHandlers;
+using ERHMS.Desktop.Events;
 using ERHMS.Desktop.Infrastructure.Services;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;

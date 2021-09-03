@@ -3,6 +3,7 @@
         <ResourceDictionary Source="Wizards/CreateAssetViews.xaml" />
         <ResourceDictionary Source="Wizards/CreateProjectViews.xaml" />
         <ResourceDictionary Source="Wizards/CreateViewViews.xaml" />
+        <ResourceDictionary Source="Wizards/CreateWorkerViews.xaml" />
         <ResourceDictionary Source="Wizards/ExportRecordsViews.xaml" />
         <ResourceDictionary Source="Wizards/ImportRecordsViews.xaml" />
         <ResourceDictionary Source="Wizards/SetUpProjectViews.xaml" />

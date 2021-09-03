@@ -21,8 +21,7 @@
                 BorderThickness="0,1"
                 Style="{StaticResource FluidLayout}">
             <Grid Style="{StaticResource Container}">
-                <Views_Collections:WorkerCollectionView CommitCommand="{Binding CommitCommand, ElementName=Root}"
-                                                        DataContext="{Binding Workers}" />
+                <Views_Collections:WorkerCollectionView DataContext="{Binding Workers}" />
             </Grid>
         </Border>
         <Border Grid.Row="1"
@@ -32,11 +31,10 @@
                 <WrapPanel.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
                 </WrapPanel.Resources>
-                <Button Command="{Binding CommitCommand, ElementName=Root}"
+                <Button Command="{Binding Workers.ChooseCommand}"
                         Content="{Markup:String AccessText.Ok}"
                         IsDefault="True" />
-                <Button Command="{Binding CancelCommand, ElementName=Root}"
-                        Content="{Markup:String AccessText.Cancel}"
+                <Button Content="{Markup:String AccessText.Cancel}"
                         IsCancel="True" />
             </WrapPanel>
         </Border>

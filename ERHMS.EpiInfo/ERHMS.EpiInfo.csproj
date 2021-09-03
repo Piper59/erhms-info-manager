@@ -90,6 +90,7 @@
     <Compile Include="Data\IDbDriverExtensions.cs" />
     <Compile Include="Data\Record.cs" />
     <Compile Include="Data\RecordCollection.cs" />
+    <Compile Include="Data\RecordEventArgs.cs" />
     <Compile Include="Data\RecordExporter.cs" />
     <Compile Include="Data\RecordImporter.cs" />
     <Compile Include="Data\RecordMapper.cs" />

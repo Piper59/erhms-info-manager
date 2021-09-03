@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
 
-namespace ERHMS.Desktop.EventHandlers
+namespace ERHMS.Desktop.Events
 {
     public static class OpenUriOnRequestNavigate
     {

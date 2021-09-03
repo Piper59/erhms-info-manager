@@ -1469,6 +1469,7 @@ namespace ERHMS.Desktop
         private static readonly IDictionary<string, string> keysByName = new Dictionary<string, string>
         {
             { "Add", "plus" },
+            { "Choose", "check" },
             { "Clear", "times" },
             { "Close", "times" },
             { "Collapse", "chevron-up" },

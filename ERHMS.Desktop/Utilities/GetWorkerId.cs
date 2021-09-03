@@ -41,14 +41,14 @@ namespace ERHMS.Desktop.Utilities
         public override async Task<string> ExecuteAsync()
         {
             GetWorkerIdViewModel dataContext =
-                await GetWorkerIdViewModel.CreateAsync(FirstName, LastName, EmailAddress);
-            dataContext.WorkerId = WorkerId;
+                await GetWorkerIdViewModel.CreateAsync(FirstName, LastName, EmailAddress, WorkerId);
             Window window = new GetWorkerIdView
             {
                 DataContext = dataContext,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
-            return window.ShowDialog() == true ? dataContext.WorkerId : null;
+            window.ShowDialog();
+            return dataContext.WorkerId;
         }
     }
 }

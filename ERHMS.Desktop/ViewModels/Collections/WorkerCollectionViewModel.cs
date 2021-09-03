@@ -1,12 +1,18 @@
 ﻿using Epi;
+using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.Services;
+using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.Domain;
 using ERHMS.Domain.Data;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels.Collections
@@ -45,6 +51,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public RecordStatusListCollectionView Statuses { get; } = new RecordStatusListCollectionView();
 
+        public ICommand AddCommand { get; }
+        public ICommand ChooseCommand { get; }
+        public ICommand RefreshCommand { get; }
+
         private WorkerCollectionViewModel(string firstName, string lastName, string emailAddress)
         {
             FirstName = firstName;
@@ -54,15 +64,21 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items.PageSize = 100;
             Items.SortDescriptions.Add(new SortDescription(nameof(Worker.Similarity), ListSortDirection.Descending));
             Statuses.CurrentChanged += (sender, e) => Items.Refresh();
+            AddCommand = new SyncCommand(Add);
+            ChooseCommand = new SyncCommand(Choose, HasCurrent);
+            RefreshCommand = new AsyncCommand(RefreshAsync);
         }
+
+        public event EventHandler<RecordEventArgs<Worker>> Committed;
+        private void OnCommitted(RecordEventArgs<Worker> e) => Committed?.Invoke(this, e);
+        private void OnCommitted(Worker worker) => OnCommitted(new RecordEventArgs<Worker>(worker));
 
         private async Task InitializeAsync()
         {
             await Task.Run(() =>
             {
                 List.Clear();
-                string projectPath = Settings.Default.WorkerProjectPath;
-                Project project = ProjectExtensions.Open(projectPath);
+                Project project = ProjectExtensions.Open(Settings.Default.WorkerProjectPath);
                 View view = project.Views[CoreView.WorkerRosteringForm.Name];
                 using (RecordRepository<Worker> repository = new RecordRepository<Worker>(view))
                 {
@@ -103,6 +119,28 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             Worker worker = (Worker)item;
             return IsStatusMatch(worker) && IsSearchMatch(worker);
+        }
+
+        public void Add()
+        {
+            WizardViewModel wizard = CreateWorkerViewModels.GetWizard(FirstName, LastName, EmailAddress);
+            if (wizard.Run(out CreateWorkerViewModels.State state) != true)
+            {
+                return;
+            }
+            OnCommitted(state.Worker);
+        }
+
+        public void Choose()
+        {
+            OnCommitted(CurrentItem);
+        }
+
+        public async Task RefreshAsync()
+        {
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Lead = Strings.Lead_RefreshingWorkers;
+            await progress.Run(InitializeAsync);
         }
     }
 }

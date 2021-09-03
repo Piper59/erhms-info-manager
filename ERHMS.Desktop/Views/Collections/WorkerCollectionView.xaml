@@ -25,9 +25,33 @@
                                     ItemsSource="{Binding Statuses}"
                                     MinWidth="125" />
         </Grid>
-        <Controls:Pager Grid.Row="1"
-                        DataContext="{Binding Items}"
-                        HorizontalAlignment="Right" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <WrapPanel Grid.Column="0">
+                <Controls:IconButton AccessKey="1"
+                                     AltText="{Markup:String AltText.Add}"
+                                     Command="{Binding AddCommand}"
+                                     Content="{Markup:Icon Add}"
+                                     HelpText="{Markup:String HelpText.AddWorker}" />
+                <Controls:IconButton AccessKey="2"
+                                     AltText="{Markup:String AltText.Choose}"
+                                     Command="{Binding ChooseCommand}"
+                                     Content="{Markup:Icon Choose}"
+                                     HelpText="{Markup:String HelpText.ChooseWorker}" />
+                <Border Style="{StaticResource IconButtonSeparator}" />
+                <Controls:IconButton AccessKey="3"
+                                     AltText="{Markup:String AltText.Refresh}"
+                                     Command="{Binding RefreshCommand}"
+                                     Content="{Markup:Icon Refresh}"
+                                     HelpText="{Markup:String HelpText.Refresh}" />
+            </WrapPanel>
+            <Controls:Pager Grid.Column="1"
+                            DataContext="{Binding Items}"
+                            VerticalAlignment="Top" />
+        </Grid>
         <DataGrid Grid.Row="2"
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
@@ -51,7 +75,7 @@
                                     Width="3*" />
             </DataGrid.Columns>
             <DataGrid.InputBindings>
-                <MouseBinding Command="{Binding CommitCommand, ElementName=Root}"
+                <MouseBinding Command="{Binding ChooseCommand}"
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
         </DataGrid>

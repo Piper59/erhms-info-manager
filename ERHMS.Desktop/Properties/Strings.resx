@@ -327,6 +327,9 @@
   <data name="AltText.Advanced" xml:space="preserve">
     <value>Advanced</value>
   </data>
+  <data name="AltText.Choose" xml:space="preserve">
+    <value>Choose</value>
+  </data>
   <data name="AltText.ClearSearch" xml:space="preserve">
     <value>Clear search</value>
   </data>
@@ -678,6 +681,12 @@ Close anyway?</value>
   <data name="CreateView.Lead.SetXTemplate" xml:space="preserve">
     <value>Choose a template</value>
   </data>
+  <data name="CreateWorker.Lead.Close" xml:space="preserve">
+    <value>Worker creation was successful</value>
+  </data>
+  <data name="CreateWorker.Lead.SetWorker" xml:space="preserve">
+    <value>Enter details for the worker</value>
+  </data>
   <data name="DatabaseProvider.Value.Access2003" xml:space="preserve">
     <value>Microsoft Access</value>
   </data>
@@ -777,6 +786,12 @@ Close anyway?</value>
   </data>
   <data name="HelpText.AddRecord" xml:space="preserve">
     <value>Add a new record in the Epi Info Enter Data module.</value>
+  </data>
+  <data name="HelpText.AddWorker" xml:space="preserve">
+    <value>Add a new worker and return to Epi Info.</value>
+  </data>
+  <data name="HelpText.ChooseWorker" xml:space="preserve">
+    <value>Choose the selected worker and return to Epi Info.</value>
   </data>
   <data name="HelpText.CopyField" xml:space="preserve">
     <value>Copy values to the Clipboard from one or all fields.</value>
@@ -919,14 +934,23 @@ Close anyway?</value>
   <data name="Label.Description" xml:space="preserve">
     <value>Description:</value>
   </data>
+  <data name="Label.EmailAddress" xml:space="preserve">
+    <value>Email address:</value>
+  </data>
   <data name="Label.Encrypt" xml:space="preserve">
     <value>Encrypt connection?</value>
   </data>
   <data name="Label.File" xml:space="preserve">
     <value>File:</value>
   </data>
+  <data name="Label.FirstName" xml:space="preserve">
+    <value>First name:</value>
+  </data>
   <data name="Label.InitialCatalog" xml:space="preserve">
     <value>Connect to database:</value>
+  </data>
+  <data name="Label.LastName" xml:space="preserve">
+    <value>Last name:</value>
   </data>
   <data name="Label.Location" xml:space="preserve">
     <value>Location:</value>
@@ -1009,6 +1033,9 @@ Close anyway?</value>
   <data name="Lead.CreatingView" xml:space="preserve">
     <value>Creating form</value>
   </data>
+  <data name="Lead.CreatingWorker" xml:space="preserve">
+    <value>Creating worker</value>
+  </data>
   <data name="Lead.DeletingAsset" xml:space="preserve">
     <value>Deleting file</value>
   </data>
@@ -1065,6 +1092,9 @@ Close anyway?</value>
   </data>
   <data name="Lead.RefreshingViews" xml:space="preserve">
     <value>Refreshing forms</value>
+  </data>
+  <data name="Lead.RefreshingWorkers" xml:space="preserve">
+    <value>Refreshing workers</value>
   </data>
   <data name="Lead.Start" xml:space="preserve">
     <value>Before you begin</value>

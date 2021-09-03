@@ -1,0 +1,46 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
+                    xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
+                    xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateWorkerViewModels+SetWorkerViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0"
+                   Grid.Row="0"
+                   Content="{Markup:String Label.FirstName}" />
+            <TextBox AutomationProperties.Name="{Markup:String Label.FirstName}"
+                     Grid.Column="1"
+                     Grid.Row="0"
+                     Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" />
+            <Label Grid.Column="0"
+                   Grid.Row="1"
+                   Content="{Markup:String Label.LastName}" />
+            <TextBox AutomationProperties.Name="{Markup:String Label.LastName}"
+                     Grid.Column="1"
+                     Grid.Row="1"
+                     Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" />
+            <Label Grid.Column="0"
+                   Grid.Row="2"
+                   Content="{Markup:String Label.EmailAddress}" />
+            <TextBox AutomationProperties.Name="{Markup:String Label.EmailAddress}"
+                     Grid.Column="1"
+                     Grid.Row="2"
+                     Text="{Binding EmailAddress, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateWorkerViewModels+CommitViewModel}">
+        <Views_Shared:DetailsView ItemsSource="{Binding Details}" />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateWorkerViewModels+CloseViewModel}" />
+</ResourceDictionary>

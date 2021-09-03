@@ -691,6 +691,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose.
+        /// </summary>
+        public static string AltText_Choose {
+            get {
+                return ResourceManager.GetString("AltText.Choose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear search.
         /// </summary>
         public static string AltText_ClearSearch {
@@ -1708,6 +1717,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Worker creation was successful.
+        /// </summary>
+        public static string CreateWorker_Lead_Close {
+            get {
+                return ResourceManager.GetString("CreateWorker.Lead.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter details for the worker.
+        /// </summary>
+        public static string CreateWorker_Lead_SetWorker {
+            get {
+                return ResourceManager.GetString("CreateWorker.Lead.SetWorker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Microsoft Access.
         /// </summary>
         public static string DatabaseProvider_Value_Access2003 {
@@ -2002,6 +2029,24 @@ namespace ERHMS.Desktop.Properties {
         public static string HelpText_AddRecord {
             get {
                 return ResourceManager.GetString("HelpText.AddRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a new worker and return to Epi Info..
+        /// </summary>
+        public static string HelpText_AddWorker {
+            get {
+                return ResourceManager.GetString("HelpText.AddWorker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose the selected worker and return to Epi Info..
+        /// </summary>
+        public static string HelpText_ChooseWorker {
+            get {
+                return ResourceManager.GetString("HelpText.ChooseWorker", resourceCulture);
             }
         }
         
@@ -2429,6 +2474,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email address:.
+        /// </summary>
+        public static string Label_EmailAddress {
+            get {
+                return ResourceManager.GetString("Label.EmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Encrypt connection?.
         /// </summary>
         public static string Label_Encrypt {
@@ -2447,11 +2501,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First name:.
+        /// </summary>
+        public static string Label_FirstName {
+            get {
+                return ResourceManager.GetString("Label.FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect to database:.
         /// </summary>
         public static string Label_InitialCatalog {
             get {
                 return ResourceManager.GetString("Label.InitialCatalog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last name:.
+        /// </summary>
+        public static string Label_LastName {
+            get {
+                return ResourceManager.GetString("Label.LastName", resourceCulture);
             }
         }
         
@@ -2699,6 +2771,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating worker.
+        /// </summary>
+        public static string Lead_CreatingWorker {
+            get {
+                return ResourceManager.GetString("Lead.CreatingWorker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleting file.
         /// </summary>
         public static string Lead_DeletingAsset {
@@ -2866,6 +2947,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_RefreshingViews {
             get {
                 return ResourceManager.GetString("Lead.RefreshingViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshing workers.
+        /// </summary>
+        public static string Lead_RefreshingWorkers {
+            get {
+                return ResourceManager.GetString("Lead.RefreshingWorkers", resourceCulture);
             }
         }
         

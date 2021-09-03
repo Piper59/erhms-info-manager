@@ -144,7 +144,7 @@
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogSeverity.cs" />
-    <Compile Include="EventHandlers\OpenUriOnRequestNavigate.cs" />
+    <Compile Include="Events\OpenUriOnRequestNavigate.cs" />
     <Compile Include="IAppCommands.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
@@ -231,6 +231,7 @@
     <Compile Include="ViewModels\Wizards\CreateViewViewModels.FromTemplate.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModels.Main.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModels.Standard.cs" />
+    <Compile Include="ViewModels\Wizards\CreateWorkerViewModels.cs" />
     <Compile Include="ViewModels\Wizards\ExportRecordsViewModels.cs" />
     <Compile Include="ViewModels\Wizards\ImportRecordsViewModels.cs" />
     <Compile Include="ViewModels\Wizards\SetUpProjectViewModels.cs" />
@@ -442,6 +443,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Wizards\CreateViewViews.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wizards\CreateWorkerViews.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,7 +1,7 @@
-﻿using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.ViewModels.Utilities;
+﻿using ERHMS.Desktop.ViewModels.Utilities;
+using ERHMS.Domain.Data;
+using ERHMS.EpiInfo.Data;
 using System.Windows;
-using System.Windows.Input;
 
 namespace ERHMS.Desktop.Views.Utilities
 {
@@ -13,30 +13,26 @@ namespace ERHMS.Desktop.Views.Utilities
             set { base.DataContext = value; }
         }
 
-        public ICommand CommitCommand { get; }
-        public ICommand CancelCommand { get; }
-
         public GetWorkerIdView()
         {
-            CommitCommand = new SyncCommand(Commit, CanCommit);
-            CancelCommand = new SyncCommand(Cancel);
             InitializeComponent();
+            DataContextChanged += GetWorkerIdView_DataContextChanged;
         }
 
-        public bool CanCommit()
+        private void GetWorkerIdView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            return DataContext?.Workers.HasCurrent() ?? false;
+            if (e.OldValue != null)
+            {
+                ((GetWorkerIdViewModel)e.OldValue).Workers.Committed -= Workers_Committed;
+            }
+            if (e.NewValue != null)
+            {
+                ((GetWorkerIdViewModel)e.NewValue).Workers.Committed += Workers_Committed;
+            }
         }
 
-        public void Commit()
+        private void Workers_Committed(object sender, RecordEventArgs<Worker> e)
         {
-            DialogResult = true;
-            Close();
-        }
-
-        public void Cancel()
-        {
-            DialogResult = false;
             Close();
         }
     }
