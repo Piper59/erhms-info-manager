@@ -35,23 +35,19 @@
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.2.0.90\lib\net461\Dapper.dll</HintPath>
     </Reference>
-    <Reference Include="Enter, Version=7.2.7423.18888, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Enter">
       <HintPath>..\Epi Info 7\Enter.exe</HintPath>
     </Reference>
     <Reference Include="Epi.Core">
       <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Epi.ImportExport, Version=7.2.7423.18879, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Epi.ImportExport">
       <HintPath>..\Epi Info 7\Epi.ImportExport.dll</HintPath>
     </Reference>
-    <Reference Include="Epi.Windows, Version=7.2.7423.18880, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Epi.Windows">
       <HintPath>..\Epi Info 7\Epi.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Epi.Windows.ImportExport, Version=7.2.7423.18888, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Epi.Windows.ImportExport">
       <HintPath>..\Epi Info 7\Epi.Windows.ImportExport.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
