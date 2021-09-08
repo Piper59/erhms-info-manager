@@ -19,5 +19,10 @@ namespace ERHMS.Common
         {
             return string.Join(" ", args.Select(Quote));
         }
+
+        public static string Quote(params string[] args)
+        {
+            return Quote((IEnumerable<string>)args);
+        }
     }
 }

@@ -1,14 +1,23 @@
-﻿namespace ERHMS.Console.Utilities
+﻿using ERHMS.Common;
+using System;
+using System.Diagnostics;
+using System.IO;
+
+namespace ERHMS.Console.Utilities
 {
     public class ResetSettings : Utility
     {
         public override void Run()
         {
-            Desktop.Utilities.ResetSettings utility = new Desktop.Utilities.ResetSettings
+            string workingDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;
+            ProcessStartInfo startInfo = new ProcessStartInfo
             {
-                Verbose = false
+                UseShellExecute = false,
+                WorkingDirectory = workingDirectoryPath,
+                FileName = Path.Combine(workingDirectoryPath, "ERHMS Info Manager.exe"),
+                Arguments = CommandLine.Quote("ResetSettings", bool.FalseString)
             };
-            utility.Invoke();
+            Process.Start(startInfo)?.Dispose();
         }
     }
 }

@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Desktop", "ERHMS.Desktop\ERHMS.Desktop.csproj", "{F0080890-84E8-48F2-8B0E-2CECE4706CB2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{740D7AFA-023C-406F-AC03-4986A0F81AFA} = {740D7AFA-023C-406F-AC03-4986A0F81AFA}
+		{DD348D56-5AD0-4D2D-AF7A-2BFFD797F146} = {DD348D56-5AD0-4D2D-AF7A-2BFFD797F146}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Console", "ERHMS.Console\ERHMS.Console.csproj", "{740D7AFA-023C-406F-AC03-4986A0F81AFA}"
 EndProject

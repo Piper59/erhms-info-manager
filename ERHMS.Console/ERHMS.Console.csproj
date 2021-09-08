@@ -70,10 +70,6 @@
       <Project>{ccebb7b1-4468-4b27-958e-79e86373a398}</Project>
       <Name>ERHMS.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ERHMS.Desktop\ERHMS.Desktop.csproj">
-      <Project>{f0080890-84e8-48f2-8b0e-2cece4706cb2}</Project>
-      <Name>ERHMS.Desktop</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ERHMS.Domain\ERHMS.Domain.csproj">
       <Project>{181048FB-DAE4-4875-9A58-461F81C4131A}</Project>
       <Name>ERHMS.Domain</Name>
