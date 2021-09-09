@@ -1,4 +1,6 @@
-﻿namespace ERHMS.Console.Utilities
+﻿using Epi;
+
+namespace ERHMS.Console.Utilities
 {
     public class Decrypt : Utility
     {
@@ -11,7 +13,7 @@
 
         public override void Run()
         {
-            Out.WriteLine(Epi.Configuration.Decrypt(Text));
+            Out.WriteLine(Configuration.Decrypt(Text));
         }
     }
 }

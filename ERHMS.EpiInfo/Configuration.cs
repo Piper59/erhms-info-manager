@@ -1,30 +1,25 @@
 ﻿using Epi;
 using Epi.DataSets;
-using ERHMS.Common.IO;
-using ERHMS.Common.Logging;
 using ERHMS.Data;
 using System;
-using System.Data;
 using System.IO;
-using Settings = ERHMS.EpiInfo.Properties.Settings;
 
-namespace ERHMS
+namespace ERHMS.EpiInfo
 {
-    public static class Configuration
+    public class Configuration : Epi.Configuration
     {
-        public static string FilePath => Epi.Configuration.DefaultConfigurationPath;
-        public static Epi.Configuration Instance { get; private set; }
+        public static Configuration Instance { get; private set; }
 
         public static string GetDatabaseDriver(DatabaseProvider provider)
         {
             switch (provider)
             {
                 case DatabaseProvider.Access2003:
-                    return Epi.Configuration.AccessDriver;
+                    return AccessDriver;
                 case DatabaseProvider.Access2007:
-                    return Epi.Configuration.Access2007Driver;
+                    return Access2007Driver;
                 case DatabaseProvider.SqlServer:
-                    return Epi.Configuration.SqlDriver;
+                    return SqlDriver;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(provider));
             }
@@ -34,44 +29,69 @@ namespace ERHMS
         {
             switch (driver)
             {
-                case Epi.Configuration.AccessDriver:
+                case AccessDriver:
                     return DatabaseProvider.Access2003;
-                case Epi.Configuration.Access2007Driver:
+                case Access2007Driver:
                     return DatabaseProvider.Access2007;
-                case Epi.Configuration.SqlDriver:
+                case SqlDriver:
                     return DatabaseProvider.SqlServer;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(driver));
             }
         }
 
-        private static string GetDirectory(this Epi.Configuration @this, string columnName)
+        public static void Initialize(ExecutionEnvironment environment)
         {
-            string path = PathExtensions.TrimEnd(@this.Directories.Field<string>(columnName));
-            try
+            if (!Exists())
             {
-                Directory.CreateDirectory(path);
+                Save(Create());
             }
-            catch (Exception ex)
-            {
-                Log.Instance.Warn(ex);
-            }
-            return path;
+            Instance = Load();
+            Environment = environment;
         }
 
-        public static string GetProjectsDirectory(this Epi.Configuration @this)
+        public static bool Exists()
         {
-            return @this.GetDirectory(nameof(Config.DirectoriesRow.Project));
+            return File.Exists(DefaultConfigurationPath);
         }
 
-        public static string GetTemplatesDirectory(this Epi.Configuration @this)
+        public static Configuration Create()
         {
-            return @this.GetDirectory(nameof(Config.DirectoriesRow.Templates));
+            Configuration configuration = new Configuration(CreateDefaultConfiguration());
+            configuration.RecentViews.Clear();
+            configuration.RecentProjects.Clear();
+            configuration.ReadSettings(Properties.Settings.Default);
+            return configuration;
         }
 
-        public static void SetTextEncryptionModule(this Epi.Configuration @this, bool fipsCompliant)
+        public static Configuration Load()
         {
-            Config.TextEncryptionModuleDataTable table = @this.ConfigDataSet.TextEncryptionModule;
+            Load(DefaultConfigurationPath);
+            return new Configuration(GetNewInstance());
+        }
+
+        public new Directories Directories { get; }
+
+        private Configuration(Epi.Configuration configuration)
+            : base(configuration.ConfigFilePath, configuration.ConfigDataSet)
+        {
+            Directories = new Directories(this);
+        }
+
+        private void ReadSettings(Properties.Settings settings)
+        {
+            SetTextEncryptionModule(settings.FipsCompliant);
+            Config.SettingsRow row = Settings;
+            row.ControlFontSize = settings.ControlFontSize;
+            row.DefaultPageHeight = settings.DefaultPageHeight;
+            row.DefaultPageWidth = settings.DefaultPageWidth;
+            row.EditorFontSize = settings.EditorFontSize;
+            row.GridSize = settings.GridSize;
+        }
+
+        public void SetTextEncryptionModule(bool fipsCompliant)
+        {
+            Config.TextEncryptionModuleDataTable table = ConfigDataSet.TextEncryptionModule;
             table.Clear();
             if (fipsCompliant)
             {
@@ -81,35 +101,9 @@ namespace ERHMS
             }
         }
 
-        private static void ReadSettings(this Epi.Configuration @this, Settings settings)
+        public void Save()
         {
-            @this.SetTextEncryptionModule(settings.FipsCompliant);
-            Config.SettingsRow row = @this.Settings;
-            row.ControlFontSize = settings.ControlFontSize;
-            row.DefaultPageHeight = settings.DefaultPageHeight;
-            row.DefaultPageWidth = settings.DefaultPageWidth;
-            row.EditorFontSize = settings.EditorFontSize;
-            row.GridSize = settings.GridSize;
-        }
-
-        public static Epi.Configuration Create()
-        {
-            Epi.Configuration configuration = Epi.Configuration.CreateDefaultConfiguration();
-            configuration.RecentViews.Clear();
-            configuration.RecentProjects.Clear();
-            configuration.ReadSettings(Settings.Default);
-            return configuration;
-        }
-
-        public static void Initialize(ExecutionEnvironment environment)
-        {
-            if (!File.Exists(FilePath))
-            {
-                Epi.Configuration.Save(Create());
-            }
-            Epi.Configuration.Load(FilePath);
-            Instance = Epi.Configuration.GetNewInstance();
-            Epi.Configuration.Environment = environment;
+            Save(this);
         }
     }
 }

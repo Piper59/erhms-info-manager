@@ -11,6 +11,7 @@ using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Configuration = ERHMS.EpiInfo.Configuration;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
@@ -45,7 +46,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     : base(state)
                 {
                     fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-                    fileDialog.InitialDirectory = Configuration.Instance.GetTemplatesDirectory();
+                    fileDialog.InitialDirectory = Configuration.Instance.Directories.Templates;
                     fileDialog.Filter = Strings.FileDialog_Filter_Templates;
                     BrowseCommand = new AsyncCommand(BrowseAsync);
                 }

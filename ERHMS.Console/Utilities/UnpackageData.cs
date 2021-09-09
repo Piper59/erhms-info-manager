@@ -1,4 +1,5 @@
-﻿using Epi.ImportExport;
+﻿using Epi;
+using Epi.ImportExport;
 using System;
 using System.Xml.Linq;
 
@@ -17,7 +18,7 @@ namespace ERHMS.Console.Utilities
 
         public override void Run()
         {
-            string content = Epi.Configuration.DecryptFileToString(PackagePath, GetPassword());
+            string content = Configuration.DecryptFileToString(PackagePath, GetPassword());
             if (!content.StartsWith(sentinel))
             {
                 throw new InvalidOperationException("File does not appear to be an Epi Info data package.");

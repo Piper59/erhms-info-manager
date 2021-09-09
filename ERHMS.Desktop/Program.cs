@@ -3,6 +3,7 @@ using ERHMS.Common.Logging;
 using ERHMS.Desktop.Properties;
 using System;
 using System.Windows;
+using Configuration = ERHMS.EpiInfo.Configuration;
 using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop

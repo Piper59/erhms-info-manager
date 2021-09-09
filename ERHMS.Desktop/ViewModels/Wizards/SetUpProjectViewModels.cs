@@ -2,6 +2,7 @@
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Domain;
+using ERHMS.EpiInfo;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
@@ -50,7 +51,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public static bool Open(CoreProject coreProject)
         {
             IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-            fileDialog.InitialDirectory = Configuration.Instance.GetProjectsDirectory();
+            fileDialog.InitialDirectory = Configuration.Instance.Directories.Projects;
             fileDialog.Filter = Strings.FileDialog_Filter_Projects;
             if (fileDialog.Open() != true)
             {

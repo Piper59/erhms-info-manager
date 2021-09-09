@@ -1,4 +1,6 @@
-﻿namespace ERHMS.Console.Utilities
+﻿using Epi;
+
+namespace ERHMS.Console.Utilities
 {
     public class Encrypt : Utility
     {
@@ -11,7 +13,7 @@
 
         public override void Run()
         {
-            Out.WriteLine(Epi.Configuration.Encrypt(Text));
+            Out.WriteLine(Configuration.Encrypt(Text));
         }
     }
 }

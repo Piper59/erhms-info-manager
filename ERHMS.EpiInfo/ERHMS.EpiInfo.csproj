@@ -95,6 +95,7 @@
     <Compile Include="Data\RecordRepository.Save.cs" />
     <Compile Include="Data\RecordRepository.Select.cs" />
     <Compile Include="Data\RecordStatus.cs" />
+    <Compile Include="Directories.cs" />
     <Compile Include="FileExtensions.cs" />
     <Compile Include="Metadata\FieldCollectionMasterExtensions.cs" />
     <Compile Include="Metadata\FieldComparer.cs" />

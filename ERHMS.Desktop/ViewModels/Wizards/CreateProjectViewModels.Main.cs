@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Configuration = ERHMS.EpiInfo.Configuration;
 using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
@@ -55,7 +56,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 set { SetProperty(ref description, value); }
             }
 
-            private string locationRoot = Configuration.Instance.GetProjectsDirectory();
+            private string locationRoot = Configuration.Instance.Directories.Projects;
             public string LocationRoot
             {
                 get { return locationRoot; }

@@ -1,4 +1,6 @@
-﻿namespace ERHMS.Console.Utilities
+﻿using Epi;
+
+namespace ERHMS.Console.Utilities
 {
     public class DecryptFile : Utility
     {
@@ -13,7 +15,7 @@
 
         public override void Run()
         {
-            Epi.Configuration.DecryptFile(InputPath, OutputPath, GetPassword());
+            Configuration.DecryptFile(InputPath, OutputPath, GetPassword());
         }
     }
 }

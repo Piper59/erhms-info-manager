@@ -1,4 +1,6 @@
-﻿namespace ERHMS.Console.Utilities
+﻿using ERHMS.EpiInfo;
+
+namespace ERHMS.Console.Utilities
 {
     public class ResetConfiguration : Utility
     {
@@ -14,12 +16,12 @@
 
         public override void Run()
         {
-            Epi.Configuration configuration = Configuration.Create();
+            Configuration configuration = Configuration.Create();
             if (FipsCompliant != null)
             {
                 configuration.SetTextEncryptionModule(FipsCompliant.Value);
             }
-            Epi.Configuration.Save(configuration);
+            configuration.Save();
         }
     }
 }

@@ -3,6 +3,7 @@ using ERHMS.Common.Logging;
 using ERHMS.Console.Utilities;
 using System;
 using System.Linq;
+using Configuration = ERHMS.EpiInfo.Configuration;
 
 namespace ERHMS.Console
 {
