@@ -13,7 +13,6 @@ using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
@@ -78,7 +77,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             await Task.Run(() =>
             {
                 List.Clear();
-                Project project = ProjectExtensions.Open(Settings.Default.WorkerProjectPath);
+                Project project = ProjectExtensions.Open(Configuration.Instance.WorkerProjectPath);
                 View view = project.Views[CoreView.WorkerRosteringForm.Name];
                 using (RecordRepository<Worker> repository = new RecordRepository<Worker>(view))
                 {

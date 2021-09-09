@@ -1,10 +1,7 @@
-﻿using Epi;
-using ERHMS.Common.Logging;
+﻿using ERHMS.Common.Logging;
 using ERHMS.Desktop.Properties;
 using System;
 using System.Windows;
-using Configuration = ERHMS.EpiInfo.Configuration;
-using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop
 {
@@ -17,8 +14,7 @@ namespace ERHMS.Desktop
             {
                 Log.Initialize(new FileAppender());
                 Log.Instance.Debug("Starting up");
-                Settings.Default.Initialize();
-                Configuration.Initialize(ExecutionEnvironment.WindowsApplication);
+                Configuration.Initialize();
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 App app = new App();
                 app.Run();

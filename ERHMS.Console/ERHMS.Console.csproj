@@ -116,8 +116,6 @@
     <Compile Include="Utilities\IUtility.cs" />
     <Compile Include="Utilities\PrintView.cs" />
     <Compile Include="Utilities\PrintViews.cs" />
-    <Compile Include="Utilities\ResetConfiguration.cs" />
-    <Compile Include="Utilities\ResetSettings.cs" />
     <Compile Include="Utilities\ShowProject.cs" />
     <Compile Include="Utilities\SynchronizeView.cs" />
     <Compile Include="Utilities\UnpackageData.cs" />

@@ -7,7 +7,6 @@ using ERHMS.Domain.Data;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using System.Threading.Tasks;
-using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
@@ -107,7 +106,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 progress.Lead = Strings.Lead_CreatingWorker;
                 await progress.Run(() =>
                 {
-                    Project project = ProjectExtensions.Open(Settings.Default.WorkerProjectPath);
+                    Project project = ProjectExtensions.Open(Configuration.Instance.WorkerProjectPath);
                     View view = project.Views[CoreView.WorkerRosteringForm.Name];
                     using (RecordRepository<Worker> repository = new RecordRepository<Worker>(view))
                     {

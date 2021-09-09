@@ -1,10 +1,9 @@
 ﻿using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Properties;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -44,10 +43,10 @@ namespace ERHMS.Desktop.ViewModels
 
             protected ProjectCollectionViewModel()
             {
-                Settings.Default.SettingsSaving += Default_SettingsSaving;
+                Configuration.Instance.Saved += Configuration_Saved;
             }
 
-            private void Default_SettingsSaving(object sender, CancelEventArgs e)
+            private void Configuration_Saved(object sender, EventArgs e)
             {
                 Refresh();
             }
@@ -70,9 +69,9 @@ namespace ERHMS.Desktop.ViewModels
 
             private void Initialize()
             {
-                if (Settings.Default.HasWorkerProjectPath)
+                if (Configuration.Instance.HasWorkerProjectPath)
                 {
-                    Current = new ProjectInfo(Settings.Default.WorkerProjectPath);
+                    Current = new ProjectInfo(Configuration.Instance.WorkerProjectPath);
                 }
             }
 
@@ -99,11 +98,11 @@ namespace ERHMS.Desktop.ViewModels
 
             private void Initialize()
             {
-                if (Settings.Default.HasIncidentProjectPath)
+                if (Configuration.Instance.HasIncidentProjectPaths)
                 {
-                    Current = new ProjectInfo(Settings.Default.IncidentProjectPath);
+                    Current = new ProjectInfo(Configuration.Instance.IncidentProjectPath);
                 }
-                Recents = Settings.Default.IncidentProjectPaths.Cast<string>()
+                Recents = Configuration.Instance.IncidentProjectPaths.Cast<string>()
                     .Skip(1)
                     .Select(path => new ProjectInfo(path))
                     .DefaultIfEmpty(EmptyProjectInfo.Instance)
@@ -117,14 +116,14 @@ namespace ERHMS.Desktop.ViewModels
 
             public void SetCurrent(ProjectInfo projectInfo)
             {
-                Settings.Default.IncidentProjectPath = projectInfo.FilePath;
-                Settings.Default.Save();
+                Configuration.Instance.IncidentProjectPath = projectInfo.FilePath;
+                Configuration.Instance.Save();
             }
 
             public void RemoveRecent(ProjectInfo projectInfo)
             {
-                Settings.Default.IncidentProjectPaths.Remove(projectInfo.FilePath);
-                Settings.Default.Save();
+                Configuration.Instance.IncidentProjectPaths.Remove(projectInfo.FilePath);
+                Configuration.Instance.Save();
             }
 
             protected override void Refresh()

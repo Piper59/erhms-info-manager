@@ -109,6 +109,7 @@
     <Compile Include="Commands\ErrorBehavior.cs" />
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Controls\BoundComboBox.cs" />
     <Compile Include="Controls\ComboBoxHeader.xaml.cs">
       <DependentUpon>ComboBoxHeader.xaml</DependentUpon>
@@ -175,12 +176,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Settings.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -194,7 +189,6 @@
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Utilities\GetWorkerId.cs" />
     <Compile Include="Utilities\IUtility.cs" />
-    <Compile Include="Utilities\ResetSettings.cs" />
     <Compile Include="Utilities\Utility.cs" />
     <Compile Include="Utilities\UtilityDialog.cs">
       <SubType>Form</SubType>
@@ -311,11 +305,6 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml">

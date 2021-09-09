@@ -19,7 +19,6 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Module = ERHMS.EpiInfo.Module;
-using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -139,7 +138,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public bool CanGoToCoreProject(CoreProject coreProject)
         {
-            return Settings.Default.HasProjectPath(coreProject);
+            return Configuration.Instance.HasProjectPath(coreProject);
         }
 
         public async Task GoToCoreProjectAsync(CoreProject coreProject)
@@ -152,7 +151,7 @@ namespace ERHMS.Desktop.ViewModels
                 {
                     Project project = await Task.Run(() =>
                     {
-                        string projectPath = Settings.Default.GetProjectPath(coreProject);
+                        string projectPath = Configuration.Instance.GetProjectPath(coreProject);
                         return ProjectExtensions.Open(projectPath);
                     });
                     return await ProjectViewModel.CreateAsync(project);
@@ -203,7 +202,7 @@ namespace ERHMS.Desktop.ViewModels
                 {
                     View view = await Task.Run(() =>
                     {
-                        string projectPath = Settings.Default.GetProjectPath(coreView.CoreProject);
+                        string projectPath = Configuration.Instance.GetProjectPath(coreView.CoreProject);
                         project = ProjectExtensions.Open(projectPath);
                         return project.Views.Contains(coreView.Name) ? project.Views[coreView.Name] : null;
                     });
@@ -249,15 +248,15 @@ namespace ERHMS.Desktop.ViewModels
         private bool? ConfirmCoreProjectChange(CoreProject coreProject)
         {
             if (coreProject == CoreProject.Worker
-                && Settings.Default.HasWorkerProjectPath
-                && File.Exists(Settings.Default.WorkerProjectPath))
+                && Configuration.Instance.HasWorkerProjectPath
+                && File.Exists(Configuration.Instance.WorkerProjectPath))
             {
                 IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
                 dialog.Severity = DialogSeverity.Warning;
                 dialog.Lead = Strings.Lead_ConfirmWorkerProjectChange;
                 dialog.Body = string.Format(
                     Strings.Body_ConfirmWorkerProjectChange,
-                    Settings.Default.WorkerProjectPath);
+                    Configuration.Instance.WorkerProjectPath);
                 dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
                 return dialog.Show();
             }

@@ -42,7 +42,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public StartViewModel()
         {
-            Closed = Settings.Default.HasWorkerProjectPath && Settings.Default.HasIncidentProjectPath;
+            Closed = Configuration.Instance.HasWorkerProjectPath && Configuration.Instance.HasIncidentProjectPaths;
             ToggleCommand = new SyncCommand(Toggle);
             CloseCommand = new SyncCommand(Close);
         }

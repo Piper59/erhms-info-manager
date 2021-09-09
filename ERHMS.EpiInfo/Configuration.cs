@@ -8,6 +8,7 @@ namespace ERHMS.EpiInfo
 {
     public class Configuration : Epi.Configuration
     {
+        private static string FilePath => DefaultConfigurationPath;
         public static Configuration Instance { get; private set; }
 
         public static string GetDatabaseDriver(DatabaseProvider provider)
@@ -42,20 +43,16 @@ namespace ERHMS.EpiInfo
 
         public static void Initialize(ExecutionEnvironment environment)
         {
-            if (!Exists())
+            if (!File.Exists(FilePath))
             {
-                Save(Create());
+                Configuration configuration = Create();
+                configuration.Save();
             }
             Instance = Load();
             Environment = environment;
         }
 
-        public static bool Exists()
-        {
-            return File.Exists(DefaultConfigurationPath);
-        }
-
-        public static Configuration Create()
+        private static Configuration Create()
         {
             Configuration configuration = new Configuration(CreateDefaultConfiguration());
             configuration.RecentViews.Clear();
@@ -64,9 +61,9 @@ namespace ERHMS.EpiInfo
             return configuration;
         }
 
-        public static Configuration Load()
+        private static Configuration Load()
         {
-            Load(DefaultConfigurationPath);
+            Load(FilePath);
             return new Configuration(GetNewInstance());
         }
 

@@ -15,8 +15,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Configuration = ERHMS.EpiInfo.Configuration;
-using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
@@ -56,7 +54,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 set { SetProperty(ref description, value); }
             }
 
-            private string locationRoot = Configuration.Instance.Directories.Projects;
+            private string locationRoot = EpiInfo.Configuration.Instance.Directories.Projects;
             public string LocationRoot
             {
                 get { return locationRoot; }
@@ -252,8 +250,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     }
                     return project;
                 });
-                Settings.Default.SetProjectPath(State.CoreProject, State.Project.FilePath);
-                Settings.Default.Save();
+                Configuration.Instance.SetProjectPath(State.CoreProject, State.Project.FilePath);
+                Configuration.Instance.Save();
                 Wizard.Result = true;
                 Wizard.Committed = true;
                 Wizard.GoForward(new CloseViewModel(State));

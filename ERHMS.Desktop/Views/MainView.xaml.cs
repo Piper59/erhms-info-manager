@@ -1,5 +1,4 @@
 ﻿using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.ViewModels;
 using System.ComponentModel;
 using System.Windows;
@@ -21,21 +20,21 @@ namespace ERHMS.Desktop.Views
         {
             CloseCommand = new SyncCommand(Close);
             InitializeComponent();
-            ReadSettings(Settings.Default);
+            ReadConfiguration(Configuration.Instance);
         }
 
-        private void ReadSettings(Settings settings)
+        private void ReadConfiguration(Configuration configuration)
         {
-            Width = settings.WindowWidth;
-            Height = settings.WindowHeight;
-            WindowState = settings.WindowMaximized ? WindowState.Maximized : WindowState.Normal;
+            Width = configuration.WindowWidth;
+            Height = configuration.WindowHeight;
+            WindowState = configuration.WindowMaximized ? WindowState.Maximized : WindowState.Normal;
         }
 
-        private void WriteSettings(Settings settings)
+        private void WriteConfiguration(Configuration configuration)
         {
-            settings.WindowWidth = RestoreBounds.Width;
-            settings.WindowHeight = RestoreBounds.Height;
-            settings.WindowMaximized = WindowState == WindowState.Maximized;
+            configuration.WindowWidth = RestoreBounds.Width;
+            configuration.WindowHeight = RestoreBounds.Height;
+            configuration.WindowMaximized = WindowState == WindowState.Maximized;
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -45,8 +44,8 @@ namespace ERHMS.Desktop.Views
             {
                 return;
             }
-            WriteSettings(Settings.Default);
-            Settings.Default.Save();
+            WriteConfiguration(Configuration.Instance);
+            Configuration.Instance.Save();
         }
     }
 }
