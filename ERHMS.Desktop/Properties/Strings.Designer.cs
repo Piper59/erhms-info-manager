@@ -133,15 +133,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Change.
-        /// </summary>
-        public static string AccessText_Change {
-            get {
-                return ResourceManager.GetString("AccessText.Change", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to _Check integrity.
         /// </summary>
         public static string AccessText_CheckIntegrity {
@@ -996,7 +987,9 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The worker project has already been set up. Multiple worker projects are not supported. ERHMS Info Manager will only recognize workers who have been entered into the current project&apos;s Worker Rostering Form..
+        ///   Looks up a localized string similar to Project: {0}
+        ///
+        ///ERHMS Info Manager does not support multiple worker projects and will only recognize workers who have been entered into the current project&apos;s Worker Rostering Form. Continue changing the worker project anyway?.
         /// </summary>
         public static string Body_ConfirmWorkerProjectChange {
             get {
@@ -2726,7 +2719,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to change the worker project?.
+        ///   Looks up a localized string similar to The worker project has already been set up.
         /// </summary>
         public static string Lead_ConfirmWorkerProjectChange {
             get {

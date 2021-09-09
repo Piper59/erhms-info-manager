@@ -255,8 +255,10 @@ namespace ERHMS.Desktop.ViewModels
                 IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
                 dialog.Severity = DialogSeverity.Warning;
                 dialog.Lead = Strings.Lead_ConfirmWorkerProjectChange;
-                dialog.Body = Strings.Body_ConfirmWorkerProjectChange;
-                dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Change);
+                dialog.Body = string.Format(
+                    Strings.Body_ConfirmWorkerProjectChange,
+                    Settings.Default.WorkerProjectPath);
+                dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
                 return dialog.Show();
             }
             else

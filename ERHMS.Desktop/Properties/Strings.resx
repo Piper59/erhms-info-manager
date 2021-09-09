@@ -141,9 +141,6 @@
   <data name="AccessText.Canvases" xml:space="preserve">
     <value>_Dashboards</value>
   </data>
-  <data name="AccessText.Change" xml:space="preserve">
-    <value>_Change</value>
-  </data>
   <data name="AccessText.CheckIntegrity" xml:space="preserve">
     <value>_Check integrity</value>
   </data>
@@ -435,7 +432,9 @@ No form with this name was found in the project. Create a standard {1}?</value>
 This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone.</value>
   </data>
   <data name="Body.ConfirmWorkerProjectChange" xml:space="preserve">
-    <value>The worker project has already been set up. Multiple worker projects are not supported. ERHMS Info Manager will only recognize workers who have been entered into the current project's Worker Rostering Form.</value>
+    <value>Project: {0}
+
+ERHMS Info Manager does not support multiple worker projects and will only recognize workers who have been entered into the current project's Worker Rostering Form. Continue changing the worker project anyway?</value>
   </data>
   <data name="Body.CreatingTemplate" xml:space="preserve">
     <value>Creating template...</value>
@@ -1019,7 +1018,7 @@ Close anyway?</value>
     <value>Are you sure you want to delete this form?</value>
   </data>
   <data name="Lead.ConfirmWorkerProjectChange" xml:space="preserve">
-    <value>Are you sure you want to change the worker project?</value>
+    <value>The worker project has already been set up</value>
   </data>
   <data name="Lead.ConnectionInfo" xml:space="preserve">
     <value>Connection details</value>
