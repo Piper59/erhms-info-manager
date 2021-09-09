@@ -65,4 +65,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="TouchTemplates" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <Template Include="$(BuildDir)Templates\**\*" />
+    </ItemGroup>
+    <Touch Files="@(Template)" />
+  </Target>
 </Project>

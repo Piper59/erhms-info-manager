@@ -9,4 +9,6 @@
   <ItemGroup>
     <Compile Include="$(SolutionDir)SolutionInfo.cs" />
   </ItemGroup>
+
+  <Target Name="Release" />
 </Project>

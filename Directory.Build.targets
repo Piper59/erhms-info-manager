@@ -3,11 +3,4 @@
   <Target Name="Require32Bit" BeforeTargets="BeforeBuild">
     <Error Condition="'$(PlatformTarget)' != 'x86'" Text="Target platform must be x86." />
   </Target>
-
-  <Target Name="TouchTemplates" AfterTargets="AfterBuild">
-    <ItemGroup>
-      <Template Include="$(BuildDir)Templates\**\*" />
-    </ItemGroup>
-    <Touch Files="@(Template)" />
-  </Target>
 </Project>
