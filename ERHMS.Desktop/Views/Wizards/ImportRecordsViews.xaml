@@ -9,12 +9,12 @@
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
-            <Button Command="{Binding ImportFromViewCommand}"
-                    Content="{Markup:String ImportRecords.AccessText.ImportFromView}" />
-            <Button Command="{Binding ImportFromPackageCommand}"
-                    Content="{Markup:String ImportRecords.AccessText.ImportFromPackage}" />
             <Button Command="{Binding ImportFromFileCommand}"
                     Content="{Markup:String ImportRecords.AccessText.ImportFromFile}" />
+            <Button Command="{Binding ImportFromPackageCommand}"
+                    Content="{Markup:String ImportRecords.AccessText.ImportFromPackage}" />
+            <Button Command="{Binding ImportFromViewCommand}"
+                    Content="{Markup:String ImportRecords.AccessText.ImportFromView}" />
         </StackPanel>
     </DataTemplate>
 

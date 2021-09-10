@@ -30,14 +30,14 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public override string Title => Strings.ExportRecords_Lead_SetStrategy;
 
-            public ICommand ExportToPackageCommand { get; }
             public ICommand ExportToFileCommand { get; }
+            public ICommand ExportToPackageCommand { get; }
 
             public SetStrategyViewModel(State state)
                 : base(state)
             {
-                ExportToPackageCommand = new SyncCommand(ExportToPackage);
                 ExportToFileCommand = new SyncCommand(ExportToFile);
+                ExportToPackageCommand = new SyncCommand(ExportToPackage);
             }
 
             public void ExportToFile()

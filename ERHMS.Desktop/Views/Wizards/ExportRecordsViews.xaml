@@ -8,10 +8,10 @@
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
-            <Button Command="{Binding ExportToPackageCommand}"
-                    Content="{Markup:String ExportRecords.AccessText.ExportToPackage}" />
             <Button Command="{Binding ExportToFileCommand}"
                     Content="{Markup:String ExportRecords.AccessText.ExportToFile}" />
+            <Button Command="{Binding ExportToPackageCommand}"
+                    Content="{Markup:String ExportRecords.AccessText.ExportToPackage}" />
         </StackPanel>
     </DataTemplate>
 

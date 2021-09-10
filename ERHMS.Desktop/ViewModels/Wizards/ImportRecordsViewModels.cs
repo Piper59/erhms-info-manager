@@ -81,23 +81,21 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public override string Title => Strings.ImportRecords_Lead_SetStrategy;
 
-            public ICommand ImportFromViewCommand { get; }
-            public ICommand ImportFromPackageCommand { get; }
             public ICommand ImportFromFileCommand { get; }
+            public ICommand ImportFromPackageCommand { get; }
+            public ICommand ImportFromViewCommand { get; }
 
             public SetStrategyViewModel(State state)
                 : base(state)
             {
-                ImportFromViewCommand = new SyncCommand(ImportFromView);
-                ImportFromPackageCommand = new SyncCommand(ImportFromPackage);
                 ImportFromFileCommand = new SyncCommand(ImportFromFile);
+                ImportFromPackageCommand = new SyncCommand(ImportFromPackage);
+                ImportFromViewCommand = new SyncCommand(ImportFromView);
             }
 
-            public void ImportFromView()
+            public void ImportFromFile()
             {
-                Wizard.Close();
-                State.View.ImportFromView();
-                Wizard.Result = true;
+                Wizard.GoForward(new SetFilePathViewModel(State));
             }
 
             public void ImportFromPackage()
@@ -107,9 +105,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 Wizard.Result = true;
             }
 
-            public void ImportFromFile()
+            public void ImportFromView()
             {
-                Wizard.GoForward(new SetFilePathViewModel(State));
+                Wizard.Close();
+                State.View.ImportFromView();
+                Wizard.Result = true;
             }
         }
 
