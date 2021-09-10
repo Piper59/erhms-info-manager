@@ -9,6 +9,7 @@ using ERHMS.Desktop.ViewModels.Shared;
 using ERHMS.EpiInfo.Naming;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -44,6 +45,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public SetXTemplateViewModel(State state)
                     : base(state)
                 {
+                    Directory.CreateDirectory(EpiInfo.Configuration.Instance.Directories.Templates);
                     fileDialog = ServiceLocator.Resolve<IFileDialogService>();
                     fileDialog.InitialDirectory = EpiInfo.Configuration.Instance.Directories.Templates;
                     fileDialog.Filter = Strings.FileDialog_Filter_Templates;

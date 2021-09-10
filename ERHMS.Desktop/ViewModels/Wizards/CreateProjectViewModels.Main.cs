@@ -13,6 +13,7 @@ using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Naming;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -70,6 +71,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public SetProjectCreationInfoViewModel(State state)
                 : base(state)
             {
+                Directory.CreateDirectory(EpiInfo.Configuration.Instance.Directories.Projects);
                 directoryDialog = ServiceLocator.Resolve<IDirectoryDialogService>();
                 directoryDialog.Directory = LocationRoot;
                 DatabaseProviders = new ListCollectionView<DatabaseProvider>(

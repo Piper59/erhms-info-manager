@@ -6,6 +6,7 @@ using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -38,6 +39,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public SetSourceProjectViewModel(State state)
                     : base(state)
                 {
+                    Directory.CreateDirectory(EpiInfo.Configuration.Instance.Directories.Projects);
                     fileDialog = ServiceLocator.Resolve<IFileDialogService>();
                     fileDialog.InitialDirectory = EpiInfo.Configuration.Instance.Directories.Projects;
                     fileDialog.Filter = Strings.FileDialog_Filter_Projects;
