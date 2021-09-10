@@ -4,9 +4,7 @@ namespace ERHMS.Desktop.Markdown
 {
     public static class Regexes
     {
-        private const string LineBreakPattern = @"\r\n|\r|\n";
-
-        public static Regex LineBreak { get; } = new Regex(LineBreakPattern);
-        public static Regex BlockSeparator { get; } = new Regex($@"(?:{LineBreakPattern}){{2}}");
+        public static Regex LineBreak { get; } = new Regex(@"\r\n|\r|\n");
+        public static Regex BlockSeparator { get; } = new Regex(@"\r\n\r\n|\r\r|\n\n");
     }
 }
