@@ -48,7 +48,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public async Task BrowseAsync()
                 {
-                    if (fileDialog.Open() != true)
+                    if (!fileDialog.Open().GetValueOrDefault())
                     {
                         return;
                     }

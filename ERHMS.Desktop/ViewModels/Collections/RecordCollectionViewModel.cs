@@ -203,7 +203,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             await SynchronizeAsync();
             WizardViewModel wizard = ImportRecordsViewModels.GetWizard(View);
-            if (wizard.Run() != true)
+            if (!wizard.Run().GetValueOrDefault())
             {
                 return;
             }

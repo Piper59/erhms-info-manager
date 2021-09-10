@@ -93,7 +93,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public void Browse()
             {
-                if (directoryDialog.Open() != true)
+                if (!directoryDialog.Open().GetValueOrDefault())
                 {
                     return;
                 }

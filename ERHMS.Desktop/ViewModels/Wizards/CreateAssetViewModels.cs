@@ -113,7 +113,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public void Browse()
             {
-                if (fileDialog.Save() != true)
+                if (!fileDialog.Save().GetValueOrDefault())
                 {
                     return;
                 }
@@ -125,7 +125,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
                     dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, directoryPath);
                     dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
-                    if (dialog.Show() != true)
+                    if (!dialog.Show().GetValueOrDefault())
                     {
                         return;
                     }

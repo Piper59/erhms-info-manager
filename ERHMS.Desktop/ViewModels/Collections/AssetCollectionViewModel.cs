@@ -85,7 +85,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 return CreateAssetViewModels.GetWizardAsync(Module, Project);
             });
-            if (wizard.Run() != true)
+            if (!wizard.Run().GetValueOrDefault())
             {
                 return;
             }
@@ -104,7 +104,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             dialog.Lead = Strings.Lead_ConfirmAssetDeletion;
             dialog.Body = string.Format(Strings.Body_ConfirmAssetDeletion, CurrentItem.Value.Name);
             dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Delete);
-            if (dialog.Show() != true)
+            if (!dialog.Show().GetValueOrDefault())
             {
                 return;
             }

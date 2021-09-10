@@ -221,7 +221,7 @@ namespace ERHMS.Desktop.ViewModels
                 dialog.Lead = Strings.Lead_ConfirmViewCreation;
                 dialog.Body = string.Format(Strings.Body_ConfirmViewCreation, coreView.Name, coreView.GetTitle());
                 dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Create);
-                if (dialog.Show() != true)
+                if (!dialog.Show().GetValueOrDefault())
                 {
                     return;
                 }
@@ -268,12 +268,12 @@ namespace ERHMS.Desktop.ViewModels
 
         public void CreateCoreProject(CoreProject coreProject)
         {
-            if (ConfirmCoreProjectChange(coreProject) != true)
+            if (!ConfirmCoreProjectChange(coreProject).GetValueOrDefault())
             {
                 return;
             }
             WizardViewModel wizard = CreateProjectViewModels.GetWizard(coreProject);
-            if (wizard.Run() != true)
+            if (!wizard.Run().GetValueOrDefault())
             {
                 return;
             }
@@ -282,7 +282,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public void OpenCoreProject(CoreProject coreProject)
         {
-            if (ConfirmCoreProjectChange(coreProject) != true)
+            if (!ConfirmCoreProjectChange(coreProject).GetValueOrDefault())
             {
                 return;
             }
@@ -295,12 +295,12 @@ namespace ERHMS.Desktop.ViewModels
 
         public void SetUpCoreProject(CoreProject coreProject)
         {
-            if (ConfirmCoreProjectChange(coreProject) != true)
+            if (!ConfirmCoreProjectChange(coreProject).GetValueOrDefault())
             {
                 return;
             }
             WizardViewModel wizard = SetUpProjectViewModels.GetWizard(coreProject);
-            if (wizard.Run() != true)
+            if (!wizard.Run().GetValueOrDefault())
             {
                 return;
             }
@@ -317,7 +317,7 @@ namespace ERHMS.Desktop.ViewModels
             IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
             fileDialog.InitialFileName = $"Logs_{DateTime.Now:yyyyMMdd_HHmmss}.zip";
             fileDialog.Filter = Strings.FileDialog_Filter_ZipFiles;
-            if (fileDialog.Save() != true)
+            if (!fileDialog.Save().GetValueOrDefault())
             {
                 return;
             }

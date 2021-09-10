@@ -110,7 +110,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task CreateAsync()
         {
             WizardViewModel wizard = CreateViewViewModels.GetWizard(Project);
-            if (wizard.Run() != true)
+            if (!wizard.Run().GetValueOrDefault())
             {
                 return;
             }
@@ -124,7 +124,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             dialog.Lead = Strings.Lead_ConfirmViewDeletion;
             dialog.Body = string.Format(Strings.Body_ConfirmViewDeletion, CurrentItem.Value.Name);
             dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Delete);
-            if (dialog.Show() != true)
+            if (!dialog.Show().GetValueOrDefault())
             {
                 return;
             }

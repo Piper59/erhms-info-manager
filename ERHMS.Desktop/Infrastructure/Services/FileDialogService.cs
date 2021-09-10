@@ -41,7 +41,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
             dialog.Filter = Filter;
             Window owner = Application.Current.GetActiveWindow();
             owner.EnsureHandle();
-            if (dialog.ShowDialog(owner) == true)
+            if (dialog.ShowDialog(owner).GetValueOrDefault())
             {
                 FileName = dialog.FileName;
                 return true;

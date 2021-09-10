@@ -123,7 +123,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public void Add()
         {
             WizardViewModel wizard = CreateWorkerViewModels.GetWizard(FirstName, LastName, EmailAddress);
-            if (wizard.Run(out CreateWorkerViewModels.State state) != true)
+            if (!wizard.Run(out CreateWorkerViewModels.State state).GetValueOrDefault())
             {
                 return;
             }

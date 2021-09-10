@@ -77,7 +77,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public void Browse()
             {
-                if (fileDialog.Save() != true)
+                if (!fileDialog.Save().GetValueOrDefault())
                 {
                     return;
                 }
@@ -150,7 +150,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public class CloseViewModel : StepViewModel<State>
         {
             public override string Title =>
-                Wizard.Result == true
+                Wizard.Result.GetValueOrDefault()
                 ? Strings.ExportRecords_Lead_Close_Success
                 : Strings.ExportRecords_Lead_Close_Failure;
             public override string ContinueAction => Strings.AccessText_Close;
