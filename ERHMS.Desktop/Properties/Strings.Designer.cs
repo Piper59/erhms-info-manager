@@ -2196,20 +2196,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open the current form in the Epi Info Form Designer module..
-        /// </summary>
-        public static string HelpText_DesignCurrentView {
-            get {
-                return ResourceManager.GetString("HelpText.DesignCurrentView", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Open the selected form in the Epi Info Form Designer module..
         /// </summary>
-        public static string HelpText_DesignSelectedView {
+        public static string HelpText_DesignView {
             get {
-                return ResourceManager.GetString("HelpText.DesignSelectedView", resourceCulture);
+                return ResourceManager.GetString("HelpText.DesignView", resourceCulture);
             }
         }
         
