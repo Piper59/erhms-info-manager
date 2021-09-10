@@ -1928,9 +1928,89 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] Help_Body_Canvases {
+            get {
+                object obj = ResourceManager.GetObject("Help.Body.Canvases", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] Help_Body_Home {
             get {
                 object obj = ResourceManager.GetObject("Help.Body.Home", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Help_Body_Maps {
+            get {
+                object obj = ResourceManager.GetObject("Help.Body.Maps", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Help_Body_Pgms {
+            get {
+                object obj = ResourceManager.GetObject("Help.Body.Pgms", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Help_Body_Phases {
+            get {
+                object obj = ResourceManager.GetObject("Help.Body.Phases", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Help_Body_Projects {
+            get {
+                object obj = ResourceManager.GetObject("Help.Body.Projects", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Help_Body_Records {
+            get {
+                object obj = ResourceManager.GetObject("Help.Body.Records", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Help_Body_Security {
+            get {
+                object obj = ResourceManager.GetObject("Help.Body.Security", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Help_Body_Views {
+            get {
+                object obj = ResourceManager.GetObject("Help.Body.Views", resourceCulture);
                 return ((byte[])(obj));
             }
         }

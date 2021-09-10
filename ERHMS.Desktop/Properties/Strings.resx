@@ -753,8 +753,32 @@ Close anyway?</value>
     <value>Quick start</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Help.Body.Canvases" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\wiki\dashboards.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Help.Body.Home" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\wiki\home.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Help.Body.Maps" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\wiki\maps.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Help.Body.Pgms" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\wiki\analyses.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Help.Body.Phases" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\wiki\phases.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Help.Body.Projects" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\wiki\projects.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Help.Body.Records" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\wiki\records.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Help.Body.Security" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\wiki\security.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Help.Body.Views" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\wiki\forms.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Help.Title.Canvases" xml:space="preserve">
     <value>Dashboards</value>

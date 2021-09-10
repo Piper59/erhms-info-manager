@@ -6,6 +6,8 @@
 
     <!-- Viewers -->
     <Style x:Key="FlowDocumentScrollViewerBase" TargetType="FlowDocumentScrollViewer">
+        <Setter Property="MaxZoom" Value="100" />
+        <Setter Property="MinZoom" Value="100" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
     </Style>
     <Style TargetType="FlowDocumentScrollViewer" BasedOn="{StaticResource FlowDocumentScrollViewerBase}" />
