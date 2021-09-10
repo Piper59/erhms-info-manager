@@ -434,7 +434,7 @@ This form, any related forms, and all associated records will be permanently del
   <data name="Body.ConfirmWorkerProjectChange" xml:space="preserve">
     <value>Project: {0}
 
-ERHMS Info Manager does not support multiple worker projects and will only recognize workers who have been entered into the current project's Worker Rostering Form. Continue changing the worker project anyway?</value>
+Multiple worker projects are not supported. ERHMS Info Manager will only recognize workers who have been entered into the current project's Worker Rostering Form. Continue changing the worker project anyway?</value>
   </data>
   <data name="Body.CreatingTemplate" xml:space="preserve">
     <value>Creating template...</value>
@@ -1154,6 +1154,23 @@ Close anyway?</value>
   </data>
   <data name="RecordStatus.Value.Undeleted" xml:space="preserve">
     <value>Undeleted</value>
+  </data>
+  <data name="RecoverProject.AccessText.Create" xml:space="preserve">
+    <value>_Create new</value>
+  </data>
+  <data name="RecoverProject.AccessText.Open" xml:space="preserve">
+    <value>_Open from new location</value>
+  </data>
+  <data name="RecoverProject.AccessText.Remove" xml:space="preserve">
+    <value>_Remove from list</value>
+  </data>
+  <data name="RecoverProject.Body.SetStrategy" xml:space="preserve">
+    <value>Project: {0}
+
+No file was found in this location. If the project has been moved, you can open it from its new location. If the project no longer exists, you can create a new project or remove it from the list of known projects.</value>
+  </data>
+  <data name="RecoverProject.Lead.SetStrategy" xml:space="preserve">
+    <value>This project does not exist</value>
   </data>
   <data name="SetUpProject.AccessText.Create" xml:space="preserve">
     <value>_Create a new project</value>

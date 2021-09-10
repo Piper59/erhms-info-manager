@@ -989,7 +989,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Project: {0}
         ///
-        ///ERHMS Info Manager does not support multiple worker projects and will only recognize workers who have been entered into the current project&apos;s Worker Rostering Form. Continue changing the worker project anyway?.
+        ///Multiple worker projects are not supported. ERHMS Info Manager will only recognize workers who have been entered into the current project&apos;s Worker Rostering Form. Continue changing the worker project anyway?.
         /// </summary>
         public static string Body_ConfirmWorkerProjectChange {
             get {
@@ -3129,6 +3129,53 @@ namespace ERHMS.Desktop.Properties {
         public static string RecordStatus_Value_Undeleted {
             get {
                 return ResourceManager.GetString("RecordStatus.Value.Undeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Create new.
+        /// </summary>
+        public static string RecoverProject_AccessText_Create {
+            get {
+                return ResourceManager.GetString("RecoverProject.AccessText.Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Open from new location.
+        /// </summary>
+        public static string RecoverProject_AccessText_Open {
+            get {
+                return ResourceManager.GetString("RecoverProject.AccessText.Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Remove from list.
+        /// </summary>
+        public static string RecoverProject_AccessText_Remove {
+            get {
+                return ResourceManager.GetString("RecoverProject.AccessText.Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project: {0}
+        ///
+        ///No file was found in this location. If the project has been moved, you can open it from its new location. If the project no longer exists, you can create a new project or remove it from the list of known projects..
+        /// </summary>
+        public static string RecoverProject_Body_SetStrategy {
+            get {
+                return ResourceManager.GetString("RecoverProject.Body.SetStrategy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This project does not exist.
+        /// </summary>
+        public static string RecoverProject_Lead_SetStrategy {
+            get {
+                return ResourceManager.GetString("RecoverProject.Lead.SetStrategy", resourceCulture);
             }
         }
         

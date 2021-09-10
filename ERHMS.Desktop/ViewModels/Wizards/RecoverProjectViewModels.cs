@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
-    public static class SetUpProjectViewModels
+    public static class RecoverProjectViewModels
     {
         public class State : CreateProjectViewModels.State
         {
@@ -16,16 +16,26 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class SetStrategyViewModel : StepViewModel<State>
         {
-            public override string Title => Strings.SetUpProject_Lead_SetStrategy;
+            public override string Title => Strings.RecoverProject_Lead_SetStrategy;
+            public string ProjectPath { get; }
 
-            public ICommand CreateCommand { get; }
             public ICommand OpenCommand { get; }
+            public ICommand CreateCommand { get; }
+            public ICommand RemoveCommand { get; }
 
             public SetStrategyViewModel(State state)
                 : base(state)
             {
-                CreateCommand = new SyncCommand(Create);
+                ProjectPath = Configuration.Instance.GetProjectPath(state.CoreProject);
                 OpenCommand = new SyncCommand(Open);
+                CreateCommand = new SyncCommand(Create);
+                RemoveCommand = new SyncCommand(Remove);
+            }
+
+            public void Open()
+            {
+                Wizard.Close();
+                Wizard.Result = State.CoreProject.Open();
             }
 
             public void Create()
@@ -33,10 +43,12 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 Wizard.GoForward(new CreateProjectViewModels.SetProjectCreationInfoViewModel(State));
             }
 
-            public void Open()
+            public void Remove()
             {
+                Configuration.Instance.UnsetProjectPath(State.CoreProject);
+                Configuration.Instance.Save();
+                Wizard.Result = false;
                 Wizard.Close();
-                Wizard.Result = State.CoreProject.Open();
             }
         }
 

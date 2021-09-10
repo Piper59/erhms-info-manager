@@ -69,10 +69,10 @@ namespace ERHMS.Desktop.ViewModels
 
             private void Initialize()
             {
-                if (Configuration.Instance.HasWorkerProjectPath)
-                {
-                    Current = new ProjectInfo(Configuration.Instance.WorkerProjectPath);
-                }
+                Current =
+                    Configuration.Instance.HasWorkerProjectPath
+                    ? new ProjectInfo(Configuration.Instance.WorkerProjectPath)
+                    : null;
             }
 
             protected override void Refresh()
@@ -98,10 +98,10 @@ namespace ERHMS.Desktop.ViewModels
 
             private void Initialize()
             {
-                if (Configuration.Instance.HasIncidentProjectPaths)
-                {
-                    Current = new ProjectInfo(Configuration.Instance.IncidentProjectPath);
-                }
+                Current =
+                    Configuration.Instance.HasIncidentProjectPaths
+                    ? new ProjectInfo(Configuration.Instance.IncidentProjectPath)
+                    : null;
                 Recents = Configuration.Instance.IncidentProjectPaths.Cast<string>()
                     .Skip(1)
                     .Select(path => new ProjectInfo(path))

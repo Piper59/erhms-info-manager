@@ -6,6 +6,7 @@
         <ResourceDictionary Source="Wizards/CreateWorkerViews.xaml" />
         <ResourceDictionary Source="Wizards/ExportRecordsViews.xaml" />
         <ResourceDictionary Source="Wizards/ImportRecordsViews.xaml" />
+        <ResourceDictionary Source="Wizards/RecoverProjectViews.xaml" />
         <ResourceDictionary Source="Wizards/SetUpProjectViews.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

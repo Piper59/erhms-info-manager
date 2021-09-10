@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
+                    xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:RecoverProjectViewModels+SetStrategyViewModel}">
+        <StackPanel>
+            <StackPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
+            </StackPanel.Resources>
+            <Grid Style="{StaticResource Paragraph}">
+                <TextBlock Style="{StaticResource Body}"
+                           Text="{Binding ProjectPath, StringFormat={Markup:String RecoverProject.Body.SetStrategy}}" />
+            </Grid>
+            <Button Command="{Binding OpenCommand}"
+                    Content="{Markup:String RecoverProject.AccessText.Open}" />
+            <Button Command="{Binding CreateCommand}"
+                    Content="{Markup:String RecoverProject.AccessText.Create}" />
+            <Button Command="{Binding RemoveCommand}"
+                    Content="{Markup:String RecoverProject.AccessText.Remove}" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

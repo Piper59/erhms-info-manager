@@ -143,6 +143,10 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToCoreProjectAsync(CoreProject coreProject)
         {
+            if (!coreProject.Check())
+            {
+                return;
+            }
             try
             {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
@@ -192,6 +196,10 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToCoreViewAsync(CoreView coreView)
         {
+            if (!coreView.CoreProject.Check())
+            {
+                return;
+            }
             Project project = null;
             object content = null;
             try
@@ -286,7 +294,7 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            if (!SetUpProjectViewModels.Open(coreProject))
+            if (!coreProject.Open())
             {
                 return;
             }

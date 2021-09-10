@@ -112,5 +112,23 @@ namespace ERHMS.Desktop
                     throw new ArgumentOutOfRangeException(nameof(coreProject));
             }
         }
+
+        public void UnsetProjectPath(CoreProject coreProject)
+        {
+            switch (coreProject)
+            {
+                case CoreProject.Worker:
+                    WorkerProjectPath = null;
+                    break;
+                case CoreProject.Incident:
+                    if (IncidentProjectPaths.Count > 0)
+                    {
+                        IncidentProjectPaths.RemoveAt(0);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(coreProject));
+            }
+        }
     }
 }
