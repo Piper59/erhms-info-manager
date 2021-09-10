@@ -89,6 +89,11 @@
     </Style>
     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridColumnHeaderBase}" />
 
+    <Style x:Key="HyperlinkBase" TargetType="Hyperlink">
+        <Setter Property="ToolTip" Value="{Binding NavigateUri, RelativeSource={RelativeSource Self}}" />
+    </Style>
+    <Style TargetType="Hyperlink" BasedOn="{StaticResource HyperlinkBase}" />
+
     <Style x:Key="GroupBoxBase" TargetType="GroupBox">
         <Setter Property="HeaderTemplate">
             <Setter.Value>

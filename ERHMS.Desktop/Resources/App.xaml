@@ -105,7 +105,7 @@
         <Setter Property="TextBlock.TextAlignment" Value="Right" />
     </Style>
 
-    <Style x:Key="PlainHyperlink" TargetType="Hyperlink">
+    <Style x:Key="PlainHyperlink" TargetType="Hyperlink" BasedOn="{StaticResource HyperlinkBase}">
         <Setter Property="Foreground" Value="{x:Static SystemColors.WindowTextBrush}" />
         <Setter Property="TextDecorations" Value="None" />
     </Style>
