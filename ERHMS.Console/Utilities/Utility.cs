@@ -141,7 +141,14 @@ namespace ERHMS.Console.Utilities
         protected static string GetPassword()
         {
             Error.Write("Password: ");
-            return ConsoleExtensions.ReadPassword();
+            try
+            {
+                return ConsoleExtensions.ReadPassword();
+            }
+            finally
+            {
+                Error.WriteLine();
+            }
         }
 
         public abstract void Run();
