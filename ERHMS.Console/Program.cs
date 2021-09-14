@@ -12,9 +12,8 @@ namespace ERHMS.Console
         [STAThread]
         private static int Main(string[] args)
         {
-            Log.Initialize(new ConsoleAppender());
-            Configuration.Initialize(ExecutionEnvironment.Console);
             IUtility utility = Utility.ParseArgs(args);
+            Log.Initialize(new ConsoleAppender());
             Log.Instance.Info($"Running: {utility.GetType().Name}");
             foreach (string arg in args.Skip(1))
             {
@@ -22,6 +21,7 @@ namespace ERHMS.Console
             }
             try
             {
+                Configuration.Initialize(ExecutionEnvironment.Console);
                 utility.Run();
                 Log.Instance.Info("Completed");
                 return ErrorCodes.Success;

@@ -43,13 +43,20 @@ namespace ERHMS.EpiInfo
 
         public static void Initialize(ExecutionEnvironment environment)
         {
-            if (!File.Exists(FilePath))
+            try
             {
-                Configuration configuration = Create();
-                configuration.Save();
+                if (!File.Exists(FilePath))
+                {
+                    Configuration configuration = Create();
+                    configuration.Save();
+                }
+                Instance = Load();
+                Environment = environment;
             }
-            Instance = Load();
-            Environment = environment;
+            catch (Exception ex)
+            {
+                throw new ConfigurationException($"Epi Info could not be configured from {FilePath}.", ex);
+            }
         }
 
         private static Configuration Create()

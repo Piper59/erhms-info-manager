@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using ConfigurationException = ERHMS.EpiInfo.ConfigurationException;
 
 namespace ERHMS.Desktop
 {
@@ -18,12 +19,19 @@ namespace ERHMS.Desktop
         public static void Initialize()
         {
             EpiInfo.Configuration.Initialize(ExecutionEnvironment.WindowsApplication);
-            if (!File.Exists(FilePath))
+            try
             {
-                Configuration configuration = new Configuration();
-                configuration.Save();
+                if (!File.Exists(FilePath))
+                {
+                    Configuration configuration = new Configuration();
+                    configuration.Save();
+                }
+                Instance = Load();
             }
-            Instance = Load();
+            catch (Exception ex)
+            {
+                throw new ConfigurationException($"ERHMS Info Manager could not be configured from {FilePath}.", ex);
+            }
         }
 
         private static Configuration Load()

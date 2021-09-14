@@ -10,12 +10,12 @@ namespace ERHMS.Desktop
         [STAThread]
         private static void Main()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Log.Initialize(new FileAppender());
+            Log.Instance.Debug("Starting up");
             try
             {
-                Log.Initialize(new FileAppender());
-                Log.Instance.Debug("Starting up");
                 Configuration.Initialize();
-                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 App app = new App();
                 app.Run();
             }

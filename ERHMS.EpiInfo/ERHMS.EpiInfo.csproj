@@ -80,6 +80,7 @@
     <Compile Include="Analytics\Map.cs" />
     <Compile Include="Analytics\Pgm.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigurationException.cs" />
     <Compile Include="Data\CollectedDataProviderExtensions.cs" />
     <Compile Include="Data\DatabaseStatus.cs" />
     <Compile Include="Data\IDatabaseExtensions.cs" />
