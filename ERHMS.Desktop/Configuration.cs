@@ -62,7 +62,7 @@ namespace ERHMS.Desktop
             }
         }
 
-        public bool WindowMaximized { get; set; }
+        public bool WindowMaximized { get; set; } = true;
         public double WindowWidth { get; set; } = 1024;
         public double WindowHeight { get; set; } = 768;
 
