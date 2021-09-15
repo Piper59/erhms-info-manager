@@ -37,7 +37,11 @@
     </Style>
 
     <!-- Inlines -->
-    <Style x:Key="Emphasis" TargetType="Run">
+    <Style x:Key="Emphasized" TargetType="Run">
         <Setter Property="FontStyle" Value="Italic" />
+    </Style>
+
+    <Style x:Key="Strong" TargetType="Run">
+        <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
     </Style>
 </ResourceDictionary>

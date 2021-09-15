@@ -13,7 +13,8 @@ namespace ERHMS.Desktop.Markdown
         public object Heading1StyleKey { get; set; }
         public object Heading2StyleKey { get; set; }
         public object Heading3StyleKey { get; set; }
-        public object EmphasisStyleKey { get; set; }
+        public object EmphasizedStyleKey { get; set; }
+        public object StrongStyleKey { get; set; }
 
         public RenderingContext()
         {

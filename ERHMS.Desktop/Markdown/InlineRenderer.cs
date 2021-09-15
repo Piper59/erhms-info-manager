@@ -36,11 +36,12 @@ namespace ERHMS.Desktop.Markdown
             }
         }
 
-        public class AsEmphasis : InlineRenderer
+        public abstract class AsStyled : InlineRenderer
         {
-            private static Regex Regex { get; } = new Regex(@"\*(?<text>[^*]+)\*");
+            protected abstract Regex Regex { get; }
+            protected abstract object StyleKey { get; }
 
-            public AsEmphasis(RenderingContext context)
+            public AsStyled(RenderingContext context)
                 : base(context) { }
 
             public override bool TryRender(string text, out InlineNode node)
@@ -49,7 +50,7 @@ namespace ERHMS.Desktop.Markdown
                 if (match.Success)
                 {
                     Run run = new Run(match.Groups["text"].Value);
-                    run.SetResourceReference(FrameworkElement.StyleProperty, Context.EmphasisStyleKey);
+                    run.SetResourceReference(FrameworkElement.StyleProperty, StyleKey);
                     node = new InlineNode(text, match, run);
                     return true;
                 }
@@ -59,6 +60,24 @@ namespace ERHMS.Desktop.Markdown
                     return false;
                 }
             }
+        }
+
+        public class AsEmphasized : AsStyled
+        {
+            protected override Regex Regex { get; } = new Regex(@"\*(?<text>[^*]+)\*");
+            protected override object StyleKey => Context.EmphasizedStyleKey;
+
+            public AsEmphasized(RenderingContext context)
+                : base(context) { }
+        }
+
+        public class AsStrong : AsStyled
+        {
+            protected override Regex Regex { get; } = new Regex(@"\*\*(?<text>[^*]+)\*\*");
+            protected override object StyleKey => Context.StrongStyleKey;
+
+            public AsStrong(RenderingContext context)
+                : base(context) { }
         }
 
         public class AsRun : InlineRenderer
@@ -77,7 +96,8 @@ namespace ERHMS.Desktop.Markdown
         public static IEnumerable<InlineRenderer> GetInstances(RenderingContext context)
         {
             yield return new AsHyperlink(context);
-            yield return new AsEmphasis(context);
+            yield return new AsStrong(context);
+            yield return new AsEmphasized(context);
             yield return new AsRun(context);
         }
 
