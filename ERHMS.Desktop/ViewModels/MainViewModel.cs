@@ -70,9 +70,9 @@ namespace ERHMS.Desktop.ViewModels
             GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync, CanGoToCoreProject);
             GoToViewCommand = new AsyncCommand<View>(GoToViewAsync, CanGoToView);
             GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync, CanGoToCoreView);
-            CreateCoreProjectCommand = new AsyncCommand<CoreProject>(CreateCoreProjectAsync);
-            OpenCoreProjectCommand = new AsyncCommand<CoreProject>(OpenCoreProjectAsync);
-            SetUpCoreProjectCommand = new AsyncCommand<CoreProject>(SetUpCoreProjectAsync);
+            CreateCoreProjectCommand = new SyncCommand<CoreProject>(CreateCoreProject);
+            OpenCoreProjectCommand = new SyncCommand<CoreProject>(OpenCoreProject);
+            SetUpCoreProjectCommand = new SyncCommand<CoreProject>(SetUpCoreProject);
             OpenUriCommand = new SyncCommand<string>(OpenUri);
             ExportLogsCommand = new AsyncCommand(ExportLogsAsync);
             StartEpiInfoCommand = new SyncCommand(StartEpiInfo);
@@ -274,7 +274,7 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public async Task CreateCoreProjectAsync(CoreProject coreProject)
+        public void CreateCoreProject(CoreProject coreProject)
         {
             if (!ConfirmCoreProjectChange(coreProject).GetValueOrDefault())
             {
@@ -285,10 +285,10 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            await GoToCoreProjectAsync(coreProject);
+            GoToHome();
         }
 
-        public async Task OpenCoreProjectAsync(CoreProject coreProject)
+        public void OpenCoreProject(CoreProject coreProject)
         {
             if (!ConfirmCoreProjectChange(coreProject).GetValueOrDefault())
             {
@@ -298,10 +298,10 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            await GoToCoreProjectAsync(coreProject);
+            GoToHome();
         }
 
-        public async Task SetUpCoreProjectAsync(CoreProject coreProject)
+        public void SetUpCoreProject(CoreProject coreProject)
         {
             if (!ConfirmCoreProjectChange(coreProject).GetValueOrDefault())
             {
@@ -312,7 +312,7 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            await GoToCoreProjectAsync(coreProject);
+            GoToHome();
         }
 
         public void OpenUri(string uri)
