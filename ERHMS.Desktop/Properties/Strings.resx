@@ -753,6 +753,9 @@ Close anyway?</value>
     <value>Quick start</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Help.Body.Background" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\wiki\background.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Help.Body.Canvases" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\wiki\dashboards.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -764,9 +767,6 @@ Close anyway?</value>
   </data>
   <data name="Help.Body.Pgms" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\wiki\analyses.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Help.Body.Phases" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\..\wiki\phases.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Help.Body.Projects" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\wiki\projects.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -780,6 +780,9 @@ Close anyway?</value>
   <data name="Help.Body.Views" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\wiki\forms.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Help.Title.Background" xml:space="preserve">
+    <value>Background</value>
+  </data>
   <data name="Help.Title.Canvases" xml:space="preserve">
     <value>Dashboards</value>
   </data>
@@ -791,9 +794,6 @@ Close anyway?</value>
   </data>
   <data name="Help.Title.Pgms" xml:space="preserve">
     <value>Analyses</value>
-  </data>
-  <data name="Help.Title.Phases" xml:space="preserve">
-    <value>Phases</value>
   </data>
   <data name="Help.Title.Projects" xml:space="preserve">
     <value>Projects</value>
@@ -1203,7 +1203,7 @@ No file was found in this location. If the project has been moved, you can open 
     <value>_Open an existing project</value>
   </data>
   <data name="SetUpProject.Body.SetStrategy" xml:space="preserve">
-    <value>A project consists of an Epi Info project (.prj) file and an underlying database. If you choose to create a new project, ERHMS Info Manager will ensure that the database exists and has been initialized for use with Epi Info.</value>
+    <value>A project represents a set of data collection forms. It consists of an Epi Info project (.prj) file and an underlying database. If you choose to create a new project, ERHMS Info Manager will ensure that the database exists and has been initialized for use with Epi Info.</value>
   </data>
   <data name="SetUpProject.HelpText.Create" xml:space="preserve">
     <value>Create a new Epi Info project (.prj) file connected to a new or existing database.</value>

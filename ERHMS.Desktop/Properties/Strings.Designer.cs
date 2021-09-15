@@ -1928,6 +1928,16 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] Help_Body_Background {
+            get {
+                object obj = ResourceManager.GetObject("Help.Body.Background", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] Help_Body_Canvases {
             get {
                 object obj = ResourceManager.GetObject("Help.Body.Canvases", resourceCulture);
@@ -1961,16 +1971,6 @@ namespace ERHMS.Desktop.Properties {
         public static byte[] Help_Body_Pgms {
             get {
                 object obj = ResourceManager.GetObject("Help.Body.Pgms", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] Help_Body_Phases {
-            get {
-                object obj = ResourceManager.GetObject("Help.Body.Phases", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -2016,6 +2016,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Background.
+        /// </summary>
+        public static string Help_Title_Background {
+            get {
+                return ResourceManager.GetString("Help.Title.Background", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dashboards.
         /// </summary>
         public static string Help_Title_Canvases {
@@ -2048,15 +2057,6 @@ namespace ERHMS.Desktop.Properties {
         public static string Help_Title_Pgms {
             get {
                 return ResourceManager.GetString("Help.Title.Pgms", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Phases.
-        /// </summary>
-        public static string Help_Title_Phases {
-            get {
-                return ResourceManager.GetString("Help.Title.Phases", resourceCulture);
             }
         }
         
@@ -3278,7 +3278,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A project consists of an Epi Info project (.prj) file and an underlying database. If you choose to create a new project, ERHMS Info Manager will ensure that the database exists and has been initialized for use with Epi Info..
+        ///   Looks up a localized string similar to A project represents a set of data collection forms. It consists of an Epi Info project (.prj) file and an underlying database. If you choose to create a new project, ERHMS Info Manager will ensure that the database exists and has been initialized for use with Epi Info..
         /// </summary>
         public static string SetUpProject_Body_SetStrategy {
             get {

@@ -7,7 +7,7 @@ namespace ERHMS.Desktop.ViewModels
         public IEnumerable<string> Sections { get; } = new string[]
         {
             "Home",
-            "Phases",
+            "Background",
             "Projects",
             "Views",
             "Records",
