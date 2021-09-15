@@ -840,7 +840,10 @@ Close anyway?</value>
   <data name="HelpText.DeleteView" xml:space="preserve">
     <value>Permanently delete the selected form, any related forms, and all associated records.</value>
   </data>
-  <data name="HelpText.DesignView" xml:space="preserve">
+  <data name="HelpText.DesignCurrentView" xml:space="preserve">
+    <value>Open the current form in the Epi Info Form Designer module.</value>
+  </data>
+  <data name="HelpText.DesignSelectedView" xml:space="preserve">
     <value>Open the selected form in the Epi Info Form Designer module.</value>
   </data>
   <data name="HelpText.EditRecord" xml:space="preserve">

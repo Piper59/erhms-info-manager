@@ -95,6 +95,12 @@
                                      HelpText="{Markup:String HelpText.ExportRecords}" />
                 <Border Style="{StaticResource IconButtonSeparator}" />
                 <Controls:IconButton AccessKey="8"
+                                     AltText="{Markup:String AltText.Design}"
+                                     Command="{Binding DesignCommand}"
+                                     Content="{Markup:Icon Design}"
+                                     HelpText="{Markup:String HelpText.DesignCurrentView}" />
+                <Border Style="{StaticResource IconButtonSeparator}" />
+                <Controls:IconButton AccessKey="9"
                                      AltText="{Markup:String AltText.Refresh}"
                                      Command="{Binding RefreshCommand}"
                                      Content="{Markup:Icon Refresh}"
