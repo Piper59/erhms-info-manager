@@ -1194,13 +1194,13 @@ Close anyway?</value>
     <value>Undeleted</value>
   </data>
   <data name="RecoverProject.AccessText.Create" xml:space="preserve">
-    <value>_Create new</value>
+    <value>_Create new project</value>
   </data>
   <data name="RecoverProject.AccessText.Open" xml:space="preserve">
-    <value>_Open from new location</value>
+    <value>_Open project from new location</value>
   </data>
   <data name="RecoverProject.AccessText.Remove" xml:space="preserve">
-    <value>_Remove from list</value>
+    <value>_Remove project from list</value>
   </data>
   <data name="RecoverProject.Body.SetStrategy" xml:space="preserve">
     <value>Project: {0}

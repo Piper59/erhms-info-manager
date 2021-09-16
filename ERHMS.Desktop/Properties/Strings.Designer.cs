@@ -3251,7 +3251,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Create new.
+        ///   Looks up a localized string similar to _Create new project.
         /// </summary>
         public static string RecoverProject_AccessText_Create {
             get {
@@ -3260,7 +3260,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Open from new location.
+        ///   Looks up a localized string similar to _Open project from new location.
         /// </summary>
         public static string RecoverProject_AccessText_Open {
             get {
@@ -3269,7 +3269,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Remove from list.
+        ///   Looks up a localized string similar to _Remove project from list.
         /// </summary>
         public static string RecoverProject_AccessText_Remove {
             get {
