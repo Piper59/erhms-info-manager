@@ -264,6 +264,9 @@
   <data name="AccessText.Records" xml:space="preserve">
     <value>_Records</value>
   </data>
+  <data name="AccessText.Remove" xml:space="preserve">
+    <value>_Remove</value>
+  </data>
   <data name="AccessText.Reports" xml:space="preserve">
     <value>_Reports</value>
   </data>
@@ -423,6 +426,11 @@ This file will be moved to the Recycle Bin.</value>
     <value>Location: {0}
 
 ERHMS Info Manager will only recognize files that are in the same location as the current project. Continue with this location anyway?</value>
+  </data>
+  <data name="Body.ConfirmRecentProjectRemoval" xml:space="preserve">
+    <value>Project: {0}
+
+This project will be removed from the list of recent projects.</value>
   </data>
   <data name="Body.ConfirmViewCreation" xml:space="preserve">
     <value>Form: {0}
@@ -1037,6 +1045,9 @@ Close anyway?</value>
   </data>
   <data name="Lead.ConfirmOrphanAssetCreation" xml:space="preserve">
     <value>This location is not supported</value>
+  </data>
+  <data name="Lead.ConfirmRecentProjectRemoval" xml:space="preserve">
+    <value>Are you sure you want to remove this project?</value>
   </data>
   <data name="Lead.ConfirmViewCreation" xml:space="preserve">
     <value>This form does not exist</value>

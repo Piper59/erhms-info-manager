@@ -502,6 +502,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Remove.
+        /// </summary>
+        public static string AccessText_Remove {
+            get {
+                return ResourceManager.GetString("AccessText.Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Reports.
         /// </summary>
         public static string AccessText_Reports {
@@ -970,6 +979,17 @@ namespace ERHMS.Desktop.Properties {
         public static string Body_ConfirmOrphanAssetCreation {
             get {
                 return ResourceManager.GetString("Body.ConfirmOrphanAssetCreation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project: {0}
+        ///
+        ///This project will be removed from the list of recent projects..
+        /// </summary>
+        public static string Body_ConfirmRecentProjectRemoval {
+            get {
+                return ResourceManager.GetString("Body.ConfirmRecentProjectRemoval", resourceCulture);
             }
         }
         
@@ -2786,6 +2806,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_ConfirmOrphanAssetCreation {
             get {
                 return ResourceManager.GetString("Lead.ConfirmOrphanAssetCreation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this project?.
+        /// </summary>
+        public static string Lead_ConfirmRecentProjectRemoval {
+            get {
+                return ResourceManager.GetString("Lead.ConfirmRecentProjectRemoval", resourceCulture);
             }
         }
         

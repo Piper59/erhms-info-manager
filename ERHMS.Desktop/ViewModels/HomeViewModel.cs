@@ -1,5 +1,8 @@
 ﻿using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
+using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.Services;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using System;
@@ -122,6 +125,15 @@ namespace ERHMS.Desktop.ViewModels
 
             public void RemoveRecent(ProjectInfo projectInfo)
             {
+                IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                dialog.Severity = DialogSeverity.Warning;
+                dialog.Lead = Strings.Lead_ConfirmRecentProjectRemoval;
+                dialog.Body = string.Format(Strings.Body_ConfirmRecentProjectRemoval, projectInfo.FilePath);
+                dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Remove);
+                if (!dialog.Show().GetValueOrDefault())
+                {
+                    return;
+                }
                 Configuration.Instance.IncidentProjectPaths.Remove(projectInfo.FilePath);
                 Configuration.Instance.Save();
             }
