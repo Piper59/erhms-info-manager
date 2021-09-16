@@ -77,7 +77,7 @@
                                    TextWrapping="NoWrap" />
                     </StackPanel>
                 </Button>
-                <Button AutomationProperties.Name="{Markup:String AltText.Options}"
+                <Button AutomationProperties.Name="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AltText.ProjectOptions.{0}'}"
                         ContextMenuService.Placement="Bottom"
                         Grid.Column="1"
                         Content="{Markup:Icon Expand}"
