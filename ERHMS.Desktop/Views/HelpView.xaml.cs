@@ -1,5 +1,6 @@
 ﻿using ERHMS.Desktop.ViewModels;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Views
 {
@@ -14,6 +15,15 @@ namespace ERHMS.Desktop.Views
         public HelpView()
         {
             InitializeComponent();
+        }
+
+        private void FlowDocumentScrollViewer_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            FlowDocumentScrollViewer documentViewer = (FlowDocumentScrollViewer)sender;
+            if (documentViewer.Template.FindName("PART_ContentHost", documentViewer) is ScrollViewer scrollViewer)
+            {
+                scrollViewer.ScrollToTop();
+            }
         }
     }
 }

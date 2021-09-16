@@ -18,7 +18,8 @@
                             TabStripPlacement="Left">
                     <TabControl.ContentTemplate>
                         <DataTemplate>
-                            <FlowDocumentScrollViewer Document="{Binding ., Converter={StaticResource HelpSectionLocalizingConverter}}" />
+                            <FlowDocumentScrollViewer DataContextChanged="FlowDocumentScrollViewer_DataContextChanged"
+                                                      Document="{Binding ., Converter={StaticResource HelpSectionLocalizingConverter}}" />
                         </DataTemplate>
                     </TabControl.ContentTemplate>
                     <TabControl.ItemContainerStyle>
