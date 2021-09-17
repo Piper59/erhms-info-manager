@@ -30,7 +30,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public void Create()
             {
-                Wizard.GoForward(new CreateProjectViewModels.SetProjectCreationInfoViewModel(State));
+                Wizard.GoForward(new CreateProjectViewModels.SetProjectInfoViewModel(State));
             }
 
             public void Open()

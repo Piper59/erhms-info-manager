@@ -1,10 +1,28 @@
-﻿using System.IO;
+﻿using ERHMS.Common.Logging;
+using System;
+using System.IO;
+using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo
 {
     public class ProjectInfo
     {
+        private static string GetDescription(string path)
+        {
+            try
+            {
+                XDocument document = XDocument.Load(path);
+                return document.Root.Attribute("description").Value;
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Warn(ex);
+                return null;
+            }
+        }
+
         public string Name { get; set; }
+        public string Description { get; set; }
 
         private string location;
         public string Location
@@ -68,6 +86,7 @@ namespace ERHMS.EpiInfo
                 filePath = value;
                 Name = Path.GetFileNameWithoutExtension(value);
                 Location = Path.GetDirectoryName(value);
+                Description = GetDescription(value);
             }
         }
 

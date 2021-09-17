@@ -1,7 +1,5 @@
 ﻿using ERHMS.Data;
 using ERHMS.EpiInfo;
-using System;
-using System.IO;
 
 namespace ERHMS.Console.Utilities
 {
@@ -38,14 +36,13 @@ namespace ERHMS.Console.Utilities
 
         public override void Run()
         {
-            ProjectCreationInfo projectCreationInfo = new ProjectCreationInfo
+            ProjectInfo projectInfo = new ProjectInfo
             {
                 Name = ProjectName,
                 Description = ProjectDescription,
-                Location = ProjectLocation,
-                Database = DatabaseProvider.ToDatabase(ConnectionString)
+                Location = ProjectLocation
             };
-            ProjectExtensions.Create(projectCreationInfo);
+            ProjectExtensions.Create(projectInfo, DatabaseProvider.ToDatabase(ConnectionString));
         }
     }
 }

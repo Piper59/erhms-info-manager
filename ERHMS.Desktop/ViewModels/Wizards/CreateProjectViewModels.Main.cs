@@ -24,8 +24,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public partial class State
         {
             public CoreProject CoreProject { get; }
+            public ProjectInfo ProjectInfo { get; set; }
+            public IDatabase Database { get; set; }
             public DatabaseStatus DatabaseStatus { get; set; }
-            public ProjectCreationInfo ProjectCreationInfo { get; set; }
             public Project Project { get; set; }
 
             public State(CoreProject coreProject)
@@ -34,12 +35,12 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             }
         }
 
-        public class SetProjectCreationInfoViewModel : StepViewModel<State>
+        public class SetProjectInfoViewModel : StepViewModel<State>
         {
             private readonly IDirectoryDialogService directoryDialog;
             private readonly IDictionary<DatabaseProvider, ConnectionInfoViewModel> connectionInfosByDatabaseProvider;
 
-            public override string Title => Strings.CreateProject_Lead_SetProjectCreationInfo;
+            public override string Title => Strings.CreateProject_Lead_SetProjectInfo;
 
             private string name;
             public string Name
@@ -68,7 +69,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public ICommand BrowseCommand { get; }
 
-            public SetProjectCreationInfoViewModel(State state)
+            public SetProjectInfoViewModel(State state)
                 : base(state)
             {
                 Directory.CreateDirectory(EpiInfo.Configuration.Instance.Directories.Projects);
@@ -122,21 +123,23 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     return;
                 }
-                ProjectCreationInfo projectCreationInfo = new ProjectCreationInfo
+                ProjectInfo projectInfo = new ProjectInfo
                 {
                     Name = Name,
                     Description = Description ?? "",
                     LocationRoot = LocationRoot
                 };
-                string connectionString = ConnectionInfo.GetConnectionString(projectCreationInfo.FilePath);
-                projectCreationInfo.Database = DatabaseProviders.CurrentItem.ToDatabase(connectionString);
+                string connectionString = ConnectionInfo.GetConnectionString(projectInfo.FilePath);
+                IDatabase database = DatabaseProviders.CurrentItem.ToDatabase(connectionString);
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                State.DatabaseStatus = await progress.Run(() =>
+                DatabaseStatus databaseStatus = await progress.Run(() =>
                 {
-                    return projectCreationInfo.Database.GetStatus();
+                    return database.GetStatus();
                 });
-                State.ProjectCreationInfo = projectCreationInfo;
-                if (State.DatabaseStatus == DatabaseStatus.Initialized)
+                State.ProjectInfo = projectInfo;
+                State.Database = database;
+                State.DatabaseStatus = databaseStatus;
+                if (databaseStatus == DatabaseStatus.Initialized)
                 {
                     Wizard.GoForward(new Blank.CommitViewModel(State));
                 }
@@ -206,14 +209,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 Details = new DetailsViewModel
                 {
-                    { Strings.Label_Name, state.ProjectCreationInfo.Name },
-                    { Strings.Label_Description, state.ProjectCreationInfo.Description },
-                    { Strings.Label_LocationRoot, state.ProjectCreationInfo.LocationRoot },
-                    { Strings.Label_DatabaseProvider, state.ProjectCreationInfo.Database.Provider },
-                    {
-                        Strings.Label_ConnectionInfo,
-                        state.ProjectCreationInfo.Database.GetConnectionStringBuilder()
-                    },
+                    { Strings.Label_Name, state.ProjectInfo.Name },
+                    { Strings.Label_Description, state.ProjectInfo.Description },
+                    { Strings.Label_LocationRoot, state.ProjectInfo.LocationRoot },
+                    { Strings.Label_DatabaseProvider, state.Database.Provider },
+                    { Strings.Label_ConnectionInfo, state.Database.GetConnectionStringBuilder() },
                     { Strings.Label_DatabaseStatus, state.DatabaseStatus }
                 };
             }
@@ -231,11 +231,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 progress.Lead = Strings.Lead_CreatingProject;
                 State.Project = await progress.Run(() =>
                 {
-                    if (!State.ProjectCreationInfo.Database.Exists())
+                    if (!State.Database.Exists())
                     {
-                        State.ProjectCreationInfo.Database.Create();
+                        State.Database.Create();
                     }
-                    Project project = ProjectExtensions.Create(State.ProjectCreationInfo);
+                    Project project = ProjectExtensions.Create(State.ProjectInfo, State.Database);
                     if (!project.IsInitialized())
                     {
                         progress.Report(Strings.Body_Initializing);
@@ -283,7 +283,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public static WizardViewModel GetWizard(CoreProject coreProject)
         {
             State state = new State(coreProject);
-            StepViewModel step = new SetProjectCreationInfoViewModel(state);
+            StepViewModel step = new SetProjectInfoViewModel(state);
             return new WizardViewModel(step);
         }
     }

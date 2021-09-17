@@ -4,7 +4,7 @@
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+SetProjectCreationInfoViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+SetProjectInfoViewModel}">
         <StackPanel>
             <Grid>
                 <Grid.ColumnDefinitions>

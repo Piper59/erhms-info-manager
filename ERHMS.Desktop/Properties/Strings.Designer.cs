@@ -1561,9 +1561,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Enter details for the project.
         /// </summary>
-        public static string CreateProject_Lead_SetProjectCreationInfo {
+        public static string CreateProject_Lead_SetProjectInfo {
             get {
-                return ResourceManager.GetString("CreateProject.Lead.SetProjectCreationInfo", resourceCulture);
+                return ResourceManager.GetString("CreateProject.Lead.SetProjectInfo", resourceCulture);
             }
         }
         

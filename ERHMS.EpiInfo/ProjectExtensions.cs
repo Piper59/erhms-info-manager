@@ -15,26 +15,26 @@ namespace ERHMS.EpiInfo
 {
     public static class ProjectExtensions
     {
-        public static Project Create(ProjectCreationInfo creationInfo)
+        public static Project Create(ProjectInfo info, IDatabase database)
         {
-            Log.Instance.Debug($"Creating project: {creationInfo.FilePath}");
-            if (File.Exists(creationInfo.FilePath))
+            Log.Instance.Debug($"Creating project: {info.FilePath}");
+            if (File.Exists(info.FilePath))
             {
                 throw new InvalidOperationException("Project already exists.");
             }
-            Directory.CreateDirectory(creationInfo.Location);
+            Directory.CreateDirectory(info.Location);
             Project project = new Project
             {
                 Id = Guid.NewGuid(),
-                Name = creationInfo.Name,
-                Description = creationInfo.Description,
-                Location = creationInfo.Location,
-                CollectedDataDriver = Configuration.GetDatabaseDriver(creationInfo.Database.Provider),
-                CollectedDataConnectionString = creationInfo.Database.ConnectionString,
+                Name = info.Name,
+                Description = info.Description,
+                Location = info.Location,
+                CollectedDataDriver = Configuration.GetDatabaseDriver(database.Provider),
+                CollectedDataConnectionString = database.ConnectionString,
                 CollectedDataDbInfo = new DbDriverInfo
                 {
-                    DBCnnStringBuilder = creationInfo.Database.GetConnectionStringBuilder(),
-                    DBName = creationInfo.Database.Name
+                    DBCnnStringBuilder = database.GetConnectionStringBuilder(),
+                    DBName = database.Name
                 },
                 MetadataSource = MetadataSource.SameDb
             };

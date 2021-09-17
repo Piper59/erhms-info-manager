@@ -631,7 +631,7 @@ Close anyway?</value>
   <data name="CreateProject.Lead.Close" xml:space="preserve">
     <value>Project creation was successful</value>
   </data>
-  <data name="CreateProject.Lead.SetProjectCreationInfo" xml:space="preserve">
+  <data name="CreateProject.Lead.SetProjectInfo" xml:space="preserve">
     <value>Enter details for the project</value>
   </data>
   <data name="CreateProject.Lead.SetSourceProject" xml:space="preserve">
