@@ -1,5 +1,6 @@
 ﻿using Epi;
 using Epi.DataSets;
+using ERHMS.Common.Logging;
 using ERHMS.Data;
 using System;
 using System.IO;
@@ -43,6 +44,7 @@ namespace ERHMS.EpiInfo
 
         public static void Initialize(ExecutionEnvironment environment)
         {
+            Log.Instance.Debug("Configuring Epi Info");
             try
             {
                 if (!File.Exists(FilePath))

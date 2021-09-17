@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Common.Logging;
 using ERHMS.Domain;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace ERHMS.Desktop
         public static void Initialize()
         {
             EpiInfo.Configuration.Initialize(ExecutionEnvironment.WindowsApplication);
+            Log.Instance.Debug("Configuring ERHMS Info Manager");
             try
             {
                 if (!File.Exists(FilePath))
