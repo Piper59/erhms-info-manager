@@ -27,7 +27,6 @@ namespace ERHMS.EpiInfo
             {
                 Id = Guid.NewGuid(),
                 Name = info.Name,
-                Description = info.Description,
                 Location = info.Location,
                 CollectedDataDriver = Configuration.GetDatabaseDriver(database.Provider),
                 CollectedDataConnectionString = database.ConnectionString,

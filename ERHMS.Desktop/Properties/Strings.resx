@@ -965,9 +965,6 @@ Close anyway?</value>
   <data name="Label.DataSource" xml:space="preserve">
     <value>Server name:</value>
   </data>
-  <data name="Label.Description" xml:space="preserve">
-    <value>Description:</value>
-  </data>
   <data name="Label.EmailAddress" xml:space="preserve">
     <value>Email address:</value>
   </data>

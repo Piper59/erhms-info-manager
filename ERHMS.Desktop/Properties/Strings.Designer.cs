@@ -2567,15 +2567,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Description:.
-        /// </summary>
-        public static string Label_Description {
-            get {
-                return ResourceManager.GetString("Label.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Email address:.
         /// </summary>
         public static string Label_EmailAddress {

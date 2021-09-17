@@ -49,13 +49,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 set { SetProperty(ref name, value); }
             }
 
-            private string description;
-            public string Description
-            {
-                get { return description; }
-                set { SetProperty(ref description, value); }
-            }
-
             private string locationRoot = EpiInfo.Configuration.Instance.Directories.Projects;
             public string LocationRoot
             {
@@ -126,7 +119,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 ProjectInfo projectInfo = new ProjectInfo
                 {
                     Name = Name,
-                    Description = Description ?? "",
                     LocationRoot = LocationRoot
                 };
                 string connectionString = ConnectionInfo.GetConnectionString(projectInfo.FilePath);
@@ -210,7 +202,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 Details = new DetailsViewModel
                 {
                     { Strings.Label_Name, state.ProjectInfo.Name },
-                    { Strings.Label_Description, state.ProjectInfo.Description },
                     { Strings.Label_LocationRoot, state.ProjectInfo.LocationRoot },
                     { Strings.Label_DatabaseProvider, state.Database.Provider },
                     { Strings.Label_ConnectionInfo, state.Database.GetConnectionStringBuilder() },
