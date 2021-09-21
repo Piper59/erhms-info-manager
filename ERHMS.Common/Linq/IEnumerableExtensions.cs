@@ -5,19 +5,22 @@ namespace ERHMS.Common.Linq
 {
     public static class IEnumerableExtensions
     {
-        public static IEnumerable<TItem> Yield<TItem>(TItem item)
+        public static IEnumerable<TItem> Yield<TItem>(params TItem[] items)
         {
-            yield return item;
+            foreach (TItem item in items)
+            {
+                yield return item;
+            }
         }
 
-        public static IEnumerable<TItem> Append<TItem>(this IEnumerable<TItem> @this, TItem item)
+        public static IEnumerable<TItem> Append<TItem>(this IEnumerable<TItem> @this, params TItem[] items)
         {
-            return @this.Concat(Yield(item));
+            return Enumerable.Concat(@this, items);
         }
 
-        public static IEnumerable<TItem> Prepend<TItem>(this IEnumerable<TItem> @this, TItem item)
+        public static IEnumerable<TItem> Prepend<TItem>(this IEnumerable<TItem> @this, params TItem[] items)
         {
-            return Yield(item).Concat(@this);
+            return Enumerable.Concat(items, @this);
         }
 
         public static IEnumerable<Iterator<TItem>> Iterate<TItem>(this IEnumerable<TItem> @this)

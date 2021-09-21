@@ -122,6 +122,7 @@
     <Compile Include="Controls\Pager.xaml.cs">
       <DependentUpon>Pager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PathTextBlock.cs" />
     <Compile Include="Controls\SearchBox.xaml.cs">
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
@@ -133,6 +134,7 @@
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\PathToDirectoryNameConverter.cs" />
     <Compile Include="Converters\PathToFileNameConverter.cs" />
+    <Compile Include="Converters\PathTrimmingConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
     <Compile Include="Converters\StringLocalizingConverter.cs" />
     <Compile Include="Data\ICollectionViewExtensions.cs" />

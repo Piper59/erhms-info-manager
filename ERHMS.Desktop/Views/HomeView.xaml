@@ -70,11 +70,12 @@
                                  Text="{Binding CoreProject, Mode=OneWay, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreProject.Label.{0}'}" />
                             <Run Text="{Binding Current.Name, FallbackValue={Markup:String ProjectInfo.Current.Empty}}" />
                         </TextBlock>
-                        <TextBlock Margin="0"
-                                   Style="{StaticResource Small}"
-                                   Text="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.SetUpProject}}"
-                                   TextTrimming="CharacterEllipsis"
-                                   TextWrapping="NoWrap" />
+                        <Controls:PathTextBlock Binding="{Binding Current.FilePath}"
+                                                FallbackValue="{Markup:String HelpText.SetUpProject}"
+                                                Margin="0"
+                                                Style="{StaticResource Small}"
+                                                TextTrimming="CharacterEllipsis"
+                                                TextWrapping="NoWrap" />
                     </StackPanel>
                 </Button>
                 <Button AutomationProperties.Name="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AltText.ProjectOptions.{0}'}"
@@ -100,8 +101,8 @@
                                         <StackPanel Grid.Column="0">
                                             <TextBlock FontWeight="{StaticResource ThickFontWeight}"
                                                        Text="{Binding Name}" />
-                                            <TextBlock Text="{Binding FilePath}"
-                                                       TextTrimming="CharacterEllipsis" />
+                                            <Controls:PathTextBlock Binding="{Binding FilePath}"
+                                                                    TextTrimming="CharacterEllipsis" />
                                         </StackPanel>
                                         <Grid Grid.Column="1"
                                               Style="{StaticResource ControlIconButtonGroup}">
