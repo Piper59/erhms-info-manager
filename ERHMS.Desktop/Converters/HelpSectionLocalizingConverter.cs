@@ -19,7 +19,8 @@ namespace ERHMS.Desktop.Converters
             Heading2StyleKey = "Heading2",
             Heading3StyleKey = "Heading3",
             EmphasizedStyleKey = "Emphasized",
-            StrongStyleKey = "Strong"
+            StrongStyleKey = "Strong",
+            CodeStyleKey = "Code"
         };
 
         private Block GetTitle(object value)

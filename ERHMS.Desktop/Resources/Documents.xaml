@@ -44,4 +44,10 @@
     <Style x:Key="Strong" TargetType="Run">
         <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
     </Style>
+
+    <Style x:Key="Code" TargetType="Run">
+        <Setter Property="Background" Value="{x:Static SystemColors.ControlBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />
+        <Setter Property="Foreground" Value="{x:Static SystemColors.ControlTextBrush}" />
+    </Style>
 </ResourceDictionary>

@@ -80,6 +80,15 @@ namespace ERHMS.Desktop.Markdown
                 : base(context) { }
         }
 
+        public class AsCode : AsStyled
+        {
+            protected override Regex Regex { get; } = new Regex(@"`(?<text>[^`]+)`");
+            protected override object StyleKey => Context.CodeStyleKey;
+
+            public AsCode(RenderingContext context)
+                : base(context) { }
+        }
+
         public class AsRun : InlineRenderer
         {
             public AsRun(RenderingContext context)
@@ -98,6 +107,7 @@ namespace ERHMS.Desktop.Markdown
             yield return new AsHyperlink(context);
             yield return new AsStrong(context);
             yield return new AsEmphasized(context);
+            yield return new AsCode(context);
             yield return new AsRun(context);
         }
 

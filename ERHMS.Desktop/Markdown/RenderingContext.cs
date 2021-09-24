@@ -15,6 +15,7 @@ namespace ERHMS.Desktop.Markdown
         public object Heading3StyleKey { get; set; }
         public object EmphasizedStyleKey { get; set; }
         public object StrongStyleKey { get; set; }
+        public object CodeStyleKey { get; set; }
 
         public RenderingContext()
         {
