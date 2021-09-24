@@ -1,6 +1,5 @@
 ﻿using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Properties;
 using ERHMS.Domain;
 using System.Linq;
 using System.Windows.Input;
@@ -9,19 +8,20 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class StartViewModel : ObservableObject
     {
-        public class ProjectViewModel : ObservableObject
+        public class CoreProjectViewModel
         {
             public CoreProject CoreProject { get; }
-            public CoreView MainCoreView => CoreView.GetInstances(CoreProject).First();
+            public CoreView MainCoreView { get; }
 
-            public ProjectViewModel(CoreProject coreProject)
+            public CoreProjectViewModel(CoreProject coreProject)
             {
                 CoreProject = coreProject;
+                MainCoreView = CoreView.GetInstances(CoreProject).First();
             }
         }
 
-        public ProjectViewModel WorkerProject { get; } = new ProjectViewModel(CoreProject.Worker);
-        public ProjectViewModel IncidentProject { get; } = new ProjectViewModel(CoreProject.Incident);
+        public CoreProjectViewModel WorkerProject { get; } = new CoreProjectViewModel(CoreProject.Worker);
+        public CoreProjectViewModel IncidentProject { get; } = new CoreProjectViewModel(CoreProject.Incident);
 
         private bool minimized;
         public bool Minimized

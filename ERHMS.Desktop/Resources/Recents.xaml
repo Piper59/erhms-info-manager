@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+                    xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
+                    xmlns:ViewModels_Shared="clr-namespace:ERHMS.Desktop.ViewModels.Shared">
+    <Style x:Key="RecentProjectInfoContainer" TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}">
+        <Setter Property="AutomationProperties.Name" Value="{Binding ProjectInfo.Name, TargetNullValue=''}" />
+        <Setter Property="AutomationProperties.HelpText" Value="{Binding ProjectInfo.FilePath, TargetNullValue=''}" />
+        <Setter Property="ToolTipService.VerticalOffset" Value="{StaticResource SmallSpace}" />
+        <Setter Property="Command" Value="{Binding SetCurrentCommand}" />
+        <Setter Property="MaxWidth" Value="{StaticResource MenuWidth}" />
+        <Setter Property="ToolTip" Value="{Binding ProjectInfo.FilePath}" />
+    </Style>
+
+    <DataTemplate DataType="{x:Type ViewModels_Shared:ProjectInfoViewModel+Empty}">
+        <TextBlock Text="{Markup:String ProjectInfo.Recents.Empty}" />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Shared:ProjectInfoViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <TextBlock FontWeight="{StaticResource ThickFontWeight}"
+                           Text="{Binding ProjectInfo.Name}" />
+                <Controls:PathTextBlock Binding="{Binding ProjectInfo.FilePath}"
+                                        TextTrimming="CharacterEllipsis" />
+            </StackPanel>
+            <Grid Grid.Column="1"
+                  Style="{StaticResource ControlIconButtonGroup}">
+                <Controls:IconButton AltText="{Markup:String AltText.RemoveFromList}"
+                                     Command="{Binding RemoveRecentCommand}"
+                                     Content="{Markup:Icon Close}"
+                                     Foreground="{x:Static SystemColors.MenuTextBrush}">
+                    <Controls:IconButton.Style>
+                        <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Controls:IconButton.Style>
+                </Controls:IconButton>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

@@ -211,6 +211,8 @@
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\Shared\ConnectionInfoViewModel.cs" />
     <Compile Include="ViewModels\Shared\DetailsViewModel.cs" />
+    <Compile Include="ViewModels\Shared\ProjectInfoCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Shared\ProjectInfoViewModel.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="ViewModels\StepViewModel.cs" />
     <Compile Include="ViewModels\Utilities\GetWorkerIdViewModel.cs" />
@@ -350,6 +352,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Documents.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Recents.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

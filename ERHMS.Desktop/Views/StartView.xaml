@@ -10,7 +10,7 @@
              BorderThickness="1"
              Visibility="{Binding Closed, Converter={StaticResource BooleanToVisibilityInverter}}">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type ViewModels:StartViewModel+ProjectViewModel}">
+        <DataTemplate DataType="{x:Type ViewModels:StartViewModel+CoreProjectViewModel}">
             <StackPanel Style="{StaticResource Section}">
                 <TextBlock Style="{StaticResource Lead}"
                            Text="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Lead.Start.{0}'}" />

@@ -8,206 +8,159 @@
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
              xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels"
-             xmlns:ERHMS_Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
-             xmlns:ERHMS_EpiInfo="clr-namespace:ERHMS.EpiInfo;assembly=ERHMS.EpiInfo">
+             xmlns:ViewModels_Shared="clr-namespace:ERHMS.Desktop.ViewModels.Shared"
+             xmlns:ERHMS_Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+PhaseViewModel}">
-            <StackPanel Style="{StaticResource Section}">
-                <Border Margin="{StaticResource DefaultMargin}"
-                        Padding="{StaticResource DefaultPadding}">
-                    <Border.Background>
-                        <LinearGradientBrush StartPoint="0.5,0"
-                                             EndPoint="1,0">
-                            <GradientStop Color="{Binding Value, Converter={StaticResource PhaseToColorConverter}, ConverterParameter='0x40'}"
-                                          Offset="0" />
-                            <GradientStop Color="{Binding Value, Converter={StaticResource PhaseToColorConverter}, ConverterParameter='0x00'}"
-                                          Offset="1" />
-                        </LinearGradientBrush>
-                    </Border.Background>
-                    <TextBlock Style="{StaticResource Heading}"
-                               Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Phase.Heading.{0}'}" />
-                </Border>
-                <ContentPresenter Content="{Binding Projects}" />
-                <ItemsControl IsTabStop="False"
-                              ItemsSource="{Binding Views}" />
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+ProjectCollectionViewModel}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Button AutomationProperties.HelpText="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.SetUpProject}}"
-                        Grid.Column="0"
-                        CommandParameter="{Binding CoreProject}"
-                        ToolTip="{Binding Current.FilePath}">
-                    <AutomationProperties.Name>
-                        <MultiBinding StringFormat="{}{0} {1}">
-                            <Binding Converter="{StaticResource StringLocalizingConverter}"
-                                     ConverterParameter="CoreProject.Label.{0}"
-                                     Path="CoreProject" />
-                            <Binding FallbackValue="{Markup:String ProjectInfo.Current.Empty}"
-                                     Path="Current.Name" />
-                        </MultiBinding>
-                    </AutomationProperties.Name>
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
-                            <Setter Property="Command" Value="{x:Static local:AppCommands.GoToCoreProjectCommand}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Current}" Value="{x:Null}">
-                                    <Setter Property="Command" Value="{x:Static local:AppCommands.SetUpCoreProjectCommand}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource Lead}">
-                            <TextBlock.Margin>
-                                <Thickness Bottom="{StaticResource SmallSpace}" />
-                            </TextBlock.Margin>
-                            <Run FontWeight="{StaticResource ThinFontWeight}"
-                                 Text="{Binding CoreProject, Mode=OneWay, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreProject.Label.{0}'}" />
-                            <Run Text="{Binding Current.Name, FallbackValue={Markup:String ProjectInfo.Current.Empty}}" />
-                        </TextBlock>
-                        <Controls:PathTextBlock Binding="{Binding Current.FilePath}"
-                                                FallbackValue="{Markup:String HelpText.SetUpProject}"
-                                                Margin="0"
-                                                Style="{StaticResource Small}"
-                                                TextTrimming="CharacterEllipsis"
-                                                TextWrapping="NoWrap" />
-                    </StackPanel>
-                </Button>
-                <Button AutomationProperties.Name="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AltText.ProjectOptions.{0}'}"
-                        ContextMenuService.Placement="Bottom"
-                        Grid.Column="1"
-                        Content="{Markup:Icon Expand}"
-                        FontFamily="{StaticResource IconFontFamily}">
-                    <b:Interaction.Behaviors>
-                        <Behaviors:OpenContextMenuOnClick />
-                    </b:Interaction.Behaviors>
-                    <Button.ContextMenu>
-                        <ContextMenu>
-                            <ContextMenu.Resources>
-                                <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+EmptyProjectInfo}">
-                                    <TextBlock Text="{Markup:String ProjectInfo.Recents.Empty}" />
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type ERHMS_EpiInfo:ProjectInfo}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel Grid.Column="0">
-                                            <TextBlock FontWeight="{StaticResource ThickFontWeight}"
-                                                       Text="{Binding Name}" />
-                                            <Controls:PathTextBlock Binding="{Binding FilePath}"
-                                                                    TextTrimming="CharacterEllipsis" />
-                                        </StackPanel>
-                                        <Grid Grid.Column="1"
-                                              Style="{StaticResource ControlIconButtonGroup}">
-                                            <Controls:IconButton AltText="{Markup:String AltText.RemoveFromList}"
-                                                                 Command="{Binding DataContext.RemoveRecentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem, AncestorLevel=2}}"
-                                                                 CommandParameter="{Binding}"
-                                                                 Content="{Markup:Icon Close}"
-                                                                 Foreground="{x:Static SystemColors.MenuTextBrush}">
-                                                <Controls:IconButton.Style>
-                                                    <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}">
-                                                        <Setter Property="Visibility" Value="Hidden" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Controls:IconButton.Style>
-                                            </Controls:IconButton>
-                                        </Grid>
-                                    </Grid>
-                                </DataTemplate>
-                            </ContextMenu.Resources>
-                            <MenuItem Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
-                                      CommandParameter="{Binding CoreProject}"
-                                      Header="{Markup:String AccessText.GoToProject}" />
-                            <MenuItem Header="{Markup:String AccessText.SwitchProject}"
-                                      ItemsSource="{Binding Recents}"
-                                      Visibility="{Binding CanHaveRecents, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <MenuItem.ItemContainerStyle>
-                                    <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}">
-                                        <Setter Property="AutomationProperties.Name" Value="{Binding Name, TargetNullValue=''}" />
-                                        <Setter Property="AutomationProperties.HelpText" Value="{Binding FilePath, TargetNullValue=''}" />
-                                        <Setter Property="ToolTipService.VerticalOffset" Value="{StaticResource SmallSpace}" />
-                                        <Setter Property="Command" Value="{Binding DataContext.SetCurrentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" />
-                                        <Setter Property="CommandParameter" Value="{Binding}" />
-                                        <Setter Property="MaxWidth" Value="{StaticResource MenuWidth}" />
-                                        <Setter Property="ToolTip" Value="{Binding FilePath}" />
-                                    </Style>
-                                </MenuItem.ItemContainerStyle>
-                            </MenuItem>
-                            <Separator />
-                            <MenuItem Command="{x:Static local:AppCommands.CreateCoreProjectCommand}"
-                                      CommandParameter="{Binding CoreProject}"
-                                      Header="{Markup:String AccessText.CreateProject}" />
-                            <MenuItem Command="{x:Static local:AppCommands.OpenCoreProjectCommand}"
-                                      CommandParameter="{Binding CoreProject}"
-                                      Header="{Markup:String AccessText.OpenProject}" />
-                        </ContextMenu>
-                    </Button.ContextMenu>
-                    <Button.Margin>
-                        <Thickness Left="{StaticResource NegativeSmallSpace}"
-                                   Top="{StaticResource SmallSpace}"
-                                   Right="{StaticResource SmallSpace}"
-                                   Bottom="{StaticResource SmallSpace}" />
-                    </Button.Margin>
-                </Button>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type ERHMS_Domain:CoreView}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"
-                                   SharedSizeGroup="ButtonGroup" />
-                </Grid.RowDefinitions>
-                <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}"
-                        AutomationProperties.Name="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
-                        Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
-                        CommandParameter="{Binding}"
-                        Style="{StaticResource WorkflowButton}"
-                        ToolTip="{x:Null}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition SharedSizeGroup="IconGroup"
-                                              Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
-                                   FontFamily="{StaticResource IconFontFamily}"
-                                   FontSize="{StaticResource HugeFontSize}"
-                                   HorizontalAlignment="Center"
-                                   Text="{Binding Name, Converter={StaticResource IconNameToStringConverter}, ConverterParameter='CoreView.{0}'}"
-                                   VerticalAlignment="Center">
-                            <TextBlock.Margin>
-                                <Thickness Right="{StaticResource LargeSpace}" />
-                            </TextBlock.Margin>
-                        </TextBlock>
-                        <StackPanel Grid.Column="1">
-                            <TextBlock Style="{StaticResource Lead}"
-                                       Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}">
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Recents.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+PhaseViewModel}">
+                <StackPanel Style="{StaticResource Section}">
+                    <Border Margin="{StaticResource DefaultMargin}"
+                            Padding="{StaticResource DefaultPadding}">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0.5,0"
+                                                 EndPoint="1,0">
+                                <GradientStop Color="{Binding Phase, Converter={StaticResource PhaseToColorConverter}, ConverterParameter='0x40'}"
+                                              Offset="0" />
+                                <GradientStop Color="{Binding Phase, Converter={StaticResource PhaseToColorConverter}, ConverterParameter='0x00'}"
+                                              Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <TextBlock Style="{StaticResource Heading}"
+                                   Text="{Binding Phase, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Phase.Heading.{0}'}" />
+                    </Border>
+                    <ContentPresenter Content="{Binding ProjectInfos}" />
+                    <ItemsControl IsTabStop="False"
+                                  ItemsSource="{Binding CoreViews}" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type ViewModels_Shared:ProjectInfoCollectionViewModel}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button AutomationProperties.HelpText="{Binding Current.ProjectInfo.FilePath, FallbackValue={Markup:String HelpText.SetUpProject}}"
+                            Grid.Column="0"
+                            CommandParameter="{Binding CoreProject}"
+                            ToolTip="{Binding Current.ProjectInfo.FilePath}">
+                        <AutomationProperties.Name>
+                            <MultiBinding StringFormat="{}{0} {1}">
+                                <Binding Converter="{StaticResource StringLocalizingConverter}"
+                                         ConverterParameter="CoreProject.Label.{0}"
+                                         Path="CoreProject" />
+                                <Binding FallbackValue="{Markup:String ProjectInfo.Current.Empty}"
+                                         Path="Current.ProjectInfo.Name" />
+                            </MultiBinding>
+                        </AutomationProperties.Name>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
+                                <Setter Property="Command" Value="{x:Static local:AppCommands.GoToCoreProjectCommand}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Current.IsEmpty}" Value="True">
+                                        <Setter Property="Command" Value="{x:Static local:AppCommands.SetUpCoreProjectCommand}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Lead}">
                                 <TextBlock.Margin>
                                     <Thickness Bottom="{StaticResource SmallSpace}" />
                                 </TextBlock.Margin>
+                                <Run FontWeight="{StaticResource ThinFontWeight}"
+                                     Text="{Binding CoreProject, Mode=OneWay, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreProject.Label.{0}'}" />
+                                <Run Text="{Binding Current.ProjectInfo.Name, FallbackValue={Markup:String ProjectInfo.Current.Empty}}" />
                             </TextBlock>
-                            <TextBlock Margin="0"
-                                       Style="{StaticResource Small}"
-                                       Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}" />
+                            <Controls:PathTextBlock Binding="{Binding Current.ProjectInfo.FilePath}"
+                                                    FallbackValue="{Markup:String HelpText.SetUpProject}"
+                                                    Margin="0"
+                                                    Style="{StaticResource Small}"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    TextWrapping="NoWrap" />
                         </StackPanel>
-                    </Grid>
-                </Button>
-            </Grid>
-        </DataTemplate>
+                    </Button>
+                    <Button AutomationProperties.Name="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AltText.ProjectOptions.{0}'}"
+                            ContextMenuService.Placement="Bottom"
+                            Grid.Column="1"
+                            Content="{Markup:Icon Expand}"
+                            FontFamily="{StaticResource IconFontFamily}">
+                        <b:Interaction.Behaviors>
+                            <Behaviors:OpenContextMenuOnClick />
+                        </b:Interaction.Behaviors>
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
+                                          CommandParameter="{Binding CoreProject}"
+                                          Header="{Markup:String AccessText.GoToProject}" />
+                                <MenuItem Header="{Markup:String AccessText.SwitchProject}"
+                                          ItemContainerStyle="{StaticResource RecentProjectInfoContainer}"
+                                          ItemsSource="{Binding Recents}"
+                                          Visibility="{Binding CanHaveRecents, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                <Separator />
+                                <MenuItem Command="{x:Static local:AppCommands.CreateCoreProjectCommand}"
+                                          CommandParameter="{Binding CoreProject}"
+                                          Header="{Markup:String AccessText.CreateProject}" />
+                                <MenuItem Command="{x:Static local:AppCommands.OpenCoreProjectCommand}"
+                                          CommandParameter="{Binding CoreProject}"
+                                          Header="{Markup:String AccessText.OpenProject}" />
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                        <Button.Margin>
+                            <Thickness Left="{StaticResource NegativeSmallSpace}"
+                                       Top="{StaticResource SmallSpace}"
+                                       Right="{StaticResource SmallSpace}"
+                                       Bottom="{StaticResource SmallSpace}" />
+                        </Button.Margin>
+                    </Button>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type ERHMS_Domain:CoreView}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"
+                                       SharedSizeGroup="ButtonGroup" />
+                    </Grid.RowDefinitions>
+                    <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}"
+                            AutomationProperties.Name="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
+                            Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
+                            CommandParameter="{Binding}"
+                            Style="{StaticResource WorkflowButton}"
+                            ToolTip="{x:Null}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="IconGroup"
+                                                  Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontFamily="{StaticResource IconFontFamily}"
+                                       FontSize="{StaticResource HugeFontSize}"
+                                       HorizontalAlignment="Center"
+                                       Text="{Binding Name, Converter={StaticResource IconNameToStringConverter}, ConverterParameter='CoreView.{0}'}"
+                                       VerticalAlignment="Center">
+                                <TextBlock.Margin>
+                                    <Thickness Right="{StaticResource LargeSpace}" />
+                                </TextBlock.Margin>
+                            </TextBlock>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Style="{StaticResource Lead}"
+                                           Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}">
+                                    <TextBlock.Margin>
+                                        <Thickness Bottom="{StaticResource SmallSpace}" />
+                                    </TextBlock.Margin>
+                                </TextBlock>
+                                <TextBlock Margin="0"
+                                           Style="{StaticResource Small}"
+                                           Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}" />
+                            </StackPanel>
+                        </Grid>
+                    </Button>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
         <Border Style="{StaticResource SmallLayout}">
