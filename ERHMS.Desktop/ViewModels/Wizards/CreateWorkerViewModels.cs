@@ -108,6 +108,10 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     Project project = ProjectExtensions.Open(Configuration.Instance.WorkerProjectPath);
                     View view = project.Views[CoreView.WorkerRosteringForm.Name];
+                    if (!project.CollectedData.TableExists(view.TableName))
+                    {
+                        project.CollectedData.SynchronizeViewTree(view);
+                    }
                     using (RecordRepository<Worker> repository = new RecordRepository<Worker>(view))
                     {
                         repository.Insert(State.Worker);

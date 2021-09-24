@@ -79,16 +79,15 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 List.Clear();
                 Project project = ProjectExtensions.Open(Configuration.Instance.WorkerProjectPath);
                 View view = project.Views[CoreView.WorkerRosteringForm.Name];
-                if (!project.CollectedData.TableExists(view.TableName))
+                if (project.CollectedData.TableExists(view.TableName))
                 {
-                    project.CollectedData.SynchronizeViewTree(view);
-                }
-                using (RecordRepository<Worker> repository = new RecordRepository<Worker>(view))
-                {
-                    foreach (Worker worker in repository.Select())
+                    using (RecordRepository<Worker> repository = new RecordRepository<Worker>(view))
                     {
-                        worker.SetSimilarity(FirstName, LastName, EmailAddress);
-                        List.Add(worker);
+                        foreach (Worker worker in repository.Select())
+                        {
+                            worker.SetSimilarity(FirstName, LastName, EmailAddress);
+                            List.Add(worker);
+                        }
                     }
                 }
             });
