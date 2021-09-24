@@ -1,7 +1,11 @@
 ﻿using ERHMS.Common.Linq;
+using ERHMS.Common.Logging;
+using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Utilities;
 using ERHMS.Desktop.Views.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,15 +44,29 @@ namespace ERHMS.Desktop.Utilities
 
         public override async Task<string> ExecuteAsync()
         {
-            GetWorkerIdViewModel dataContext =
-                await GetWorkerIdViewModel.CreateAsync(FirstName, LastName, EmailAddress, WorkerId);
-            Window window = new GetWorkerIdView
+            GetWorkerIdView window = new GetWorkerIdView
             {
-                DataContext = dataContext,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
+            try
+            {
+                window.DataContext =
+                    await GetWorkerIdViewModel.CreateAsync(FirstName, LastName, EmailAddress, WorkerId);
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Warn(ex);
+                IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                dialog.Severity = DialogSeverity.Warning;
+                dialog.Lead = Strings.GetWorkerId_Lead_Error;
+                dialog.Body = Strings.GetWorkerId_Body_Error;
+                dialog.Details = ex.ToString();
+                dialog.Buttons = DialogButtonCollection.Close;
+                dialog.Show();
+                return null;
+            }
             window.ShowDialog();
-            return dataContext.WorkerId;
+            return window.DataContext.WorkerId;
         }
     }
 }

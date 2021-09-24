@@ -433,7 +433,7 @@ ERHMS Info Manager will only recognize files that are in the same location as th
   <data name="Body.ConfirmRecentProjectRemoval" xml:space="preserve">
     <value>Project: {0}
 
-This project will be removed from the list of recent projects.</value>
+This project will be removed from the list of known projects.</value>
   </data>
   <data name="Body.ConfirmViewCreation" xml:space="preserve">
     <value>Form: {0}
@@ -768,6 +768,12 @@ Close anyway?</value>
   </data>
   <data name="FileDialog.Title.Save" xml:space="preserve">
     <value>Save As</value>
+  </data>
+  <data name="GetWorkerId.Body.Error" xml:space="preserve">
+    <value>In ERHMS Info Manager, ensure that the worker project has been set up and that the Worker Rostering Form exists.</value>
+  </data>
+  <data name="GetWorkerId.Lead.Error" xml:space="preserve">
+    <value>An error occurred while looking up the worker ID</value>
   </data>
   <data name="Heading.Start" xml:space="preserve">
     <value>Quick start</value>

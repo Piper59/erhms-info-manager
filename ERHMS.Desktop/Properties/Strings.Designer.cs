@@ -994,7 +994,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Project: {0}
         ///
-        ///This project will be removed from the list of recent projects..
+        ///This project will be removed from the list of known projects..
         /// </summary>
         public static string Body_ConfirmRecentProjectRemoval {
             get {
@@ -1969,6 +1969,24 @@ namespace ERHMS.Desktop.Properties {
         public static string FileDialog_Title_Save {
             get {
                 return ResourceManager.GetString("FileDialog.Title.Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In ERHMS Info Manager, ensure that the worker project has been set up and that the Worker Rostering Form exists..
+        /// </summary>
+        public static string GetWorkerId_Body_Error {
+            get {
+                return ResourceManager.GetString("GetWorkerId.Body.Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while looking up the worker ID.
+        /// </summary>
+        public static string GetWorkerId_Lead_Error {
+            get {
+                return ResourceManager.GetString("GetWorkerId.Lead.Error", resourceCulture);
             }
         }
         
