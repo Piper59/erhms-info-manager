@@ -7,6 +7,7 @@ using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.ViewModels.Shared;
 using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
@@ -38,6 +39,8 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
+        public ProjectInfoCollectionViewModel IncidentProjectInfos { get; } =
+            new ProjectInfoCollectionViewModel.Incidents();
         public HomeViewModel Home { get; } = new HomeViewModel();
         public HelpViewModel Help { get; } = new HelpViewModel();
         public StartViewModel Start { get; } = new StartViewModel();
@@ -62,6 +65,7 @@ namespace ERHMS.Desktop.ViewModels
         public MainViewModel()
         {
             Content = Home;
+            IncidentProjectInfos.CurrentChanged += IncidentProjectInfos_CurrentChanged;
             GoToHomeCommand = new SyncCommand(GoToHome);
             GoToHelpCommand = new SyncCommand(GoToHelp);
             GoToStartCommand = new SyncCommand(GoToStart);
@@ -77,6 +81,11 @@ namespace ERHMS.Desktop.ViewModels
             ExportLogsCommand = new AsyncCommand(ExportLogsAsync);
             StartEpiInfoCommand = new SyncCommand(StartEpiInfo);
             StartCommandPromptCommand = new SyncCommand(StartCommandPrompt);
+        }
+
+        private void IncidentProjectInfos_CurrentChanged(object sender, EventArgs e)
+        {
+            GoToHome();
         }
 
         private void OnError(Exception exception, string body = null)

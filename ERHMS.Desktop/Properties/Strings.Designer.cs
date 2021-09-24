@@ -493,6 +493,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Recent.
+        /// </summary>
+        public static string AccessText_Recent {
+            get {
+                return ResourceManager.GetString("AccessText.Recent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Records.
         /// </summary>
         public static string AccessText_Records {
@@ -1240,6 +1249,24 @@ namespace ERHMS.Desktop.Properties {
         public static string CoreProject_Value_Worker {
             get {
                 return ResourceManager.GetString("CoreProject.Value.Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Incident projects.
+        /// </summary>
+        public static string CoreProjects_AccessText_Incident {
+            get {
+                return ResourceManager.GetString("CoreProjects.AccessText.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Worker projects.
+        /// </summary>
+        public static string CoreProjects_AccessText_Worker {
+            get {
+                return ResourceManager.GetString("CoreProjects.AccessText.Worker", resourceCulture);
             }
         }
         

@@ -80,8 +80,17 @@ namespace ERHMS.Desktop.ViewModels.Shared
         private ProjectInfoViewModel current;
         public ProjectInfoViewModel Current
         {
-            get { return current; }
-            protected set { SetProperty(ref current, value); }
+            get
+            {
+                return current;
+            }
+            protected set
+            {
+                if (SetProperty(ref current, value))
+                {
+                    OnCurrentChanged();
+                }
+            }
         }
 
         public abstract bool CanHaveRecents { get; }
@@ -100,6 +109,10 @@ namespace ERHMS.Desktop.ViewModels.Shared
                 nameof(Configuration.Saved),
                 Configuration_Saved);
         }
+
+        public event EventHandler CurrentChanged;
+        private void OnCurrentChanged(EventArgs e) => CurrentChanged?.Invoke(this, e);
+        private void OnCurrentChanged() => OnCurrentChanged(EventArgs.Empty);
 
         private void Configuration_Saved(object sender, EventArgs e)
         {

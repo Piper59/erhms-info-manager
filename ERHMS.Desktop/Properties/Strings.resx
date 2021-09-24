@@ -261,6 +261,9 @@
   <data name="AccessText.Pgms" xml:space="preserve">
     <value>_Analyses</value>
   </data>
+  <data name="AccessText.Recent" xml:space="preserve">
+    <value>_Recent</value>
+  </data>
   <data name="AccessText.Records" xml:space="preserve">
     <value>_Records</value>
   </data>
@@ -525,6 +528,12 @@ Close anyway?</value>
   </data>
   <data name="CoreProject.Value.Worker" xml:space="preserve">
     <value>Worker</value>
+  </data>
+  <data name="CoreProjects.AccessText.Incident" xml:space="preserve">
+    <value>_Incident projects</value>
+  </data>
+  <data name="CoreProjects.AccessText.Worker" xml:space="preserve">
+    <value>_Worker projects</value>
   </data>
   <data name="CoreReport.AccessText.Incident" xml:space="preserve">
     <value>_Incident report</value>

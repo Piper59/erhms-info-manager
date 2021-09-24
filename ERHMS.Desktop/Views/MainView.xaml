@@ -13,6 +13,13 @@
         MinWidth="640"
         Title="{Markup:String Title.App}"
         UseLayoutRounding="True">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Recents.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <b:Interaction.Behaviors>
         <Behaviors:SetMenuDropAlignment Value="False" />
     </b:Interaction.Behaviors>
@@ -40,6 +47,12 @@
                     <MenuItem Command="{Binding OpenCoreProjectCommand}"
                               CommandParameter="{x:Static ERHMS_Domain:CoreProject.Incident}"
                               Header="{Markup:String CoreProject.AccessText.Incident}" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="{Markup:String AccessText.Recent}">
+                    <MenuItem Header="{Markup:String CoreProjects.AccessText.Incident}"
+                              ItemContainerStyle="{StaticResource RecentProjectInfoContainer}"
+                              ItemsSource="{Binding IncidentProjectInfos.Recents}" />
                 </MenuItem>
                 <Separator />
                 <MenuItem Command="{Binding CloseCommand, ElementName=Root}"
