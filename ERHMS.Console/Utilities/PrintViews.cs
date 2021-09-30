@@ -6,12 +6,12 @@ namespace ERHMS.Console.Utilities
     public class PrintViews : Utility
     {
         public string ProjectPath { get; }
-        public string FilePath { get; }
+        public string FilePathFormat { get; }
 
-        public PrintViews(string projectPath, string filePath)
+        public PrintViews(string projectPath, string filePathFormat)
         {
             ProjectPath = projectPath;
-            FilePath = filePath;
+            FilePathFormat = filePathFormat;
         }
 
         public override void Run()
@@ -19,7 +19,7 @@ namespace ERHMS.Console.Utilities
             Project project = ProjectExtensions.Open(ProjectPath);
             foreach (View view in project.Views)
             {
-                PrintView.Run(view, string.Format(FilePath, view.Name));
+                PrintView.Run(view, string.Format(FilePathFormat, view.Name));
             }
         }
     }
