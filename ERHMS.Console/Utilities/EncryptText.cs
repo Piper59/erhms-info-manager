@@ -2,18 +2,18 @@
 
 namespace ERHMS.Console.Utilities
 {
-    public class Decrypt : Utility
+    public class EncryptText : Utility
     {
         public string Text { get; }
 
-        public Decrypt(string text)
+        public EncryptText(string text)
         {
             Text = text;
         }
 
         public override void Run()
         {
-            Out.WriteLine(Configuration.Decrypt(Text));
+            Out.WriteLine(Configuration.Encrypt(Text));
         }
     }
 }

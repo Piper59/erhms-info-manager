@@ -97,15 +97,15 @@
     <Compile Include="Utilities\CreateProject.cs" />
     <Compile Include="Utilities\CreateTemplate.cs" />
     <Compile Include="Utilities\CreateView.cs" />
-    <Compile Include="Utilities\Decrypt.cs" />
     <Compile Include="Utilities\DecryptFile.cs" />
+    <Compile Include="Utilities\DecryptText.cs" />
     <Compile Include="Utilities\DeleteDatabase.cs" />
     <Compile Include="Utilities\DeletePage.cs" />
     <Compile Include="Utilities\DeleteProject.cs" />
     <Compile Include="Utilities\DeleteTable.cs" />
     <Compile Include="Utilities\DeleteView.cs" />
-    <Compile Include="Utilities\Encrypt.cs" />
     <Compile Include="Utilities\EncryptFile.cs" />
+    <Compile Include="Utilities\EncryptText.cs" />
     <Compile Include="Utilities\ExportLogs.cs" />
     <Compile Include="Utilities\ExportRecords.cs" />
     <Compile Include="Utilities\ImportRecords.cs" />
