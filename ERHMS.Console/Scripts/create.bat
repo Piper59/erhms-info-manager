@@ -10,55 +10,66 @@ if "%~1" == "" (
     call :usage >&2
     exit /b 1
 ) else (
-    set templates_dir=%~1
+    set database_provider=%~1
 )
 goto :main
 
 :usage
-echo Usage: %arg0% TEMPLATES_DIR
+echo Usage: %arg0% DATABASE_PROVIDER
+echo.
+echo Database providers:
+echo   Access2003
+echo   Access2007
+echo   SqlServer
 goto :eof
 
 :main
-call :set_project Blank
-call :update_page BlankPage || exit /b 1
-call :update_view BlankFormWithoutWorkerInfo || exit /b 1
-call :update_view BlankFormWithWorkerInfo || exit /b 1
-call :set_project Workers
-call :update_view Worker\WorkerRosteringForm || exit /b 1
-call :update_view Worker\PreDeploymentHealthSurvey || exit /b 1
-call :set_project Incident
-call :update_view Incident\WorkerDeploymentRecord || exit /b 1
-call :update_view Incident\WorkerInProcessingForm || exit /b 1
-call :update_view Incident\WorkerActivityReport || exit /b 1
-call :update_view Incident\DeploymentHealthSurvey || exit /b 1
-call :update_view Incident\WorkerOutProcessingForm || exit /b 1
-call :update_view Incident\PostDeploymentHealthSurvey || exit /b 1
-call :update_view Incident\AfterActionReview || exit /b 1
+call :create_project Blank || exit /b 1
+call :create_page BlankPage || exit /b 1
+call :create_view BlankFormWithoutWorkerInfo || exit /b 1
+call :create_view BlankFormWithWorkerInfo || exit /b 1
+call :create_project Workers || exit /b 1
+call :create_view Worker\WorkerRosteringForm || exit /b 1
+call :create_view Worker\PreDeploymentHealthSurvey || exit /b 1
+call :create_project Incident || exit /b 1
+call :create_view Incident\WorkerDeploymentRecord || exit /b 1
+call :create_view Incident\WorkerInProcessingForm || exit /b 1
+call :create_view Incident\WorkerActivityReport || exit /b 1
+call :create_view Incident\DeploymentHealthSurvey || exit /b 1
+call :create_view Incident\WorkerOutProcessingForm || exit /b 1
+call :create_view Incident\PostDeploymentHealthSurvey || exit /b 1
+call :create_view Incident\AfterActionReview || exit /b 1
 goto :eof
 
-:set_project
-set project_location=Projects\%~1
+:create_project
+set project_location=%CD%\Projects\%~1
 set project_name=%~n1
 set project_path=%project_location%\%project_name%.prj
+if "%database_provider%" == "Access2003" (
+    set connection_string=Provider=Microsoft.Jet.OLEDB.4.0;Data Source=""%project_location%\%project_name%.mdb""
+) else if "%database_provider%" == "Access2007" (
+    set connection_string=Provider=Microsoft.ACE.OLEDB.12.0;Data Source=""%project_location%\%project_name%.accdb""
+) else if "%database_provider%" == "SqlServer" (
+    set connection_string=Data Source=^(localdb^)\MSSQLLocalDB;Initial Catalog=%project_name%;Integrated Security=True
+) else (
+    call :usage >&2
+    exit /b 1
+)
+ERHMS.Console CreateDatabase "%database_provider%" "%connection_string%" || exit /b 1
+ERHMS.Console CreateProject "%database_provider%" "%connection_string%" "%project_location%" "%project_name%" || exit /b 1
+ERHMS.Console InitializeProject "%project_path%" || exit /b 1
 goto :eof
 
-:update_page
-set relative_path=Pages\%~1.xml
+:create_page
+set template_path=Templates\Pages\%~1.xml
 set page_name=%~n1
 set view_name=%page_name%
-set source_path=Templates\%relative_path%
-set target_path=%templates_dir%\%relative_path%
-ERHMS.Console CreateTemplate "%source_path%" "%project_path%" "%view_name%" "%page_name%" || exit /b 1
-ERHMS.Console CanonizeTemplate "%source_path%" || exit /b 1
-copy /y "%source_path%" "%target_path%" || exit /b 1
+ERHMS.Console CreateView "%project_path%" "%view_name%"
+ERHMS.Console InstantiateTemplate "%template_path%" "%project_path%" "%view_name%" || exit /b 1
 goto :eof
 
-:update_view
-set relative_path=Forms\%~1.xml
+:create_view
+set template_path=Templates\Forms\%~1.xml
 set view_name=%~n1
-set source_path=Templates\%relative_path%
-set target_path=%templates_dir%\%relative_path%
-ERHMS.Console CreateTemplate "%source_path%" "%project_path%" "%view_name%" || exit /b 1
-ERHMS.Console CanonizeTemplate "%source_path%" || exit /b 1
-copy /y "%source_path%" "%target_path%" || exit /b 1
+ERHMS.Console InstantiateTemplate "%template_path%" "%project_path%" || exit /b 1
 goto :eof
