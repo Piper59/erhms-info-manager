@@ -40,7 +40,9 @@ namespace ERHMS.Desktop
         {
             using (Stream stream = File.Open(FilePath, FileMode.Open, FileAccess.Read))
             {
-                return (Configuration)serializer.Deserialize(stream);
+                Configuration configuration = (Configuration)serializer.Deserialize(stream);
+                configuration.Validate();
+                return configuration;
             }
         }
 
@@ -71,6 +73,16 @@ namespace ERHMS.Desktop
         public event EventHandler Saved;
         private void OnSaved(EventArgs e) => Saved?.Invoke(this, e);
         private void OnSaved() => OnSaved(EventArgs.Empty);
+
+        private void Validate()
+        {
+            char[] invalidPathChars = Path.GetInvalidPathChars();
+            if (WorkerProjectPath != null && WorkerProjectPath.IndexOfAny(invalidPathChars) != -1)
+            {
+                WorkerProjectPath = null;
+            }
+            IncidentProjectPaths.RemoveAll(path => path.IndexOfAny(invalidPathChars) != -1);
+        }
 
         public void Save()
         {
