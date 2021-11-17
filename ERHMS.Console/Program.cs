@@ -2,7 +2,6 @@
 using ERHMS.Common.Logging;
 using ERHMS.Console.Utilities;
 using System;
-using System.Linq;
 using Configuration = ERHMS.EpiInfo.Configuration;
 
 namespace ERHMS.Console
@@ -14,11 +13,7 @@ namespace ERHMS.Console
         {
             IUtility utility = Utility.ParseArgs(args);
             Log.Initialize(new ConsoleAppender());
-            Log.Instance.Info($"Running: {utility.GetType().Name}");
-            foreach (string arg in args.Skip(1))
-            {
-                Log.Instance.Info($"  {arg}");
-            }
+            Log.Instance.Info("Running");
             try
             {
                 Configuration.Initialize(ExecutionEnvironment.Console);
