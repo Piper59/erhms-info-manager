@@ -1,15 +1,14 @@
 ERHMS Info Manager
 Copyright 2016-2021
-National Institute for Occupational Safety and Health (NIOSH)
+National Institute for Occupational Safety and Health
 
-ERHMS Info Manager[1] is developed at NIOSH[2].
+ERHMS Info Manager[1] is developed by the National Institute for Occupational
+Safety and Health (NIOSH)[2]. Emergency Responder Health Monitoring and
+Surveillance, ERHMS, the ERHMS logo, ERHMS Info Manager, and the ERHMS Info
+Manager logo, either separately or in combination, are trademarks of NIOSH.
 
-The Initial Developer of Epi Info[3] is the Centers for Disease Control and
-Prevention (CDC)[4].
-
-Emergency Responder Health Monitoring and Surveillance, ERHMS, the ERHMS logo,
-ERHMS Info Manager, and the ERHMS Info Manager logo, either separately or in
-combination, are trademarks of NIOSH. Epi Info is a trademark of CDC.
+Epi Info[3] is developed by the Centers for Disease Control and Prevention
+(CDC)[4]. Epi Info is a trademark of CDC.
 
 [1]: https://www.cdc.gov/niosh/erhms/
 [2]: https://www.cdc.gov/niosh/
