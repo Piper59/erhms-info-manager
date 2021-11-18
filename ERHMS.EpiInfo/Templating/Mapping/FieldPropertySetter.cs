@@ -76,7 +76,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             }
             catch (Exception ex)
             {
-                throw new FieldPropertySetterException(xField, Property.Name, ex);
+                throw new FieldPropertySetterException(xField.ToString(), Property.Name, ex);
             }
         }
     }
