@@ -18,8 +18,8 @@ namespace ERHMS.Console.Utilities
             ZipFileExtensions.CreateFromDirectory(
                 FileAppender.Directory,
                 OutputPath,
+                true,
                 $"*{FileAppender.Extension}",
-                FileMode.Create,
                 FileShare.ReadWrite);
         }
     }

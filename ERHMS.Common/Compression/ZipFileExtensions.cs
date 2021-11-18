@@ -9,11 +9,12 @@ namespace ERHMS.Common.Compression
         public static void CreateFromDirectory(
             string directoryPath,
             string archivePath,
+            bool overwrite = false,
             string searchPattern = "*",
-            FileMode archiveFileMode = FileMode.CreateNew,
-            FileShare entryFileShare = FileShare.Read)
+            FileShare fileShare = FileShare.Read)
         {
-            using (Stream archiveStream = File.Open(archivePath, archiveFileMode, FileAccess.Write))
+            FileMode fileMode = overwrite ? FileMode.Create : FileMode.CreateNew;
+            using (Stream archiveStream = File.Open(archivePath, fileMode, FileAccess.Write))
             using (ZipArchive archive = new ZipArchive(archiveStream, ZipArchiveMode.Create))
             {
                 DirectoryInfo directory = new DirectoryInfo(directoryPath);
@@ -24,7 +25,7 @@ namespace ERHMS.Common.Compression
                     string entryName = directoryUri.MakeRelativeUri(fileUri).ToString();
                     ZipArchiveEntry entry = archive.CreateEntry(entryName);
                     entry.LastWriteTime = file.LastWriteTime;
-                    using (Stream fileStream = file.Open(FileMode.Open, FileAccess.Read, entryFileShare))
+                    using (Stream fileStream = file.Open(FileMode.Open, FileAccess.Read, fileShare))
                     using (Stream entryStream = entry.Open())
                     {
                         fileStream.CopyTo(entryStream);
