@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace ERHMS.Common.Collections
 {
+    [Serializable]
     public class TypeMap : Dictionary<Type, Type>
     {
         public Type Map(Type key)
