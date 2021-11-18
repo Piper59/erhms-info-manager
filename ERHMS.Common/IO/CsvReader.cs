@@ -70,7 +70,10 @@ namespace ERHMS.Common.IO
                         default:
                             if (ch == '\r' && Reader.Peek() == '\n')
                             {
-                                Reader.Read();
+                                if (Reader.Read() != '\n')
+                                {
+                                    throw GetException("Unexpected character");
+                                }
                             }
                             flags = Flags.EndOfRow;
                             return -1;
