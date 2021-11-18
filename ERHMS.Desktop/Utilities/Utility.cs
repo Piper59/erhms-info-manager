@@ -87,7 +87,10 @@ namespace ERHMS.Desktop.Utilities
                             {
                                 process.Kill();
                             }
-                            catch { }
+                            catch (Exception ex)
+                            {
+                                Log.Instance.Warn(ex);
+                            }
                         }
                     }
                 }

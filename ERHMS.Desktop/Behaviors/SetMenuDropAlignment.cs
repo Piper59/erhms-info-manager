@@ -1,4 +1,6 @@
-﻿using Microsoft.Xaml.Behaviors;
+﻿using ERHMS.Common.Logging;
+using Microsoft.Xaml.Behaviors;
+using System;
 using System.Reflection;
 using System.Windows;
 
@@ -18,7 +20,10 @@ namespace ERHMS.Desktop.Behaviors
             {
                 field.SetValue(null, Value);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Log.Instance.Warn(ex);
+            }
         }
     }
 }

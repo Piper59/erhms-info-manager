@@ -111,7 +111,10 @@ namespace ERHMS.EpiInfo.Data
                     userName = identity.Name;
                 }
             }
-            catch { }
+            catch
+            {
+                userName = "?";
+            }
             DateTime now = DateTime.Now;
             if (creating)
             {
