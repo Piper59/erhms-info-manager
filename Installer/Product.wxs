@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*"
+           Language="1033"
+           Manufacturer="$(var.CompanyName)"
+           Name="$(var.ProductName) $(var.ProductVersion)"
+           UpgradeCode="{43DD8FB2-4D29-4D6C-ACD0-821659F4FADD}"
+           Version="$(var.FileVersion)">
+    <Package Id="*" Compressed="yes" InstallerVersion="200" InstallScope="perUser" />
+
+    <Media Id="1" Cabinet="product.cab" EmbedCab="yes" />
+
+    <Icon Id="Icon" SourceFile="$(var.BuildDir)\$(var.ExecutableFileName)"/>
+    <Property Id="ARPPRODUCTICON" Value="Icon" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of $(var.ProductName) is already installed." />
+
+    <Property Id="REGINSTALLDIR">
+      <RegistrySearch Id="InstallDirectoryRegistrySearch"
+                      Key="SOFTWARE\$(var.CompanyName)\$(var.ProductName)"
+                      Name="InstallDirectory"
+                      Root="HKCU"
+                      Type="directory" />
+    </Property>
+    <SetProperty Action="SetDefaultInstallDirectory"
+                 After="CostInitialize"
+                 Id="INSTALLDIR"
+                 Sequence="first"
+                 Value="[ROOTDRIVE]$(var.ProductName)\" />
+    <SetProperty Action="SetInstallDirectoryFromRegistry"
+                 After="SetDefaultInstallDirectory"
+                 Id="INSTALLDIR"
+                 Sequence="first"
+                 Value="[REGINSTALLDIR]">
+      REGINSTALLDIR
+    </SetProperty>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="INSTALLDIR">
+        <Component Id="InstallDirectoryRegistryValueComponent">
+          <RegistryValue Key="SOFTWARE\$(var.CompanyName)\$(var.ProductName)"
+                         KeyPath="yes"
+                         Name="InstallDirectory"
+                         Root="HKCU"
+                         Type="string"
+                         Value="[INSTALLDIR]" />
+        </Component>
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ProgramMenuProductDirectory" Name="$(var.ProductName)">
+          <Component Id="ProgramMenuShortcutComponent" Guid="{6DA7EEBF-347D-4C1F-805F-1D72F5B97B6B}">
+            <Shortcut Id="ProgramMenuShortcut"
+                      Icon="Icon"
+                      Name="$(var.ProductName)"
+                      Target="[#$(var.ExecutableFileId)]"
+                      WorkingDirectory="INSTALLDIR" />
+            <RemoveFolder Id="ProgramMenuProductRemoveFolder" Directory="ProgramMenuProductDirectory" On="uninstall" />
+            <RegistryValue Key="SOFTWARE\$(var.CompanyName)\$(var.ProductName)"
+                           KeyPath="yes"
+                           Name="ProgramMenuShortcut"
+                           Root="HKCU"
+                           Type="integer"
+                           Value="1" />
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="DesktopFolder">
+        <Component Id="DesktopShortcutComponent" Guid="{8AD16DEC-3D9B-4577-A1E0-6F6DE5EBC5AC}">
+          <Shortcut Id="DesktopShortcut"
+                    Icon="Icon"
+                    Name="$(var.ProductName)"
+                    Target="[#$(var.ExecutableFileId)]"
+                    WorkingDirectory="DesktopFolder" />
+          <RegistryValue Key="SOFTWARE\$(var.CompanyName)\$(var.ProductName)"
+                         KeyPath="yes"
+                         Name="DesktopShortcut"
+                         Root="HKCU"
+                         Type="integer"
+                         Value="1" />
+        </Component>
+      </Directory>
+    </Directory>
+
+    <Feature Id="Feature" Level="1" Title="$(var.ProductName) $(var.ProductVersion)">
+      <ComponentGroupRef Id="FileComponentGroup" />
+      <ComponentRef Id="InstallDirectoryRegistryValueComponent" />
+      <ComponentRef Id="ProgramMenuShortcutComponent" />
+      <ComponentRef Id="DesktopShortcutComponent" />
+    </Feature>
+
+    <UIRef Id="WixUI_InstallDir" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+    <WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
+    <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+  </Product>
+</Wix>
