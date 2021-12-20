@@ -12,7 +12,7 @@ if "%~1" == "" (
 ) else (
     if "%~1" == "Debug" (
         set configuration=%~1
-    ) else if "%configuration%" == "Release" (
+    ) else if "%~1" == "Release" (
         set configuration=%~1
     ) else (
         call :usage >&2
