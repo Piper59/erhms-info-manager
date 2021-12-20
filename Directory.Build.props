@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AppTitle>ERHMS Info Manager</AppTitle>
     <EpiInfoDir>$(SolutionDir)Epi Info 7\</EpiInfoDir>
+    <PublishDir>$(SolutionDir)Build\$(Configuration)\</PublishDir>
     <BuildDir>$(SolutionDir)Build\$(Configuration)\$(AppTitle)\</BuildDir>
   </PropertyGroup>
 
@@ -10,5 +11,5 @@
     <Compile Include="$(SolutionDir)SolutionInfo.cs" />
   </ItemGroup>
 
-  <Target Name="Release" />
+  <Target Name="CustomPublish" />
 </Project>

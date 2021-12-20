@@ -475,17 +475,14 @@
     <Resource Include="Resources\FontAwesome.otf" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <ReleaseDir>$(SolutionDir)Build\$(Configuration)</ReleaseDir>
-  </PropertyGroup>
-  <Target Name="BeforeRelease">
-    <RemoveDir Directories="$(ReleaseDir)" />
+  <Target Name="BeforeCustomPublish">
+    <RemoveDir Directories="$(PublishDir)" />
   </Target>
-  <Target Name="Release" DependsOnTargets="BeforeRelease;Build">
+  <Target Name="CustomPublish" DependsOnTargets="BeforeCustomPublish;Build">
     <PropertyGroup>
       <ZipFile>$(IntermediateOutputPath)ERHMS_Info_Manager.zip</ZipFile>
     </PropertyGroup>
-    <ZipDirectory SourceDirectory="$(ReleaseDir)" DestinationFile="$(ZipFile)" />
-    <Move SourceFiles="$(ZipFile)" DestinationFolder="$(ReleaseDir)" />
+    <ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="$(ZipFile)" />
+    <Move SourceFiles="$(ZipFile)" DestinationFolder="$(PublishDir)" />
   </Target>
 </Project>
