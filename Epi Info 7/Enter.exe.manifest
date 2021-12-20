@@ -4,7 +4,7 @@
   <description asmv2:iconFile="App.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="Enter" version="7.2.7423.18888" language="neutral" processorArchitecture="x86" />
+    <assemblyIdentity name="Enter" version="7.2.7997.31807" language="neutral" processorArchitecture="x86" />
     <commandLine file="Enter.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -91,26 +91,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Enter.exe" size="4013056">
-      <assemblyIdentity name="Enter" version="7.2.7423.18888" language="neutral" processorArchitecture="x86" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Enter.exe" size="4018176">
+      <assemblyIdentity name="Enter" version="7.2.7997.31807" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>8d6Syo0AcqQVTcTnxU67JdGzT+iyLxcdRlCQQNIL7ww=</dsig:DigestValue>
+        <dsig:DigestValue>Zt9gG+2dSecb1WAOtvuT4b0XRHW/MRohdH3NLF32Zi8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.Core.dll" size="8204800">
-      <assemblyIdentity name="Epi.Core" version="7.2.7423.18878" language="neutral" processorArchitecture="x86" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.Core.dll" size="8291840">
+      <assemblyIdentity name="Epi.Core" version="7.2.7997.31792" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>XhtYRMfrxxMDnNo7foB0Ha8FrQkaIRYx/YTNX+0IUMQ=</dsig:DigestValue>
+        <dsig:DigestValue>eydL/S2Fk3Ph7hES5nZ/mYW5a2g3TyXsrzn4WNJ4/Ms=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -140,13 +140,13 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.Data.SqlServer.dll" size="74240">
-      <assemblyIdentity name="Epi.Data.SqlServer" version="7.2.7423.18882" language="neutral" processorArchitecture="x86" />
+      <assemblyIdentity name="Epi.Data.SqlServer" version="7.2.7997.31799" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>ic3fEeXd8g5L7tajEjp30ddi91o7sAKBOWBfQ5xb/E0=</dsig:DigestValue>
+        <dsig:DigestValue>nJj1weS86pBFGpaTD7t8AAi3AJA0dSTSA2m4Y6jLDPg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -199,26 +199,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.Enter.CheckCodeEngine.dll" size="20480">
-      <assemblyIdentity name="Epi.Enter.CheckCodeEngine" version="7.2.7423.18888" language="neutral" processorArchitecture="x86" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.Enter.CheckCodeEngine.dll" size="20992">
+      <assemblyIdentity name="Epi.Enter.CheckCodeEngine" version="7.2.7997.31806" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>0kvysunNFKC6c1BQp6aOwWAJLDX1goiXBwtGQjX0vtE=</dsig:DigestValue>
+        <dsig:DigestValue>X8PhlDN65Mi2jGd0z1gNrDagSQnSRmGo+AfD+iJFVTA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.ImportExport.dll" size="311296">
-      <assemblyIdentity name="Epi.ImportExport" version="7.2.7423.18879" language="neutral" processorArchitecture="x86" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.ImportExport.dll" size="311808">
+      <assemblyIdentity name="Epi.ImportExport" version="7.2.7997.31794" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>YH4IiuTvEl0/tTVP5lGiZeTBdTw6swhrTszONMbCRFU=</dsig:DigestValue>
+        <dsig:DigestValue>mCmIKsFKZN9SRV3NETNp7gDMYDEeZGDDVuvvadIxd4I=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -248,13 +248,13 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.Statistics.dll" size="51200">
-      <assemblyIdentity name="Epi.Statistics" version="7.2.7423.18879" language="neutral" processorArchitecture="x86" />
+      <assemblyIdentity name="Epi.Statistics" version="7.2.7997.31794" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>LDDOawzCjJ1Z9X9WXPlIHAIvipQTuMZ5nJbpW6qD+50=</dsig:DigestValue>
+        <dsig:DigestValue>LBVzh1iA/QAaZ52kWwDAt0W13I0W8kqAVnLIBAu3n+E=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -272,25 +272,25 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.Windows.dll" size="2255872">
-      <assemblyIdentity name="Epi.Windows" version="7.2.7423.18880" language="neutral" processorArchitecture="x86" />
+      <assemblyIdentity name="Epi.Windows" version="7.2.7997.31796" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>1ap87eONjef0jSLtB6vsaMWgJTjew1s6cpktSE3U/20=</dsig:DigestValue>
+        <dsig:DigestValue>6FCAAsQYlD7fjizh78m9dnqSGR0I+ekE5xgguWJyAEs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.Windows.Globalization.dll" size="104960">
-      <assemblyIdentity name="Epi.Windows.Globalization" version="7.2.7423.18879" language="neutral" processorArchitecture="x86" />
+      <assemblyIdentity name="Epi.Windows.Globalization" version="7.2.7997.31794" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>yiVS2BEWhUbaFUKMBqdBI4PADBnviEwPexNfdf8fcMQ=</dsig:DigestValue>
+        <dsig:DigestValue>ulCXMTZ7pQY3FV9hefvown4uMNQEfV/ri6Wk4t46u6c=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -320,13 +320,13 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Epi.Windows.ImportExport.dll" size="872960">
-      <assemblyIdentity name="Epi.Windows.ImportExport" version="7.2.7423.18888" language="neutral" processorArchitecture="x86" />
+      <assemblyIdentity name="Epi.Windows.ImportExport" version="7.2.7997.31806" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>mG24l6dvNO922cfOCjWEk5fTU3aYlSpVSbg0kV+SFYM=</dsig:DigestValue>
+        <dsig:DigestValue>nl5a0TUZT+tbZ8UtsA9dAOkBF2FStISATdV3Ax9WNeQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -379,14 +379,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="EpiDashboard.dll" size="6658048">
-      <assemblyIdentity name="EpiDashboard" version="7.2.7423.18886" language="neutral" processorArchitecture="x86" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="EpiDashboard.dll" size="7245312">
+      <assemblyIdentity name="EpiDashboard" version="7.2.7997.31803" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>S6LgA0bOiLHbJebxVB+kQlbbZNgF7IXXe4lyCYS244g=</dsig:DigestValue>
+        <dsig:DigestValue>i60dS6vZ7TuPo6/atPYHDm1Hdh7rAVRuHcBwfotCbYU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -416,13 +416,13 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="EpiInfo.Plugin.dll" size="11264">
-      <assemblyIdentity name="EpiInfo.Plugin" version="7.2.4.0" language="neutral" processorArchitecture="x86" />
+      <assemblyIdentity name="EpiInfo.Plugin" version="7.2.5.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>WCq9rK27L2xkGmgO6NeVtonqCbTzaKPLlhneeKhwV80=</dsig:DigestValue>
+        <dsig:DigestValue>7a2X6nADVk+hU7XQIqUA0KmRuh5+z3hlDAPooc3Lirk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -548,13 +548,13 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="StatisticsRepository.dll" size="330752">
-      <assemblyIdentity name="StatisticsRepository" version="7.2.4.0" language="neutral" processorArchitecture="x86" />
+      <assemblyIdentity name="StatisticsRepository" version="7.2.5.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>AUvJV6s2XN7U/2XLaqJY0S9u+HJkelJqCh3Y75Z59M8=</dsig:DigestValue>
+        <dsig:DigestValue>KlS6fA3hppaFg4unoWUl8f8RxBmmMrWyjEC+uF8v0P4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
