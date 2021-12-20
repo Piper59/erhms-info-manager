@@ -482,8 +482,8 @@
     <PropertyGroup>
       <ZipFile>$(IntermediateOutputPath)ERHMS_Info_Manager.zip</ZipFile>
     </PropertyGroup>
-    <Exec Command="powershell -File ..\Installer\publish.ps1 -Configuration $(Configuration)" />
     <ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="$(ZipFile)" />
     <Move SourceFiles="$(ZipFile)" DestinationFolder="$(PublishDir)" />
+    <Exec Command="powershell -File ..\Installer\publish.ps1 -Configuration $(Configuration)" />
   </Target>
 </Project>
