@@ -10,7 +10,7 @@
 
     <Media Id="1" Cabinet="product.cab" EmbedCab="yes" />
 
-    <Icon Id="Icon" SourceFile="$(var.BuildDir)\$(var.ExecutableFileName)"/>
+    <Icon Id="Icon" SourceFile="$(var.BuildDir)\$(var.ExecutableFileName)" />
     <Property Id="ARPPRODUCTICON" Value="Icon" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of $(var.ProductName) is already installed." />
