@@ -34,8 +34,12 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public void Open()
             {
+                if (!State.CoreProject.Open())
+                {
+                    return;
+                }
+                Wizard.Result = true;
                 Wizard.Close();
-                Wizard.Result = State.CoreProject.Open();
             }
 
             public void Create()
