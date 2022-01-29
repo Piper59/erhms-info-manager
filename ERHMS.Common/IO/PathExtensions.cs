@@ -28,10 +28,6 @@ namespace ERHMS.Common.IO
         {
             yield return path;
             IList<string> segments = path.Split(directorySeparatorChars, StringSplitOptions.RemoveEmptyEntries);
-            if (segments.Count <= 2)
-            {
-                yield break;
-            }
             for (int startIndex = 2; startIndex < segments.Count; startIndex++)
             {
                 yield return string.Join(
