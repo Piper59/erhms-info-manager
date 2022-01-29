@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.Fields;
 using ERHMS.Common.IO;
+using ERHMS.Common.Linq;
 using ERHMS.Common.Logging;
 using ERHMS.Data;
 using ERHMS.Data.Logging;
@@ -62,10 +63,8 @@ namespace ERHMS.EpiInfo.Data
                 return null;
             }
             Record record = new Record();
-            foreach (KeyValuePair<int, Field> fieldByIndex in fieldsByIndex)
+            foreach ((int index, Field field) in fieldsByIndex)
             {
-                int index = fieldByIndex.Key;
-                Field field = fieldByIndex.Value;
                 TypeConverter converter = convertersByIndex[index];
                 string text = texts[index];
                 try

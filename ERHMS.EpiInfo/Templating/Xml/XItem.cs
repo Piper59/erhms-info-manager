@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ERHMS.Common.Linq;
+using System.Collections.Generic;
 using System.Data;
 using System.Xml.Linq;
 
@@ -55,9 +56,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 valuesByColumnName[columnName] = attribute.Value;
             }
             DataRow item = table.NewRow();
-            foreach (KeyValuePair<string, string> valueByColumnName in valuesByColumnName)
+            foreach ((string columnName, string value) in valuesByColumnName)
             {
-                item[valueByColumnName.Key] = valueByColumnName.Value;
+                item[columnName] = value;
             }
             return item;
         }

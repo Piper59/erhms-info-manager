@@ -29,11 +29,11 @@ namespace ERHMS.Console.Utilities
             using (TextReader reader = new StreamReader(stream))
             using (RecordImporter importer = new RecordImporter(view, reader))
             {
-                foreach (Iterator<string> header in importer.Headers.Iterate())
+                foreach ((int index, string header) in importer.Headers.Iterate())
                 {
-                    if (view.Fields.DataFields.Contains(header.Value))
+                    if (view.Fields.DataFields.Contains(header))
                     {
-                        importer.Map(header.Index, view.Fields[header.Value]);
+                        importer.Map(index, view.Fields[header]);
                     }
                 }
                 importer.Import();

@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Common.Linq;
 using ERHMS.EpiInfo.Templating.Xml;
 using System.Collections.Generic;
 
@@ -22,13 +23,13 @@ namespace ERHMS.EpiInfo.Templating
             {
                 viewsByXView[xView] = InstantiateViewCore(Project, xView);
             }
-            foreach (KeyValuePair<XView, View> viewByXView in viewsByXView)
+            foreach ((XView xView, View view) in viewsByXView)
             {
-                OnInstantiating(TemplateLevel.View, viewByXView.Key.Name);
-                Context.View = viewByXView.Value;
-                foreach (XPage xPage in viewByXView.Key.XPages)
+                OnInstantiating(TemplateLevel.View, xView.Name);
+                Context.View = view;
+                foreach (XPage xPage in xView.XPages)
                 {
-                    InstantiatePage(viewByXView.Value, xPage);
+                    InstantiatePage(view, xPage);
                 }
             }
         }

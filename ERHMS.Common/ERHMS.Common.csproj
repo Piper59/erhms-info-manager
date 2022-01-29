@@ -64,6 +64,7 @@
     <Compile Include="Linq\IEnumerableExtensions.cs" />
     <Compile Include="Linq\IEnumeratorExtensions.cs" />
     <Compile Include="Linq\Iterator.cs" />
+    <Compile Include="Linq\KeyValuePairExtensions.cs" />
     <Compile Include="Logging\ConsoleAppender.cs" />
     <Compile Include="Logging\FileAppender.cs" />
     <Compile Include="Logging\ILogExtensions.cs" />

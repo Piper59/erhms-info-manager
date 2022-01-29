@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ERHMS.Common.Linq;
+using System.Collections.Generic;
 
 namespace ERHMS.Desktop.ViewModels.Shared
 {
@@ -6,7 +7,7 @@ namespace ERHMS.Desktop.ViewModels.Shared
     {
         public void Add(string key, object value)
         {
-            Add(new KeyValuePair<string, object>(key, value));
+            Add(KeyValuePairExtensions.Create(key, value));
         }
     }
 }

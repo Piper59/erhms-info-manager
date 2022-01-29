@@ -68,29 +68,29 @@ namespace ERHMS.Desktop.Views.Collections
             ObservableCollection<DataGridColumn> columns = ItemsDataGrid.Columns;
             IDictionary<string, DataGridColumn> columnsByHeader =
                 columns.ToDictionary(column => (string)column.Header, NameComparer.Default);
-            foreach (Iterator<FieldDataRow> field in DataContext.Fields.Iterate())
+            foreach ((int fieldIndex, FieldDataRow field) in DataContext.Fields.Iterate())
             {
-                string header = field.Value.Name.Replace("_", "__");
+                string header = field.Name.Replace("_", "__");
                 if (columnsByHeader.TryGetValue(header, out DataGridColumn column))
                 {
                     int columnIndex = columns.IndexOf(column);
-                    if (columnIndex != field.Index)
+                    if (columnIndex != fieldIndex)
                     {
-                        columns.Move(columnIndex, field.Index);
+                        columns.Move(columnIndex, fieldIndex);
                     }
                 }
                 else
                 {
                     column = new DataGridTextColumn
                     {
-                        Binding = new Binding(field.Value.Name),
+                        Binding = new Binding(field.Name),
                         Header = header
                     };
-                    if (field.Value.FieldType.IsNumeric())
+                    if (field.FieldType.IsNumeric())
                     {
                         column.CellStyle = (Style)FindResource("CopyableNumericDataGridCell");
                     }
-                    columns.Insert(field.Index, column);
+                    columns.Insert(fieldIndex, column);
                 }
             }
             int fieldCount = DataContext.Fields.Count();

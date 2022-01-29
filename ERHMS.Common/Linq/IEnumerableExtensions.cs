@@ -25,7 +25,7 @@ namespace ERHMS.Common.Linq
 
         public static IEnumerable<Iterator<TItem>> Iterate<TItem>(this IEnumerable<TItem> @this)
         {
-            return @this.Select((value, index) => new Iterator<TItem>(index, value));
+            return @this.Select((value, index) => Iterator.Create(index, value));
         }
     }
 }

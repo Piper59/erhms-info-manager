@@ -209,9 +209,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         .Select(field => new Target(field))
                         .Prepend(Target.Empty)
                         .ToList();
-                    foreach (Iterator<string> header in Importer.Headers.Iterate())
+                    foreach ((int index, string header) in Importer.Headers.Iterate())
                     {
-                        Mappings.Add(new Mapping(header.Index, header.Value, targets));
+                        Mappings.Add(new Mapping(index, header, targets));
                     }
                 });
             }
