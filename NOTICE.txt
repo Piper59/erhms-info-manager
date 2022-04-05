@@ -1,5 +1,5 @@
 ERHMS Info Manager
-Copyright 2016-2021
+Copyright 2016-2022
 National Institute for Occupational Safety and Health
 
 ERHMS Info Manager[1] is developed by the National Institute for Occupational
