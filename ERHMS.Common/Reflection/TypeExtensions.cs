@@ -10,12 +10,12 @@ namespace ERHMS.Common.Reflection
     {
         public static IEnumerable<Type> GetInstanceTypes(this Type @this, Assembly assembly)
         {
-            return assembly.GetTypes().Where(type => @this.IsAssignableFrom(type) && !type.IsAbstract);
+            return assembly.ExportedTypes.Where(type => @this.IsAssignableFrom(type) && !type.IsAbstract);
         }
 
         public static IEnumerable<Type> GetInstanceTypes(this Type @this)
         {
-            return @this.GetInstanceTypes(Assembly.GetCallingAssembly());
+            return @this.GetInstanceTypes(@this.Assembly);
         }
 
         public static Stream GetManifestResourceStream(this Type @this, string resourceName)
