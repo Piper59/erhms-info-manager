@@ -304,7 +304,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Wiki\**\*.md">
+    <None Include="..\Wiki\**\*">
       <Link>Resources\Wiki\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </None>
     <None Include="App.config" />
